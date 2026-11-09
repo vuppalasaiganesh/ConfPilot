@@ -14,3 +14,4 @@ ignore = ["E731", "B905"]  # lambdas are fine; zip() lengths are checked by test
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]

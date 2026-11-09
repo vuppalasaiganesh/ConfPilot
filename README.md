@@ -25,6 +25,9 @@ rate limit.
 
 One project, four tracks. Each section is what to show the judges.
 
+**Check everything at once:** `scripts/validate.sh` prints PASS / WARN / FAIL for every track (app, AI,
+embeddings, meaning-only demo, Dash0, Kubernetes pods, Radar, Gitar files). Run it before the demo.
+
 ### Track 4: Search & Vector Database (Elasticsearch)
 Elasticsearch is the core. Every request runs **hybrid search**: BM25 keyword search plus dense-vector kNN
 (fastembed `bge-small` embeddings), fused with Reciprocal Rank Fusion. Attendee matchmaking is kNN over a second

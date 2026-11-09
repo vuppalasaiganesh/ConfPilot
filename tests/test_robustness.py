@@ -72,3 +72,28 @@ def test_import_csv_converts_rows():
 def test_import_csv_rejects_bad_times():
     with pytest.raises(SystemExit):
         import_csv.convert(_rows("title,abstract,start,end\nX,Y,tomorrow,later\n"))
+
+
+def test_suggested_model_from_google_error():
+    err = ("404: [{'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new "
+           "users. Please update your code to use models/gemini-3.8-flash for the latest features and improvements.")
+    assert llm._suggested_model(err) == "gemini-3.8-flash"
+    assert llm._suggested_model("401: Incorrect API key provided") is None
+
+
+def test_model_list_filters_and_sorts_newest_first(monkeypatch):
+    names = ["models/aqa", "models/gemini-2.5-flash", "models/gemini-2.5-flash-preview-tts", "models/gemini-3.8-flash",
+             "models/gemini-2.5-flash-image", "models/gemini-3.8-flash-lite", "models/deep-research-preview-04-2026"]
+
+    class M:
+        def __init__(self, i):
+            self.id = i
+
+    class Client:
+        class models:
+            @staticmethod
+            def list():
+                return type("R", (), {"data": [M(n) for n in names]})
+
+    monkeypatch.setattr(llm, "_get_client", lambda: Client)
+    assert llm._available_models() == ["gemini-3.8-flash", "gemini-3.8-flash-lite", "gemini-2.5-flash"]

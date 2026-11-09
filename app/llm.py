@@ -59,11 +59,29 @@ def _error_text(exc):
     return f"{status}: {msg}"[:300] if status else msg[:300]
 
 
+_NOT_CHAT = re.compile(r"tts|audio|image|embed|aqa|computer-use|deep-research|veo|imagen|whisper|guard|moderation", re.I)
+
+
+def _model_sort_key(name):
+    # Newest versions first: compare the numbers in the name, e.g. gemini-3.8-flash before gemini-2.5-flash.
+    nums = [float(n) for n in re.findall(r"\d+(?:\.\d+)?", name)[:2]]
+    return [-n for n in nums] + [len(name)]
+
+
 def _available_models():
+    """Chat models the key can use, newest first, without Google's 'models/' prefix."""
     try:
-        return sorted(m.id for m in _get_client().models.list().data)[:15]
+        ids = [m.id.removeprefix("models/") for m in _get_client().models.list().data]
     except Exception:
         return []
+    chat = [i for i in ids if not _NOT_CHAT.search(i)]
+    return sorted(chat, key=_model_sort_key)[:12]
+
+
+def _suggested_model(error_text):
+    """Some providers name a replacement in the error, e.g. 'use models/gemini-3.8-flash'."""
+    m = re.search(r"\buse (?:models/)?([A-Za-z0-9][\w.-]*\d[\w.-]*)", error_text)
+    return m.group(1).rstrip(".") if m else None
 
 
 def check():
@@ -78,12 +96,16 @@ def check():
     except Exception as exc:
         result = {"ok": False, "configured": True, "model": config.LLM_MODEL, "error": _error_text(exc)}
         models = _available_models()
+        suggested = _suggested_model(result["error"])
+        current = config.LLM_MODEL.removeprefix("models/")
+        if suggested and suggested != current:
+            result["hint"] = f"The provider recommends a different model. Set LLM_MODEL={suggested} in .env and run ./start.sh."
+        elif models and current not in models:
+            result["hint"] = (f"Your account doesn't offer '{current}'. Set LLM_MODEL in .env to one of: "
+                              f"{', '.join(models[:6])}")
         if models:
             result["available_models"] = models
-            if config.LLM_MODEL not in models:
-                result["hint"] = (f"Your account doesn't list the model '{config.LLM_MODEL}'. "
-                                  f"Set LLM_MODEL in .env to one of: {', '.join(models)}")
-        elif getattr(exc, "status_code", None) in (400, 401, 403):
+        if "hint" not in result and getattr(exc, "status_code", None) in (400, 401, 403):
             result["hint"] = ("Check LLM_API_KEY in .env (xAI keys start with 'xai-') and that LLM_BASE_URL "
                               "matches the provider the key is from.")
     _check_cache.update(at=time.time(), result=result)

@@ -92,7 +92,9 @@ def check():
         return _check_cache["result"]
     try:
         _complete('Reply with JSON {"ok": true}', "ping", max_tokens=300)
-        result = {"ok": True, "configured": True, "model": config.LLM_MODEL, "error": None}
+        result = {"ok": True, "configured": True, "model": active_model(), "error": None}
+        if active_model() != config.LLM_MODEL:
+            result["note"] = f"{config.LLM_MODEL} is busy right now, so the backup model {active_model()} is answering."
     except Exception as exc:
         result = {"ok": False, "configured": True, "model": config.LLM_MODEL, "error": _error_text(exc)}
         models = _available_models()
@@ -105,6 +107,11 @@ def check():
                               f"{', '.join(models[:6])}")
         if models:
             result["available_models"] = models
+        if "hint" not in result and _is_transient(exc) and getattr(exc, "status_code", None) in (429, 500, 502, 503, 504):
+            backup = next((m for m in models if "lite" in m and m != current), None)
+            result["hint"] = ("The AI provider is busy or rate limiting right now (usually temporary). "
+                              + (f"Add a backup: LLM_FALLBACK_MODELS={backup} in .env and run ./start.sh."
+                                 if backup and not config.LLM_FALLBACK_MODELS else "Try again in a minute."))
         if "hint" not in result and "timed out" in result["error"].lower():
             result["hint"] = ("The model answered too slowly. Try a faster model"
                               + (f" such as {next((m for m in models if 'lite' in m), models[0])}" if models else "")
@@ -131,7 +138,46 @@ _OPTIONAL = ["reasoning_effort", "response_format", "temperature", "max_tokens"]
 _dropped = set()
 
 
+_TRANSIENT_STATUS = {408, 429, 500, 502, 503, 504}
+_sticky = {"model": None, "until": 0.0}  # a backup that worked recently is tried first for 5 minutes
+
+
+def _is_transient(exc):
+    from openai import APIConnectionError, APIStatusError, APITimeoutError
+
+    if isinstance(exc, (APITimeoutError, APIConnectionError)):
+        return True
+    return isinstance(exc, APIStatusError) and exc.status_code in _TRANSIENT_STATUS
+
+
+def active_model():
+    if _sticky["model"] and time.time() < _sticky["until"]:
+        return _sticky["model"]
+    return config.LLM_MODEL
+
+
 def _complete(system, user, max_tokens):
+    """Try the main model, then each backup model when one is busy, rate limited or too slow."""
+    models = list(dict.fromkeys([active_model(), config.LLM_MODEL, *config.LLM_FALLBACK_MODELS]))
+    last = None
+    for model in models:
+        try:
+            text = _complete_one(model, system, user, max_tokens)
+            if model != config.LLM_MODEL:
+                _sticky.update(model=model, until=time.time() + 300)
+            elif _sticky["model"]:
+                _sticky.update(model=None, until=0.0)
+            return text
+        except Exception as exc:
+            if not _is_transient(exc):
+                raise
+            log.warning("LLM model %s unavailable (%s)%s", model, _error_text(exc),
+                        "; trying the next backup model" if model != models[-1] else "")
+            last = exc
+    raise last
+
+
+def _complete_one(model, system, user, max_tokens):
     from openai import BadRequestError
 
     optional = {"response_format": {"type": "json_object"}, "temperature": 0.3, "max_tokens": max_tokens}
@@ -141,7 +187,7 @@ def _complete(system, user, max_tokens):
         kwargs = {k: v for k, v in optional.items() if k not in _dropped}
         try:
             resp = _get_client().chat.completions.create(
-                model=config.LLM_MODEL,
+                model=model,
                 messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
                 **kwargs)
             return resp.choices[0].message.content or ""

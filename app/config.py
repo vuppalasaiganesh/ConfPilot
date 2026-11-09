@@ -11,6 +11,8 @@ ES_INDEX_PEOPLE = os.getenv("ES_INDEX_PEOPLE", "attendees")
 LLM_API_KEY = os.getenv("LLM_API_KEY", "")
 LLM_BASE_URL = os.getenv("LLM_BASE_URL", "https://api.x.ai/v1")
 LLM_MODEL = os.getenv("LLM_MODEL", "grok-4")
+# Backup models tried in order when the main one is busy, rate limited or too slow (comma separated).
+LLM_FALLBACK_MODELS = [m.strip() for m in os.getenv("LLM_FALLBACK_MODELS", "").split(",") if m.strip()]
 LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "45"))
 # "low" keeps "thinking" models (e.g. newer Gemini flash) fast. Empty = provider default.
 LLM_REASONING_EFFORT = os.getenv("LLM_REASONING_EFFORT", "low")

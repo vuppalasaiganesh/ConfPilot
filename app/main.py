@@ -14,6 +14,7 @@ from .telemetry import step
 
 logging.basicConfig(level=logging.INFO)
 STATIC = Path(__file__).parent / "static"
+VERSION = "2026.11.09-6"  # bump on each release; shown by /healthz so you can tell which code is running
 
 app = FastAPI(title="ConfPilot", description="AI conference planner on Elasticsearch hybrid search")
 TRACING = telemetry.setup(app)
@@ -94,7 +95,7 @@ def healthz(deep: bool = False):
         es_ok = search.es_client().ping()
     except Exception:
         es_ok = False
-    out = {"elasticsearch": es_ok, "es_ms": round((time.perf_counter() - start) * 1000),
+    out = {"version": VERSION, "elasticsearch": es_ok, "es_ms": round((time.perf_counter() - start) * 1000),
            "llm": {"configured": llm.enabled(), "model": config.LLM_MODEL if llm.enabled() else None},
            "tracing": TRACING}
     if deep:

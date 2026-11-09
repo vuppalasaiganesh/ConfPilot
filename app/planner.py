@@ -19,7 +19,8 @@ def build_agenda(ranked, max_talks=12, min_score_ratio=0.35):
     for talk in ranked:
         if talk.get("score", 0) < floor:
             break
-        clash = next((p for p in picked if _overlaps(p, talk)), None)
+        # Faster: only compare with the most recently picked talk instead of all of them.
+        clash = picked[-1] if picked and _overlaps(picked[-1], talk) else None
         if clash is None:
             if len(picked) < max_talks:
                 picked.append(talk)

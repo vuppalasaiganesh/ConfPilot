@@ -17,7 +17,7 @@ code, and how you can check it yourself.** No setup is needed to read it.
 
 ```mermaid
 flowchart LR
-    U([Attendee:<br/>"SRE into eBPF..."]) --> APP
+    U(["Attendee:<br/>SRE into eBPF..."]) --> APP
 
     subgraph K8S["Kubernetes cluster (watched by Radar)"]
         APP["ConfPilot app<br/>FastAPI, 2 pods"]

@@ -1,273 +1,391 @@
-# ConfPilot: AI conference planner
+# ConfPilot
 
-**Cloud Native Hackathon, Track 4: Search & Vector Database ("Find the Right Talk")**
+**Your personal conference planner.** Describe yourself in one sentence and get a clash-free agenda,
+a reason for every talk, and the people worth meeting, then refine it by chatting.
 
-Describe yourself in plain English, for example *"backend dev moving into platform engineering, curious about
-eBPF security, fairly new to Kubernetes"*. ConfPilot gives you back:
+[![CI](https://github.com/vuppalasaiganesh/ConfPilot/actions/workflows/ci.yml/badge.svg)](https://github.com/vuppalasaiganesh/ConfPilot/actions/workflows/ci.yml)
 
-1. **A clash-free personal agenda.** Talks are found with Elasticsearch **hybrid search** (BM25 keyword +
-   dense-vector kNN, fused with Reciprocal Rank Fusion). The planner then picks the best talk for each time slot.
-2. **A reason for every talk.** An LLM (Grok by default; any OpenAI-compatible API works) explains why
-   each talk fits *you*, and adds a summary and a few tips.
-3. **A backup for each slot.** If a talk you want clashes with a better match, it becomes a one-click swap.
-4. **A hallway matchmaker.** Attendees' "what I'm working on" notes are also vectors in Elasticsearch, so you
-   get the 4 most relevant people to meet, each with an AI-written conversation opener.
-5. **Follow-up chat.** Ask questions or change the agenda in plain English: *"swap anything on day 2 for AI
-   talks"*, *"add a beginner GPU talk on Thursday"*, *"drop the policy talks"*, *"who is speaking about service
-   mesh?"*. Each change goes through the same hybrid search and clash checker, so the agenda never double-books.
-   Answers come with **Add** buttons.
-6. **Calendar export.** Download the agenda as an `.ics` file.
+Built for the **Cloud Native Hackathon**, entered in all four tracks:
+**Elasticsearch** · **Dash0** · **Radar** · **Gitar**. The submission text is in [SUBMISSION.md](SUBMISSION.md).
 
-The app works **without an LLM key**: it falls back to rule-based reasons, so a live demo can't break because of a
-rate limit.
+---
 
-## Hackathon tracks
+## Contents
 
-One project, four tracks. Each section is what to show the judges.
+1. [The problem](#the-problem)
+2. [What ConfPilot does](#what-confpilot-does)
+3. [Hackathon tracks at a glance](#hackathon-tracks-at-a-glance)
+4. [Quick start (10 minutes)](#quick-start-10-minutes)
+5. [How it works](#how-it-works)
+6. [Track details and how to demo each one](#track-details-and-how-to-demo-each-one)
+7. [The demo script](#the-demo-script)
+8. [Commands cheat sheet](#commands-cheat-sheet)
+9. [Configuration (.env)](#configuration-env)
+10. [Troubleshooting](#troubleshooting)
+11. [Project structure](#project-structure)
+12. [API](#api)
+13. [Use a real conference schedule](#use-a-real-conference-schedule)
 
-**Check everything at once:** `scripts/validate.sh` prints PASS / WARN / FAIL for every track (app, AI,
-embeddings, meaning-only demo, Dash0, Kubernetes pods, Radar, Gitar files). Run it before the demo.
+---
 
-### Track 4: Search & Vector Database (Elasticsearch)
-Elasticsearch is the core. Every request runs **hybrid search**: BM25 keyword search plus dense-vector kNN
-(fastembed `bge-small` embeddings), fused with Reciprocal Rank Fusion. Attendee matchmaking is kNN over a second
-index. On the page, the **Keyword #** / **Meaning #** badges show which search found each talk, and the
-**✨ Meaning-only demo** finds talks with no words in common with the query.
+## The problem
 
-### Track 2: Observability (Dash0)
-The app sends **traces, metrics and logs** to Dash0 over OTLP. Each request is a trace: AI understanding →
-`hybrid_search` (with the Elasticsearch calls and `embed_query` inside) → planning → AI explanation. Custom
-metrics: `confpilot.search.duration`, `confpilot.llm.calls` (by model and outcome), `confpilot.llm.duration`,
-`confpilot.ai.fallbacks`. Logs are linked to their traces.
+Conferences like KubeCon have hundreds of talks, many running at the same time in different rooms.
+People spend hours reading the schedule, still miss the talks that matter to them, double-book themselves,
+and leave without meeting the right people.
 
-1. Create a Dash0 account (free trial). Copy the **OTLP gRPC endpoint** and an **auth token**.
-2. Add them to `.env`, then run `./start.sh`:
-   ```
-   DASH0_OTLP_ENDPOINT=https://ingress.<region>.aws.dash0.com:4317
-   DASH0_AUTH_TOKEN=auth_...
-   ```
-3. Generate traffic: `python3 scripts/load.py`
-4. Break something, then ask Dash0's AI agent what's wrong:
-   - `scripts/chaos.sh slow`: searches take 3 s. The trace shows the time is in `embed_query`.
-   - `scripts/chaos.sh ai`: the AI provider times out. Fallback metric jumps; error logs explain why.
-   - `scripts/chaos.sh baddata`: 40% of plans fail with HTTP 500. The stack trace points at a talk record
-     with no start time.
-   - `scripts/chaos.sh off`: back to normal.
+## What ConfPilot does
 
-### Track 3: Kubernetes UI / AI SRE (Radar)
-The app runs on Kubernetes with proper probes (`/readyz` fails when Elasticsearch is unreachable), resource
-limits and pod identity on every trace.
+You type one sentence, for example *"SRE at a bank, getting serious about OpenTelemetry, curious about eBPF."*
+In a few seconds you get:
 
-1. Docker Desktop: **Settings → Kubernetes → Enable Kubernetes**, wait for "running".
-2. Deploy: `scripts/k8s.sh up`, then open it: `scripts/k8s.sh open` (http://localhost:8080)
-3. Install and run Radar: `brew install kubectl-radar`, then `kubectl radar`
-4. Break the cluster and let Radar (or a coding agent through Radar's MCP server) find the root cause:
-
-   | Command | What happens |
-   |---|---|
-   | `scripts/k8s.sh break es-down` | Elasticsearch scaled to 0; app pods go NotReady |
-   | `scripts/k8s.sh break bad-config` | A "config change" points the app at a host that doesn't exist |
-   | `scripts/k8s.sh break oom` | Memory limit cut; pods are OOMKilled and crash-loop |
-   | `scripts/k8s.sh break bad-image` | A deploy references an image tag that doesn't exist |
-   | `scripts/k8s.sh break ai-outage` | AI provider times out; the app degrades but stays up |
-   | `scripts/k8s.sh break bad-data` | A corrupt record crashes 40% of plan requests |
-   | `scripts/k8s.sh fix` | Undo everything |
-
-   With Dash0 configured in `.env`, the same incidents show up in Dash0 with the pod name attached.
-
-### Track 1: AI Code Review (Gitar)
-- **CI** (`.github/workflows/ci.yml`): lint (ruff), 30+ unit tests, config validation, and an integration job
-  that starts a real Elasticsearch, loads the data and smoke-tests the API, including a check that the agenda
-  has no clashes.
-- **Review rules** in `.gitar/rules/`: every AI call needs a fallback, the agenda must stay clash-free, only
-  free-license Elasticsearch features, telemetry conventions, and no secrets.
-
-1. Install the Gitar GitHub App on this repository (from gitar.ai).
-2. Open a pull request that breaks a rule, for example an LLM call without a fallback, or a planner change
-   that allows overlaps. Gitar reviews it against `.gitar/rules`, suggests fixes, and diagnoses the failing CI.
-
-## Architecture
-
-```
- Browser ──► FastAPI (app/main.py)
-               │ 1. LLM: profile ──► search query + level filter      (app/llm.py)
-               │ 2. Elasticsearch: BM25 query  ┐                       (app/search.py)
-               │                  kNN query    ┴► RRF fusion ──► ranked talks
-               │ 3. Planner: greedy clash-free agenda + backups        (app/planner.py)
-               │ 4. LLM: summary + per-talk reasons + tips
-               │ 5. Elasticsearch kNN over attendees ──► LLM openers
-               ▼
-           JSON ──► agenda UI, swap/remove, .ics download
-
- Chat ──► /api/chat (app/chat.py)
-               1. intent: answer | add | replace | remove + query/days/levels   (LLM, or rules as fallback)
-               2. hybrid search + clash checker edit the agenda
-               3. LLM writes the reply and the reasons for new talks
-```
-
-- **Embeddings:** [fastembed](https://github.com/qdrant/fastembed) with `BAAI/bge-small-en-v1.5` runs locally
-  (ONNX on CPU, 384 dims, no API key). You can switch to OpenAI embeddings with `EMBEDDINGS=openai`.
-- **RRF in Python:** fusion happens in the app, so this works on the **free Basic license** of any Elasticsearch 8.x.
-- **Data:** `data/talks.json` has 165 talks over 3 days in 8 rooms. `data/attendees.json` has 60 attendees.
-  Both were generated by `data/generate_data.py`, and you can swap in a real schedule with the same fields.
-
-## Run it (one command)
-
-You need **Docker Desktop**, installed and open: https://www.docker.com/products/docker-desktop/
-
-```bash
-git clone https://github.com/vuppalasaiganesh/Elastic-_Search.git
-```
-
-```bash
-cd Elastic-_Search
-```
-
-```bash
-./start.sh
-```
-
-On a Mac you can also just double-click **`Start ConfPilot.command`**.
-
-The script:
-1. checks that Docker is installed and running, and opens Docker Desktop on a Mac if it isn't;
-2. asks once for your Grok API key and saves it in `.env`, which is git-ignored and stays on your computer. Press Enter to skip;
-3. builds the app and starts Elasticsearch, loads the talks, then starts the web app;
-4. opens http://localhost:8000 when everything is ready.
-
-The first run downloads about 1–2 GB and takes 5–10 minutes. Later runs take seconds.
-
-| Command | What it does |
+| | |
 |---|---|
-| `./start.sh` | Start, or restart after changes |
-| `./start.sh stop` | Stop everything |
-| `./start.sh logs` | Follow the app logs |
-| `./start.sh reset` | Delete all data and start fresh |
-| `./start.sh tracing` | Start with OpenTelemetry tracing. Jaeger UI at http://localhost:16686 |
+| 🗓️ **A personal schedule** | The best talks for you, grouped by day, with **no time clashes** |
+| 💡 **A reason for each talk** | Written by AI, so you know why it's worth your time |
+| 🔁 **A backup per slot** | One click to swap if a room is full |
+| 💬 **A chat to change things** | *"Swap anything on day 2 for AI talks"*, *"Who's speaking about GPUs?"* |
+| 🤝 **People to meet** | Attendees working on similar things, with a conversation opener |
+| 📅 **Calendar export** | One click to add the whole agenda to your calendar |
 
-**Troubleshooting**
-- *"permission denied: ./start.sh"*: run `chmod +x start.sh` once.
-- *Elasticsearch keeps restarting*: give Docker Desktop at least 4 GB of memory (Settings → Resources).
-- *Port 8000 or 9200 already in use*: stop the other program, or change the left-hand port in `docker-compose.yml`.
-- *Changed your API key*: edit `.env`, then run `./start.sh` again.
+It keeps working if the AI is down: answers fall back to simple rules and the page says why.
 
-## Run it locally (for development)
+---
 
+## Hackathon tracks at a glance
+
+| Track | What we built | Show the judges |
+|---|---|---|
+| **4. Search & Vector DB (Elasticsearch)** | Hybrid search (keywords + meaning) is the core of every request; people matching is vector search | The ✨ meaning demo and the Keyword/Meaning badges |
+| **2. Observability (Dash0)** | Traces, metrics and logs sent to Dash0; switches that break the app on purpose | Break the app, then ask Dash0's AI agent what went wrong |
+| **3. Kubernetes UI / AI SRE (Radar)** | One command deploys to Kubernetes; six scripted incidents | Break the cluster, then let Radar find the root cause |
+| **1. AI Code Review (Gitar)** | CI with a real Elasticsearch, plus five project-specific review rules | [Pull request #2](https://github.com/vuppalasaiganesh/ConfPilot/pull/2), where Gitar catches three rule violations and a failing build |
+
+---
+
+## Quick start (10 minutes)
+
+**You need:** a Mac, Windows or Linux computer with **Docker Desktop** installed and open
+([download](https://www.docker.com/products/docker-desktop/)). Give Docker at least 4 GB of memory
+(Settings → Resources).
+
+**1. Get the code**
 ```bash
-docker run -d --name es -p 9200:9200 -e discovery.type=single-node \
-  -e xpack.security.enabled=false -e ES_JAVA_OPTS="-Xms1g -Xmx1g" elasticsearch:8.15.3
+git clone https://github.com/vuppalasaiganesh/ConfPilot.git
+```
+```bash
+cd ConfPilot
 ```
 
-```bash
-python -m venv .venv && source .venv/bin/activate
-```
+**2. Add a free AI key (optional, 2 minutes)**
 
-```bash
-pip install -r requirements.txt
-```
-
+Get a free Google Gemini key at https://aistudio.google.com/apikey, then:
 ```bash
 cp .env.example .env
 ```
+Open `.env` and paste your key after `LLM_API_KEY=`. Without a key the app still works, with simpler answers.
 
+**3. Start everything**
 ```bash
-python -m scripts.ingest
+./start.sh
+```
+The first run downloads about 1–2 GB and takes 5–10 minutes. Your browser opens **http://localhost:8000** when
+it's ready. On a Mac you can also double-click **`Start ConfPilot.command`**.
+
+**4. Check everything**
+```bash
+scripts/validate.sh
+```
+This prints PASS / WARN / FAIL for every part of every track and tells you how to fix anything that isn't green.
+
+---
+
+## How it works
+
+```
+                        ┌───────────────────────── ConfPilot (FastAPI) ─────────────────────────┐
+ "SRE into eBPF..." ──► │ 1. AI understands the request ──► keywords + level                    │
+                        │ 2. Elasticsearch hybrid search                                        │
+                        │      keywords ──► BM25 search  ─┐                                     │
+                        │      your words ─► vector search ┴─► Reciprocal Rank Fusion ─► ranked │
+                        │ 3. Planner picks the best talk per time slot (never two at once)      │
+                        │ 4. AI writes a reason for each talk          ┐ in parallel:           │
+                        │ 5. Vector search over attendees + AI openers ┘ people to meet         │
+                        └───────────────┬───────────────────────────────────────────────────────┘
+                                        │ traces, metrics, logs (OpenTelemetry)
+                                        ▼
+                                      Dash0
 ```
 
-```bash
-uvicorn app.main:app --reload
-```
+- **Elasticsearch 8** stores 165 talks and 60 attendees with 384-dimension embeddings.
+- **Embeddings** come from [fastembed](https://github.com/qdrant/fastembed) (`BAAI/bge-small-en-v1.5`), which runs
+  locally on the CPU. No API key and no cost.
+- **Hybrid search:** keyword search gets the AI's keywords, and meaning search gets your original sentence, so
+  each search gets the input it's best at. Results are combined with Reciprocal Rank Fusion in Python, which
+  works on Elasticsearch's **free license**.
+- **AI:** any OpenAI-compatible API, such as Google Gemini (free), Groq (free), xAI Grok or OpenAI. If the main
+  model is busy, a **backup model** answers. If a model is retired, the app follows the provider's suggested
+  replacement. If every AI call fails, the app falls back to rules.
+- **Chat:** the AI works out what you want (answer, add, replace or remove), and every change goes through the
+  same search and clash check.
 
-Tests: `pip install pytest && pytest -q`
+---
 
-## Run on Kubernetes (kind / minikube)
+## Track details and how to demo each one
 
-```bash
-docker build -t confpilot:latest .
-```
+### Track 4: Search & Vector Database (Elasticsearch)
 
-```bash
-kind load docker-image confpilot:latest
-```
+**What's built**
+- Every request runs **hybrid search**: BM25 keyword search plus kNN vector search, fused with Reciprocal Rank Fusion.
+- **People matching** is kNN search over a second index of attendees' "what I'm working on" notes.
+- Each talk card shows **Keyword #** and **Meaning #** badges with its rank in each search, plus the fused score.
 
-```bash
-kubectl apply -f k8s/confpilot.yaml
-```
+**Demo**
+1. Click an example profile, then **Plan my conference**.
+2. Click **✨ Meaning-only demo: "How can we save money and help the planet?"**, then **Plan my conference**.
+   None of those words appear in any talk, yet the agenda is FinOps, autoscaling and carbon-footprint talks.
+3. Point at the badges and the "Searched for" line, which shows the keywords the AI produced while meaning
+   search used the original sentence.
 
-```bash
-kubectl -n confpilot create secret generic confpilot-llm --from-literal=LLM_API_KEY=your-key
-```
+### Track 2: Observability (Dash0)
 
-```bash
-kubectl -n confpilot port-forward svc/confpilot 8000:80
-```
+**What's built**
+- The app sends **traces, metrics and logs** to Dash0 over OpenTelemetry (OTLP gRPC).
+- Every request is a trace: `understand` → `hybrid_search` (with `embed_query` and the Elasticsearch calls
+  inside) → `plan` → `explain`, plus `people` in parallel.
+- **Custom metrics:** `confpilot.search.duration`, `confpilot.search.results`, `confpilot.llm.calls` (by model and
+  outcome: ok / busy / retired / rejected), `confpilot.llm.duration`, `confpilot.ai.fallbacks`.
+- **Logs** are linked to their traces. Slow requests and crashes are logged with the step timings or the stack trace.
+- **Fault injection** (`scripts/chaos.sh`) creates realistic incidents, each leaving a different trail.
 
-The manifest has an Elasticsearch StatefulSet, an ingest Job, the app Deployment (2 replicas) and its Services.
-The LLM secret is optional.
+**Setup**
+1. Create a Dash0 account (free trial).
+2. In Dash0, open **Settings → Endpoints** and copy the **OTLP via gRPC** address. Then open
+   **Settings → Auth Tokens** and copy a token.
+3. Add them to `.env`, then run `./start.sh`:
+   ```
+   DASH0_OTLP_ENDPOINT=https://ingress.us-east-1.aws.dash0.com:4317
+   DASH0_AUTH_TOKEN=auth_your-token
+   CHAOS_ENABLED=true
+   ```
 
-## Configuration (`.env`)
+**Demo**
+1. Send traffic: `python3 scripts/load.py --minutes 5`
+2. Break something, then ask **Dash0's AI agent** what's wrong:
 
-| Variable | Default | Notes |
+   | Command | What breaks | What Dash0 shows |
+   |---|---|---|
+   | `scripts/chaos.sh slow` | Searches take 3 extra seconds | The `embed_query` span is the slow part; "Slow request" warnings |
+   | `scripts/chaos.sh ai` | The AI provider times out | `confpilot.ai.fallbacks` jumps; LLM calls marked "busy"; error logs |
+   | `scripts/chaos.sh baddata` | 40% of plans fail with HTTP 500 | KeyError stack traces pointing at a talk record with no start time |
+   | `scripts/chaos.sh off` | Back to normal | |
+
+### Track 3: Kubernetes UI / AI SRE (Radar)
+
+**What's built**
+- `scripts/k8s.sh up` builds the image, loads it into the cluster, creates a Secret from your `.env`, deploys
+  Elasticsearch, loads the data and starts two app pods.
+- Proper health checks: `/readyz` fails when Elasticsearch is unreachable, so Kubernetes stops sending traffic.
+  Memory limits are set, and each pod's name is attached to its telemetry.
+- `scripts/k8s.sh break …` creates six realistic incidents for [Radar](https://github.com/skyhook-io/radar)'s
+  AI SRE to diagnose.
+
+**Setup**
+1. Docker Desktop: **Settings → Kubernetes → Enable Kubernetes → Apply**, then wait for "running".
+2. Deploy: `scripts/k8s.sh up`
+3. Open the app: `scripts/k8s.sh open` → http://localhost:8080
+4. Install and start Radar: `brew install kubectl-radar`, then `kubectl radar`
+
+**Demo:** break the cluster, then let Radar, or a coding agent through Radar's MCP server, find the root cause.
+
+| Command | What happens |
+|---|---|
+| `scripts/k8s.sh break oom` | Memory limit cut; pods are OOMKilled and crash-loop |
+| `scripts/k8s.sh break es-down` | Elasticsearch scaled to 0; app pods go NotReady |
+| `scripts/k8s.sh break bad-config` | A "config change" points the app at a host that doesn't exist |
+| `scripts/k8s.sh break bad-image` | A deploy references an image tag that doesn't exist |
+| `scripts/k8s.sh break ai-outage` | AI provider times out; the app degrades but stays up |
+| `scripts/k8s.sh break bad-data` | A corrupt record crashes 40% of plan requests |
+| `scripts/k8s.sh fix` | Undo everything |
+
+With Dash0 configured, the same incidents also appear in Dash0, tagged with the pod name.
+
+### Track 1: AI Code Review (Gitar)
+
+**What's built**
+- **CI** ([.github/workflows/ci.yml](.github/workflows/ci.yml)) runs on every push and pull request:
+  - lint (ruff), 34 unit tests and config validation;
+  - an **integration job** that starts a real Elasticsearch, loads the data, calls the API, and fails if the
+    agenda contains a clash.
+- **Five review rules** in [.gitar/rules/](.gitar/rules/), specific to this project:
+
+  | Rule | What Gitar checks |
+  |---|---|
+  | `ai-calls-need-fallback` | Every AI call has a rule-based fallback; AI output is validated |
+  | `agenda-stays-clash-free` | Code that edits the agenda checks for overlaps and has a test |
+  | `elasticsearch-basic-license` | Only free-license Elasticsearch features |
+  | `telemetry-conventions` | New steps are traced; metric labels stay low-cardinality; no secrets in logs |
+  | `no-secrets` | No API keys or tokens committed |
+
+**Demo:** [Pull request #2](https://github.com/vuppalasaiganesh/ConfPilot/pull/2) looks like a normal feature
+(AI talk summaries plus a planner speed-up) but breaks three rules: an AI call with no fallback, a metric
+labelled with talk IDs, and a planner change that lets clashes through, which also makes CI fail. Show Gitar's
+review comments next to the rules, and its diagnosis of the failing build.
+
+> ⚠️ **Never merge the demo pull request.** It contains deliberate bugs. If it gets merged by accident, revert
+> it on `main` (GitHub's **Revert** button on the merged pull request) and open a new one from the same changes.
+
+---
+
+## The demo script
+
+**Before you present (10 minutes early)**
+- [ ] `./start.sh` and `scripts/k8s.sh up` are running
+- [ ] `scripts/validate.sh` shows **0 failed**
+- [ ] `python3 scripts/load.py` is sending traffic, so Dash0 has live data
+- [ ] Browser tabs open: the app, Dash0, Radar (`kubectl radar`), pull request #2
+- [ ] Every fault is off: `scripts/chaos.sh off` and `scripts/k8s.sh fix`
+
+**5 minutes, all four tracks**
+
+| Time | What to do | What to say |
 |---|---|---|
-| `LLM_API_KEY` | empty | Empty means rule-based mode |
-| `LLM_BASE_URL` | `https://api.x.ai/v1` | Grok. Use `https://api.openai.com/v1` for OpenAI |
-| `LLM_MODEL` | `grok-4` | Use any chat model your provider offers |
-| `ES_URL` | `http://localhost:9200` | |
-| `EMBEDDINGS` | `fastembed` | `fastembed`, `openai` or `hash` (offline fallback, low quality) |
-| `OTEL_EXPORTER_OTLP_ENDPOINT` | unset | When set, FastAPI and Elasticsearch calls are traced with OpenTelemetry |
+| 0:00 | Show the empty page | "KubeCon has hundreds of talks at once. Picking is painful." |
+| 0:20 | Example profile → **Plan my conference** | "One sentence in, a clash-free agenda out, with a reason for every talk." |
+| 1:00 | ✨ meaning demo | "No shared words, yet every talk fits. Elasticsearch hybrid search: keywords plus meaning." *(Track 4)* |
+| 1:40 | Chat: *"swap anything on day 2 for AI talks"* | "Refine it in plain English. It still never double-books." |
+| 2:10 | `scripts/chaos.sh slow` → ask Dash0's AI agent | "Traces, metrics and logs in Dash0. Its agent finds the slow step." *(Track 2)* |
+| 3:00 | `scripts/k8s.sh break oom` → Radar | "Same app on Kubernetes. Radar's AI SRE spots the OOM kills and the change that caused them." *(Track 3)* |
+| 3:50 | Pull request #2 | "Gitar reviews pull requests against our own rules and explains the failing build." *(Track 1)* |
+| 4:30 | `scripts/chaos.sh off`, `scripts/k8s.sh fix` | "One project, four tracks, all on free tiers." |
+
+**If something fails live:** if the AI is down, the app keeps working with rule-based answers and a yellow
+notice. Say "it degrades gracefully, and Dash0 shows why" and carry on.
+
+---
+
+## Commands cheat sheet
+
+Run these from the project folder.
+
+| Command | What it does |
+|---|---|
+| `./start.sh` | Start or restart everything (Docker), then open the browser |
+| `./start.sh stop` | Stop everything |
+| `./start.sh logs` | Follow the app logs |
+| `./start.sh reset` | Delete all data and start fresh |
+| `./start.sh tracing` | Start with a local Jaeger trace viewer at http://localhost:16686 (no Dash0 needed) |
+| `scripts/validate.sh` | Check all four tracks: PASS / WARN / FAIL |
+| `scripts/load.py` | Send realistic traffic (`--rps 2 --minutes 5`) |
+| `scripts/chaos.sh slow\|ai\|baddata\|off\|status` | Break or restore the Docker app |
+| `scripts/k8s.sh up\|open\|status\|fix\|down` | Kubernetes deploy and management |
+| `scripts/k8s.sh break <incident>` | Kubernetes incidents for Radar (see Track 3) |
+| `python3 scripts/import_csv.py file.csv` | Load a real schedule (see below) |
+
+---
+
+## Configuration (.env)
+
+Copy `.env.example` to `.env`. Everything is optional. `.env` is git-ignored, so your keys never leave your computer.
+
+| Setting | Example | What it's for |
+|---|---|---|
+| `LLM_API_KEY` | `AIza...` | AI key. Empty means rule-based answers |
+| `LLM_BASE_URL` | `https://generativelanguage.googleapis.com/v1beta/openai/` | The AI provider's OpenAI-compatible address |
+| `LLM_MODEL` | `gemini-3.5-flash-lite` | Main model |
+| `LLM_FALLBACK_MODELS` | `gemini-3.8-flash` | Backups when the main model is busy, comma separated |
+| `LLM_TIMEOUT` | `45` | Seconds before an AI call gives up |
+| `DASH0_OTLP_ENDPOINT` | `https://ingress.us-east-1.aws.dash0.com:4317` | Dash0 "OTLP via gRPC" address |
+| `DASH0_AUTH_TOKEN` | `auth_...` | Dash0 auth token (just the token, no "Bearer") |
+| `DASH0_DATASET` | | Optional Dash0 dataset |
+| `CHAOS_ENABLED` | `true` | Allow `scripts/chaos.sh` to break things (demos only) |
+| `EMBEDDINGS` | `fastembed` | `fastembed` (default), `openai`, or `hash` (offline, low quality) |
+
+**Free AI options**
+
+| Provider | Get a key | `LLM_BASE_URL` | `LLM_MODEL` |
+|---|---|---|---|
+| Google Gemini | aistudio.google.com/apikey | `https://generativelanguage.googleapis.com/v1beta/openai/` | `gemini-3.5-flash-lite` |
+| Groq | console.groq.com | `https://api.groq.com/openai/v1` | `llama-3.3-70b-versatile` |
+
+Model names change often. If yours is wrong, the page's status line and `scripts/validate.sh` list the models
+your key can use.
+
+---
+
+## Troubleshooting
+
+| What you see | Fix |
+|---|---|
+| `Docker is not installed` / `Docker Compose is missing` | Install Docker Desktop and **open it once**, then run `./start.sh` again |
+| `permission denied: ./start.sh` | `chmod +x start.sh scripts/*.sh` |
+| Elasticsearch keeps restarting | Give Docker Desktop at least 4 GB of memory (Settings → Resources) |
+| Port 8000 or 9200 already in use | Stop the other program, or change the left-hand port in `docker-compose.yml` |
+| Status line: **embeddings: hash** | The embedding model didn't download. Check your internet connection, then `./start.sh` |
+| **AI problem: 400/401/403** | Wrong key or wrong provider. Check that `LLM_API_KEY` and `LLM_BASE_URL` are from the same provider |
+| **AI problem: 403 … no credits** | That provider needs payment. Use a free one (Gemini or Groq, above) |
+| **AI problem: 404 … no longer available** | Set `LLM_MODEL` to the model named in the **Fix:** line |
+| **AI problem: 503 / 429 / timed out** | Provider busy. Set a backup in `LLM_FALLBACK_MODELS` |
+| Dash0 shows nothing | Use the **OTLP via gRPC** address ending in `:4317`, and put only the token in `DASH0_AUTH_TOKEN`. Then `./start.sh` and `scripts/k8s.sh up` |
+| `k8s.sh up`: `ErrImageNeverPull` | Run `scripts/k8s.sh up` again (it copies the image into the cluster). If it persists: Docker Desktop → Settings → General → untick "Use containerd for pulling and storing images" |
+| Changed `.env` but nothing changed | Restart: `./start.sh`, and `scripts/k8s.sh up` for Kubernetes |
+| Anything else | `scripts/validate.sh` names the problem; `./start.sh logs` shows the details |
+
+---
+
+## Project structure
+
+```
+app/
+  main.py          API routes, health checks, error handling
+  search.py        Elasticsearch: indices, ingest, hybrid search (BM25 + kNN + RRF)
+  planner.py       Clash-free agenda builder and .ics calendar export
+  chat.py          Follow-up chat: intent → search → agenda edit → reply
+  llm.py           AI calls: fallbacks, backup models, retired-model handling, key checks
+  embeddings.py    fastembed (default), OpenAI, or offline hash embeddings
+  telemetry.py     OpenTelemetry traces, metrics and logs (Dash0 / any OTLP)
+  chaos.py         Fault injection for the observability demos
+  static/index.html  The web page
+data/              165 talks, 60 attendees, generator script, CSV template
+scripts/           start helpers: ingest, validate, load, chaos, k8s, CSV import
+k8s/confpilot.yaml Kubernetes manifest (Elasticsearch, ingest job, app, services)
+.gitar/rules/      Gitar code review rules
+.github/workflows/ CI: lint, tests, integration test with real Elasticsearch
+tests/             34 unit tests
+```
+
+**Tech stack:** Python 3.12, FastAPI, Elasticsearch 8.15, fastembed (ONNX), OpenAI-compatible LLM client,
+OpenTelemetry, Docker Compose, Kubernetes, GitHub Actions, vanilla HTML/JS.
+
+---
 
 ## API
 
-- `POST /api/plan` with `{"profile": "...", "days": ["2027-03-23"], "levels": [], "max_talks": 10}` returns the agenda, reasons, tips and people
-- `POST /api/search` with `{"query": "ebpf security", "size": 10}` returns the raw hybrid search results (each shows `matched_by`)
-- `POST /api/chat` with `{"message": "swap day 2 for AI talks", "profile": "...", "agenda_ids": [...], "history": []}` returns the reply, the new `agenda_ids`, the `added` talks and the `suggestions`
-- `POST /api/agenda.ics` with `{"talk_ids": ["T001", "T014"]}` returns a calendar file
-- `GET /api/facets` lists days, tracks, levels and the active embedder
-- `GET /healthz` reports Elasticsearch and LLM status
+| Method | Path | What it does |
+|---|---|---|
+| `POST` | `/api/plan` | `{"profile": "...", "days": [], "levels": [], "max_talks": 10}` → agenda, reasons, people, timings |
+| `POST` | `/api/chat` | `{"message": "...", "profile": "...", "agenda_ids": [...]}` → reply, new agenda, suggestions |
+| `POST` | `/api/search` | `{"query": "...", "size": 10}` → raw hybrid search results |
+| `POST` | `/api/agenda.ics` | `{"talk_ids": [...]}` → calendar file |
+| `GET` | `/api/facets` | Days, tracks, levels, active embedder |
+| `GET` | `/healthz?deep=true` | Version, Elasticsearch, AI key check, telemetry, fault state |
+| `GET` | `/readyz` | 200 only when Elasticsearch is reachable and the data is loaded |
+| `GET/POST` | `/api/chaos` | Read or change fault injection (needs `CHAOS_ENABLED=true`) |
+
+---
 
 ## Use a real conference schedule
 
-Put the schedule in a spreadsheet with these columns and save it as CSV. `data/talks_template.csv` is an example.
+Save the schedule from a spreadsheet as CSV with these columns. See `data/talks_template.csv` for an example.
 
 `title, abstract, speakers, track, level, tags, room, start, end`
 
-Separate several speakers or tags with `;`, and write times like `2027-03-23 10:00`. Only title, abstract,
-start and end are required.
+Only `title`, `abstract`, `start` and `end` are required. Separate several speakers or tags with `;`, and
+write times like `2027-03-23 10:00`.
 
 ```bash
 python3 scripts/import_csv.py my_schedule.csv
 ```
-
 ```bash
 ./start.sh
 ```
-
-## Tracing and reliability
-
-- `./start.sh tracing` sends OpenTelemetry traces to Jaeger. Open http://localhost:16686, pick service
-  `confpilot`, and each request shows its steps: AI understanding → hybrid search (with the Elasticsearch calls
-  inside) → planning → AI explanation → people matching.
-- Every response includes step timings, and the page shows them under the summary.
-- `GET /healthz?deep=true` checks Elasticsearch and makes a tiny real call to the AI to verify your key. The
-  page shows the result: *AI on*, *AI off*, or *AI key problem: …*.
-- If the AI fails mid-demo (bad key, rate limit, timeout), the request still works with rule-based answers,
-  and the page says why in a yellow notice. AI calls time out after 20 seconds with one retry.
-- If Elasticsearch is down or still loading, the page says so in plain words instead of failing silently.
-
-## 3-minute demo script
-
-Before the demo: run `./start.sh`, check that the status line says **embeddings: fastembed** and **AI on**,
-and run every step below once.
-
-1. **The problem (20 s).** "KubeCon has hundreds of talks at the same time. Picking is painful."
-2. **Plan (40 s).** Click the *ML engineer* example, then **Plan my conference**. Point out the agenda grouped
-   by day with no clashes, the reason under each talk, and the timing line (search takes milliseconds).
-3. **The wow (40 s).** Click **✨ Meaning-only demo: "How can we save money and help the planet?"**, then
-   **Plan my conference**. None of those words appear in any talk, yet the agenda is FinOps, autoscaling and
-   carbon-footprint talks. Point at the "Searched for" line: the AI turned the question into keywords, and
-   meaning search used the original sentence. The **Keyword #** / **Meaning #** badges show both searches
-   agreeing. (With AI off, some talks also get the purple **Found by meaning only** badge.)
-4. **Chat (40 s).** Type *"swap anything on day 2 for AI talks"*. Talks marked **New** appear. Then ask
-   *"who is speaking about service mesh?"* and click **Add**.
-5. **Wrap up (40 s).** Click **Swap for backup** on a talk, scroll to **People worth meeting**, then click
-   **Add to calendar**. If you started with `./start.sh tracing`, show one trace in Jaeger.

@@ -95,6 +95,59 @@
   .examples button.wow { border-style: solid; border-color: var(--accent); color: var(--accent); }
   .filters { margin-top: 12px; }
   code { background: var(--bg); padding: 1px 5px; border-radius: 4px; }
+
+  /* ---------- polish ---------- */
+  /* 2. "Why" reason stands out */
+  .reason { margin-top: 8px; padding: 7px 10px; background: var(--accent-soft); border-left: 3px solid var(--accent);
+            border-radius: 6px; font-size: 14px; }
+  .reason::before { content: "Why: "; font-weight: 700; color: var(--accent); }
+  /* 3. Match badges: same size, more room */
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: center; }
+  .mk, .ms, .mo, .score { margin: 0; font-size: 11.5px; line-height: 18px; padding: 1px 8px; border-radius: 6px; white-space: nowrap; }
+  .score { color: var(--muted); border: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  /* 4. Talk cards */
+  .talk { border-top: 0; padding: 14px 12px; margin: 0 -12px; border-radius: 10px; transition: background .15s; }
+  .talk:hover { background: var(--bg); }
+  .talk + .talk { border-top: 1px solid var(--line); }
+  /* 5. People cards */
+  .person { padding: 14px; transition: border-color .15s, transform .15s; }
+  .person:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .person .title { font-size: 16px; }
+  .person .opener { margin: 10px 0 0; padding: 8px 10px; border-left: 3px solid var(--accent); background: var(--bg);
+                    border-radius: 0 6px 6px 0; font-size: 13.5px; font-style: italic; }
+  /* 6. Empty state */
+  .empty .big { font-size: 34px; margin-bottom: 8px; }
+  .empty .hint { color: var(--text); font-weight: 600; margin-bottom: 4px; }
+  /* 7. Micro-interactions */
+  .fade-in { animation: fadeIn .35s ease-out both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  button { transition: background .15s, border-color .15s, color .15s, filter .15s; }
+  button.primary:hover:not(:disabled), .chatform button:hover:not(:disabled) { filter: brightness(1.1); }
+  .toolbar button:hover, .sugg button:hover:not(:disabled) { background: var(--accent-soft); }
+  .chip:hover { border-color: var(--accent); }
+  .examples button:hover { border-color: var(--accent); color: var(--text); }
+  .actions button:hover { text-decoration: underline; }
+  .new { animation: pulse 1.6s ease-out 3; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(63, 91, 216, .55); } 100% { box-shadow: 0 0 0 8px rgba(63, 91, 216, 0); } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+  /* 9. Visible keyboard focus */
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  textarea:focus-visible, .chatform input:focus-visible { outline-offset: 0; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  /* One column on small screens: the form scrolls away instead of covering the agenda. */
+  @media (max-width: 860px) { .sticky { position: static; } }
+  /* 8. Phones: more room, bigger tap targets */
+  @media (max-width: 600px) {
+    .panel { padding: 14px; }
+    .talk { grid-template-columns: 1fr; gap: 4px; }
+    .talk .time, .talk .room { display: inline; margin-right: 8px; }
+    .chip { padding: 8px 12px; font-size: 14px; }
+    .actions { gap: 16px; }
+    .actions button { padding: 6px 0; font-size: 14px; text-align: left; }
+    .sugg button { padding: 5px 12px; font-size: 13px; }
+    .chatform input, .chatform button { min-height: 44px; }
+    .msg { max-width: 95%; }
+  }
 </style>
 </head>
 <body>
@@ -112,11 +165,11 @@
     <label>Level (optional; otherwise inferred)</label>
     <div class="chips" id="levels"></div>
     <button class="primary" id="go">Plan my conference</button>
-    <div class="status" id="status">Connecting…</div>
+    <div class="status" id="status" role="status" aria-live="polite">Connecting…</div>
   </section>
 
   <section>
-    <div class="panel" id="out"><div class="empty">Your agenda will appear here.</div></div>
+    <div class="panel" id="out" aria-live="polite"><div class="empty"><div class="big" aria-hidden="true">🗓️</div><div class="hint">Describe yourself on the left and click Plan to build your agenda.</div>Or pick one of the examples to see it in action.</div></div>
   </section>
 </main>
 
@@ -149,8 +202,8 @@ function chips(el, values, set, fmt = (v) => v) {
   el.innerHTML = "";
   values.forEach((v) => {
     const b = document.createElement("button");
-    b.className = "chip"; b.textContent = fmt(v); b.type = "button";
-    b.onclick = () => { set.has(v) ? set.delete(v) : set.add(v); b.classList.toggle("on"); };
+    b.className = "chip"; b.textContent = fmt(v); b.type = "button"; b.setAttribute("aria-pressed", "false");
+    b.onclick = () => { set.has(v) ? set.delete(v) : set.add(v); b.classList.toggle("on"); b.setAttribute("aria-pressed", String(set.has(v))); };
     el.appendChild(b);
   });
 }
@@ -202,11 +255,11 @@ function talkHtml(t, i) {
       <div class="title">${state.fresh.has(t.id) ? '<span class="new">New</span>' : ""}${esc(t.title)}</div>
       <div class="meta"><span class="badge lv-${esc(t.level)}">${esc(t.level)}</span>${esc(t.track)} · ${esc(t.speakers.join(", "))}</div>
       ${t.reason ? `<div class="reason">${esc(t.reason)}</div>` : ""}
-      <div>${matchChips(t)}</div>
-      <details><summary>Abstract</summary>${esc(t.abstract)}<br><span class="debug">Fused (RRF) score ${t.score}</span></details>
+      <div class="badges">${matchChips(t)}${t.score != null ? `<span class="score" title="Reciprocal Rank Fusion score: keyword and meaning ranks combined">Score ${Number(t.score).toFixed(4)}</span>` : ""}</div>
+      <details><summary>Abstract</summary>${esc(t.abstract)}</details>
       <div class="actions">
-        ${b ? `<button data-swap="${i}">Swap for backup: ${esc(b.title)} (${esc(b.room)})</button>` : ""}
-        <button data-remove="${i}">Remove</button>
+        ${b ? `<button data-swap="${i}" aria-label="Swap ${esc(t.title)} for backup ${esc(b.title)}">Swap for backup: ${esc(b.title)} (${esc(b.room)})</button>` : ""}
+        <button data-remove="${i}" aria-label="Remove ${esc(t.title)} from agenda">Remove</button>
       </div>
     </div>
   </div>`;
@@ -227,7 +280,7 @@ function renderFilters() {
   const tracks = [...new Set(state.agenda.map((t) => t.track))].sort();
   if (state.track && !tracks.includes(state.track)) state.track = null;
   el.innerHTML = tracks.length > 1 ? [null, ...tracks].map((tr) =>
-    `<button type="button" class="chip ${state.track === tr ? "on" : ""}" data-track="${esc(tr ?? "")}">${esc(tr ?? "All tracks")}</button>`).join("") : "";
+    `<button type="button" class="chip ${state.track === tr ? "on" : ""}" aria-pressed="${state.track === tr}" data-track="${esc(tr ?? "")}">${esc(tr ?? "All tracks")}</button>`).join("") : "";
   el.querySelectorAll("[data-track]").forEach((b) => b.onclick = () => { state.track = b.dataset.track || null; renderAgenda(); });
 }
 
@@ -252,26 +305,26 @@ function render(data) {
   const aiMs = (tm.understand || 0) + (tm.explain || 0);
   const timing = `Hybrid search over the talks: ${ms(tm.hybrid_search)} · clash-free planning: ${ms(tm.plan)}` +
     (data.ai.used ? ` · AI: ${ms(aiMs)}` : "") + ` · total: ${ms(tm.total)}`;
-  $("#out").innerHTML = `
+  $("#out").innerHTML = `<div class="fade-in">
     <h2>Your agenda</h2>
     <div class="summary">${esc(data.summary)}</div>
     ${data.tips.length ? `<ul class="tips">${data.tips.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
     ${data.ai.notice ? `<div class="notice">${esc(data.ai.notice)}</div>` : ""}
     <div class="debug" style="margin-top:8px">Searched for <code>${esc(u.search_query)}</code>${u.levels.length ? ` · levels: ${esc(u.levels.join(", "))}` : ""}</div>
     <div class="debug">${timing}</div>
-    <div class="toolbar"><button id="ics">Add to calendar (.ics)</button></div>
+    <div class="toolbar"><button id="ics" aria-label="Download agenda as a calendar file">Add to calendar (.ics)</button></div>
     <div class="chat">
       <h2>Ask a follow-up or change your agenda</h2>
-      <div class="log" id="log"><div class="msg bot">Want changes? Ask things like "swap day 2 for AI talks" or "who's talking about GPUs?"</div></div>
+      <div class="log" id="log" aria-live="polite"><div class="msg bot">Want changes? Ask things like "swap day 2 for AI talks" or "who's talking about GPUs?"</div></div>
       <div class="chips" id="chatex" style="margin-bottom:8px"></div>
-      <form class="chatform" id="chatform"><input id="chatin" placeholder="Type a question or change…" autocomplete="off" maxlength="1000"><button id="chatsend">Send</button></form>
+      <form class="chatform" id="chatform"><label for="chatin" class="sr-only">Ask a follow-up or change your agenda</label><input id="chatin" placeholder="Type a question or change…" autocomplete="off" maxlength="1000"><button id="chatsend" aria-label="Send message">Send</button></form>
     </div>
     <div class="chips filters" id="filters"></div>
     <div id="agenda"></div>
     <h3>People worth meeting</h3>
     <div class="people">${data.people.map((p) => `<div class="person">
         <div class="title">${esc(p.name)}</div><div class="meta">${esc(p.role)} · ${esc(p.company)}</div>
-        <div class="opener">💬 ${esc(p.opener)}</div></div>`).join("")}</div>`;
+        <blockquote class="opener">“${esc(p.opener)}”</blockquote></div>`).join("")}</div></div>`;
   renderAgenda();
   $("#ics").onclick = downloadIcs;
   CHAT_EXAMPLES.forEach((ex) => {
@@ -285,7 +338,7 @@ function addMsg(role, text, suggestions = []) {
   const div = document.createElement("div");
   div.className = "msg " + (role === "user" ? "user" : "bot");
   div.innerHTML = esc(text) + suggestions.map((t, i) =>
-    `<div class="sugg"><b>${esc(t.title)}</b> · ${dayLabel(t.start.slice(0, 10))} ${hhmm(t.start)}, ${esc(t.room)} · ${esc(t.level)}<button data-i="${i}">Add</button></div>`).join("");
+    `<div class="sugg"><b>${esc(t.title)}</b> · ${dayLabel(t.start.slice(0, 10))} ${hhmm(t.start)}, ${esc(t.room)} · ${esc(t.level)}<button data-i="${i}" aria-label="Add ${esc(t.title)} to agenda">Add</button></div>`).join("");
   div.querySelectorAll("button[data-i]").forEach((b) => b.onclick = () => { addTalk(suggestions[+b.dataset.i]); b.disabled = true; b.textContent = "Added"; });
   $("#log").appendChild(div); $("#log").scrollTop = $("#log").scrollHeight;
 }
@@ -341,8 +394,13 @@ $("#go").onclick = async () => {
   const tick = () => document.querySelectorAll(".steps li").forEach((li, j) => { li.className = j < k ? "done" : j === k ? "on" : ""; });
   tick();
   const timer = setInterval(() => { if (k < steps.length - 1) { k++; tick(); } }, 900);
+  const sleep = (t) => new Promise((r) => setTimeout(r, t));
   try {
-    render(await api("/api/plan", { profile, days: [...state.days], levels: [...state.levels] }));
+    const data = await api("/api/plan", { profile, days: [...state.days], levels: [...state.levels] });
+    clearInterval(timer);
+    // Walk through the remaining steps quickly so every step is seen, even when the answer is instant.
+    while (k < steps.length) { k++; tick(); await sleep(180); }
+    render(data);
   } catch (e) {
     $("#out").innerHTML = `<div class="empty">${esc(e.message)}</div>`;
   } finally { clearInterval(timer); btn.disabled = false; btn.textContent = "Plan my conference"; }

@@ -1,3 +1,5 @@
+name: confpilot
+
 services:
   elasticsearch:
     image: elasticsearch:8.15.3
@@ -13,16 +15,23 @@ services:
 
   ingest:
     build: .
+    image: confpilot:local
     command: ["python", "-m", "scripts.ingest"]
-    env_file: [.env]
+    env_file:
+      - path: .env
+        required: false
     environment: [ES_URL=http://elasticsearch:9200]
     depends_on:
       elasticsearch: { condition: service_healthy }
 
   app:
-    build: .
-    env_file: [.env]
+    image: confpilot:local
+    pull_policy: never
+    env_file:
+      - path: .env
+        required: false
     environment: [ES_URL=http://elasticsearch:9200]
     ports: ["8000:8000"]
     depends_on:
       ingest: { condition: service_completed_successfully }
+    restart: unless-stopped

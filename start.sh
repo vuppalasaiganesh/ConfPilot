@@ -15,22 +15,25 @@ fail() { printf "\033[1;31mError:\033[0m %s\n" "$*" >&2; exit 1; }
 command -v docker >/dev/null 2>&1 || fail "Docker is not installed.
   Install Docker Desktop from https://www.docker.com/products/docker-desktop/ , open it once, then run this again."
 
-# 2. Compose available? (new 'docker compose' or old 'docker-compose')
-if docker compose version >/dev/null 2>&1; then DC="docker compose"
-elif command -v docker-compose >/dev/null 2>&1; then DC="docker-compose"
-else fail "Docker Compose is missing. Update Docker Desktop to a recent version."; fi
-
-# 3. Docker running? On a Mac, try to open Docker Desktop and wait for it.
+# 2. Docker running? On a Mac, try to open Docker Desktop and wait for it.
 if ! docker info >/dev/null 2>&1; then
   if [[ "$(uname)" == "Darwin" ]]; then
     say "Starting Docker Desktop..."
     open -a Docker || true
+    say "If Docker asks you to accept its terms, do that now. Waiting up to 3 minutes..."
   else
     say "Docker is not running. Start Docker Desktop (or 'sudo systemctl start docker')."
   fi
-  for _ in $(seq 1 60); do docker info >/dev/null 2>&1 && break; sleep 2; done
+  for _ in $(seq 1 90); do docker info >/dev/null 2>&1 && break; sleep 2; done
   docker info >/dev/null 2>&1 || fail "Docker did not start. Open Docker Desktop, wait for it to say 'running', then try again."
 fi
+
+# 3. Compose available? Docker Desktop registers it on first launch; also look inside the app itself.
+DESKTOP_COMPOSE="/Applications/Docker.app/Contents/Resources/cli-plugins/docker-compose"
+if docker compose version >/dev/null 2>&1; then DC="docker compose"
+elif [[ -x "$DESKTOP_COMPOSE" ]]; then DC="$DESKTOP_COMPOSE"
+elif command -v docker-compose >/dev/null 2>&1; then DC="docker-compose"
+else fail "Docker Compose is missing. Open Docker Desktop once (Applications > Docker), wait until it is running, then try again."; fi
 
 case "${1:-start}" in
   stop)  $DC down; exit 0 ;;

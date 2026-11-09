@@ -108,12 +108,17 @@ def rrf(*ranked_lists, k=RRF_K):
     return [{**docs[i], "score": round(scores[i], 5), "matched_by": sources[i]} for i in order]
 
 
-def hybrid_search_talks(query, size=40, levels=None, days=None, tracks=None, es=None):
+def hybrid_search_talks(query, size=40, levels=None, days=None, tracks=None, es=None, semantic_query=None):
+    """BM25 on `query` + kNN on the embedding of `semantic_query` (defaults to `query`), fused with RRF.
+
+    Passing the person's own words as `semantic_query` and AI-extracted keywords as `query` gives each
+    search the input it is best at: embeddings understand natural sentences, BM25 wants keywords.
+    """
     es = es or es_client()
     started = time.perf_counter()
     with telemetry.step("embed_query", embedder=get_embedder().name):
         chaos.slow_search()
-        vec = get_embedder().embed([query])[0]
+        vec = get_embedder().embed([semantic_query or query])[0]
     flt = _filters(levels, days, tracks)
     excludes = {"excludes": ["embedding"]}
 

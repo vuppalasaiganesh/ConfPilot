@@ -14,6 +14,8 @@ from . import config
 log = logging.getLogger(__name__)
 _client = None
 # Set when any LLM call in the current request failed and a fallback was used.
+# Holds {"reason": ...} for the current request. A mutable dict, so AI calls made in worker threads
+# (which run in a copy of the request's context) can still report a failure back to the request.
 _fallback_used = ContextVar("llm_fallback_used", default=None)
 _check_cache = {"at": 0.0, "result": None}
 
@@ -23,12 +25,13 @@ def enabled():
 
 
 def start_request():
-    _fallback_used.set(None)
+    _fallback_used.set({"reason": None})
 
 
 def fallback_reason():
     """Why the AI was skipped in this request (None if it worked or is not configured)."""
-    return _fallback_used.get()
+    state = _fallback_used.get()
+    return state["reason"] if state else None
 
 
 def _note_failure(where, exc):
@@ -42,7 +45,11 @@ def _note_failure(where, exc):
         reason = "the AI provider timed out"
     else:
         reason = "the AI call failed"
-    _fallback_used.set(reason)
+    state = _fallback_used.get()
+    if state is None:
+        state = {"reason": None}
+        _fallback_used.set(state)
+    state["reason"] = reason
     from . import telemetry
 
     telemetry.record_fallback(reason)

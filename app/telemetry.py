@@ -15,7 +15,7 @@ from contextlib import contextmanager
 
 log = logging.getLogger(__name__)
 SERVICE = os.getenv("OTEL_SERVICE_NAME", "confpilot")
-VERSION = "2026.11.09-8"
+VERSION = "2026.11.09-9"
 
 try:
     from opentelemetry import metrics, trace

@@ -97,3 +97,35 @@ def test_model_list_filters_and_sorts_newest_first(monkeypatch):
 
     monkeypatch.setattr(llm, "_get_client", lambda: Client)
     assert llm._available_models() == ["gemini-3.8-flash", "gemini-3.8-flash-lite", "gemini-2.5-flash"]
+
+
+def test_ai_failure_in_worker_thread_reaches_the_request():
+    import contextvars
+    from concurrent.futures import ThreadPoolExecutor
+
+    llm.start_request()
+    with ThreadPoolExecutor(1) as pool:
+        pool.submit(contextvars.copy_context().run, llm._note_failure, "icebreakers",
+                    RuntimeError("Error code: 429 - rate limit")).result()
+    assert "rate limiting" in llm.fallback_reason()
+
+
+def test_semantic_query_is_embedded_instead_of_keywords(monkeypatch):
+    from app import search
+
+    seen = []
+
+    class Emb:
+        name = "fake"
+
+        def embed(self, texts):
+            seen.extend(texts)
+            return [[0.0] * 3]
+
+    class ES:
+        def search(self, **kw):
+            return {"hits": {"hits": []}}
+
+    monkeypatch.setattr(search, "get_embedder", lambda: Emb())
+    search.hybrid_search_talks("FinOps carbon", es=ES(), semantic_query="save money and help the planet")
+    assert seen == ["save money and help the planet"]

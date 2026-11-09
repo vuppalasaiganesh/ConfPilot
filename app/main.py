@@ -1,5 +1,7 @@
+import contextvars
 import logging
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from elastic_transport import TransportError
@@ -155,20 +157,26 @@ def do_search(req: SearchRequest):
 
 @app.post("/api/plan")
 def plan(req: PlanRequest):
+    """Understand -> hybrid search -> clash-free plan -> explain, with people matching in parallel.
+
+    People matching only needs the profile, so it (and its AI openers) runs in a background thread while
+    the main path waits on the AI. That hides one AI call and cuts the response time.
+    """
     llm.start_request()
     timings, start = {}, time.perf_counter()
-    with step("understand", timings, llm=llm.enabled()):
-        intent = llm.understand(req.profile)
-    levels = req.levels or intent["levels"]
-    with step("hybrid_search", timings):
-        ranked = search.hybrid_search_talks(intent["search_query"], size=60, levels=levels, days=req.days)
-    with step("plan", timings):
-        agenda = planner.build_agenda(ranked, max_talks=req.max_talks)
-    with step("explain", timings, llm=llm.enabled()):
-        explanation = llm.explain_agenda(req.profile, agenda)
-    with step("people", timings):
-        people = search.similar_people(req.profile, size=4)
-        openers = llm.icebreakers(req.profile, people)
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        people_job = pool.submit(contextvars.copy_context().run, _people_with_openers, req.profile, timings)
+        with step("understand", timings, llm=llm.enabled()):
+            intent = llm.understand(req.profile)
+        levels = req.levels or intent["levels"]
+        with step("hybrid_search", timings):
+            ranked = search.hybrid_search_talks(intent["search_query"], size=60, levels=levels, days=req.days,
+                                                semantic_query=req.profile)
+        with step("plan", timings):
+            agenda = planner.build_agenda(ranked, max_talks=req.max_talks)
+        with step("explain", timings, llm=llm.enabled()):
+            explanation = llm.explain_agenda(req.profile, agenda)
+        people, openers = people_job.result()
     timings["total"] = round((time.perf_counter() - start) * 1000)
     _log_if_slow("/api/plan", timings)
     log.info("Planned agenda: %d talks from %d candidates in %d ms (ai=%s)",
@@ -183,6 +191,12 @@ def plan(req: PlanRequest):
         "ai": _ai_status(),
         "timings": timings,
     }
+
+
+def _people_with_openers(profile, timings):
+    with step("people", timings):
+        people = search.similar_people(profile, size=4)
+        return people, llm.icebreakers(profile, people)
 
 
 @app.post("/api/chat")

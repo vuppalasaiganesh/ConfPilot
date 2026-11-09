@@ -5,11 +5,12 @@ Basic license of any Elasticsearch 8.x (no paid retriever/RRF feature needed).
 """
 import json
 import logging
+import time
 from pathlib import Path
 
 from elasticsearch import Elasticsearch, helpers
 
-from . import config
+from . import chaos, config, telemetry
 from .embeddings import get_embedder
 
 log = logging.getLogger(__name__)
@@ -109,7 +110,10 @@ def rrf(*ranked_lists, k=RRF_K):
 
 def hybrid_search_talks(query, size=40, levels=None, days=None, tracks=None, es=None):
     es = es or es_client()
-    vec = get_embedder().embed([query])[0]
+    started = time.perf_counter()
+    with telemetry.step("embed_query", embedder=get_embedder().name):
+        chaos.slow_search()
+        vec = get_embedder().embed([query])[0]
     flt = _filters(levels, days, tracks)
     excludes = {"excludes": ["embedding"]}
 
@@ -127,7 +131,9 @@ def hybrid_search_talks(query, size=40, levels=None, days=None, tracks=None, es=
         "field": "embedding", "query_vector": vec, "k": size, "num_candidates": max(100, size * 4),
         "filter": flt,
     })["hits"]["hits"]
-    return rrf(("keyword", bm25), ("semantic", knn))[:size]
+    results = rrf(("keyword", bm25), ("semantic", knn))[:size]
+    telemetry.record_search(time.perf_counter() - started, len(results))
+    return chaos.corrupt(results)
 
 
 def similar_people(text, size=5, es=None):

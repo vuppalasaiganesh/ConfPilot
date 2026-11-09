@@ -9,12 +9,14 @@ from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import chat, config, llm, planner, search, telemetry
+from . import chaos, chat, config, llm, planner, search, telemetry
 from .telemetry import step
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+log = logging.getLogger("confpilot")
+SLOW_REQUEST_MS = 3000
 STATIC = Path(__file__).parent / "static"
-VERSION = "2026.11.09-7"  # bump on each release; shown by /healthz so you can tell which code is running
+VERSION = telemetry.VERSION  # shown by /healthz so you can tell which code is running
 
 app = FastAPI(title="ConfPilot", description="AI conference planner on Elasticsearch hybrid search")
 TRACING = telemetry.setup(app)
@@ -48,6 +50,25 @@ def _ai_status():
 
 
 # ---------- models ----------
+
+@app.exception_handler(Exception)
+def unexpected_error(request: Request, exc: Exception):
+    log.exception("Unhandled error on %s %s", request.method, request.url.path)
+    return JSONResponse(status_code=500, content={
+        "detail": f"Something broke on the server ({type(exc).__name__}). Run ./start.sh logs to see why."})
+
+
+def _log_if_slow(route, timings):
+    if timings.get("total", 0) > SLOW_REQUEST_MS:
+        log.warning("Slow request %s took %d ms: %s", route, timings["total"], timings)
+
+
+class ChaosRequest(BaseModel):
+    slow_search_ms: float | None = Field(None, ge=0, le=30000)
+    llm_outage: bool | None = None
+    bad_data_rate: float | None = Field(None, ge=0, le=1)
+    reset: bool = False
+
 
 class PlanRequest(BaseModel):
     profile: str = Field(..., min_length=3, max_length=2000)
@@ -97,10 +118,25 @@ def healthz(deep: bool = False):
         es_ok = False
     out = {"version": VERSION, "elasticsearch": es_ok, "es_ms": round((time.perf_counter() - start) * 1000),
            "llm": {"configured": llm.enabled(), "model": config.LLM_MODEL if llm.enabled() else None},
-           "tracing": TRACING}
+           "tracing": TRACING, "telemetry": telemetry.DESTINATION,
+           "chaos": {"runtime_toggle": chaos.ENABLED, **chaos.state}}
     if deep:
         out["llm"] = llm.check()
     return out
+
+
+@app.get("/readyz")
+def readyz():
+    """Kubernetes readiness: only take traffic when Elasticsearch answers and the data is loaded."""
+    try:
+        es = search.es_client()
+        if es.ping() and es.indices.exists(index=config.ES_INDEX_TALKS):
+            return {"ready": True}
+        reason = "talk index missing" if es.ping() else "Elasticsearch unreachable"
+    except Exception as exc:
+        reason = f"Elasticsearch error: {exc}"
+    log.warning("Not ready: %s (ES_URL=%s)", reason, config.ES_URL)
+    return JSONResponse(status_code=503, content={"ready": False, "reason": reason})
 
 
 @app.get("/api/facets")
@@ -134,6 +170,9 @@ def plan(req: PlanRequest):
         people = search.similar_people(req.profile, size=4)
         openers = llm.icebreakers(req.profile, people)
     timings["total"] = round((time.perf_counter() - start) * 1000)
+    _log_if_slow("/api/plan", timings)
+    log.info("Planned agenda: %d talks from %d candidates in %d ms (ai=%s)",
+             len(agenda), len(ranked), timings["total"], _ai_status()["used"])
     return {
         "understood": {"search_query": intent["search_query"], "levels": levels, "days": req.days},
         "summary": explanation["summary"],
@@ -153,7 +192,22 @@ def chat_turn(req: ChatRequest):
     history = [{"role": h.role, "content": h.content} for h in req.history]
     out = chat.handle(req.message, req.profile, req.agenda_ids, history)
     out["timings"]["total"] = round((time.perf_counter() - start) * 1000)
+    _log_if_slow("/api/chat", out["timings"])
     return {**out, "ai": _ai_status()}
+
+
+@app.get("/api/chaos")
+def get_chaos():
+    return {"runtime_toggle": chaos.ENABLED, **chaos.state}
+
+
+@app.post("/api/chaos")
+def set_chaos(req: ChaosRequest):
+    if not chaos.ENABLED:
+        return JSONResponse(status_code=403, content={"detail": "Fault injection is off. Set CHAOS_ENABLED=true in .env."})
+    if req.reset:
+        return chaos.reset()
+    return chaos.update(slow_search_ms=req.slow_search_ms, llm_outage=req.llm_outage, bad_data_rate=req.bad_data_rate)
 
 
 @app.post("/api/agenda.ics")

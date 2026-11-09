@@ -35,6 +35,7 @@ services:
       # Set by "./start.sh tracing"; empty means tracing is off.
       - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:-}
       - OTEL_SERVICE_NAME=confpilot
+      - DEPLOY_ENV=docker-compose
     ports: ["8000:8000"]
     depends_on:
       ingest: { condition: service_completed_successfully }

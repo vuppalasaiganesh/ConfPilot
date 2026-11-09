@@ -1,6 +1,5 @@
-# Deploy:  see README "Run on Kubernetes".
-# Create the LLM secret first (optional; app works without it):
-#   kubectl -n confpilot create secret generic confpilot-llm --from-literal=LLM_API_KEY=xai-...
+# ConfPilot on Kubernetes. Use scripts/k8s.sh instead of applying this by hand:
+# it builds the image, creates the confpilot-env Secret from your .env, applies this file and waits.
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -13,30 +12,33 @@ metadata:
   namespace: confpilot
 data:
   ES_URL: http://elasticsearch:9200
-  LLM_BASE_URL: https://api.x.ai/v1
-  LLM_MODEL: grok-4
   EMBEDDINGS: fastembed
+  DEPLOY_ENV: kubernetes
+  CHAOS_ENABLED: "true"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: elasticsearch
   namespace: confpilot
+  labels: { app.kubernetes.io/name: elasticsearch, app.kubernetes.io/part-of: confpilot }
 spec:
-  selector: { app: elasticsearch }
-  ports: [{ port: 9200, targetPort: 9200 }]
+  selector: { app.kubernetes.io/name: elasticsearch }
+  ports: [{ name: http, port: 9200, targetPort: 9200 }]
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: elasticsearch
   namespace: confpilot
+  labels: { app.kubernetes.io/name: elasticsearch, app.kubernetes.io/part-of: confpilot }
 spec:
   serviceName: elasticsearch
   replicas: 1
-  selector: { matchLabels: { app: elasticsearch } }
+  selector: { matchLabels: { app.kubernetes.io/name: elasticsearch } }
   template:
-    metadata: { labels: { app: elasticsearch } }
+    metadata:
+      labels: { app.kubernetes.io/name: elasticsearch, app.kubernetes.io/part-of: confpilot }
     spec:
       containers:
         - name: elasticsearch
@@ -44,13 +46,13 @@ spec:
           env:
             - { name: discovery.type, value: single-node }
             - { name: xpack.security.enabled, value: "false" }
-            - { name: ES_JAVA_OPTS, value: "-Xms1g -Xmx1g" }
-          ports: [{ containerPort: 9200 }]
+            - { name: ES_JAVA_OPTS, value: "-Xms512m -Xmx512m" }
+          ports: [{ name: http, containerPort: 9200 }]
           resources:
-            requests: { cpu: 500m, memory: 2Gi }
-            limits: { memory: 2Gi }
+            requests: { cpu: 250m, memory: 1Gi }
+            limits: { memory: 1536Mi }
           readinessProbe:
-            httpGet: { path: /_cluster/health?wait_for_status=yellow&timeout=2s, port: 9200 }
+            httpGet: { path: "/_cluster/health?wait_for_status=yellow&timeout=2s", port: 9200 }
             periodSeconds: 5
           volumeMounts: [{ name: data, mountPath: /usr/share/elasticsearch/data }]
   volumeClaimTemplates:
@@ -64,41 +66,63 @@ kind: Job
 metadata:
   name: confpilot-ingest
   namespace: confpilot
+  labels: { app.kubernetes.io/name: confpilot-ingest, app.kubernetes.io/part-of: confpilot }
 spec:
-  backoffLimit: 4
+  backoffLimit: 6
+  ttlSecondsAfterFinished: 3600
   template:
+    metadata:
+      labels: { app.kubernetes.io/name: confpilot-ingest, app.kubernetes.io/part-of: confpilot }
     spec:
       restartPolicy: OnFailure
       containers:
         - name: ingest
-          image: confpilot:latest
-          imagePullPolicy: IfNotPresent
+          image: confpilot:local
+          imagePullPolicy: Never
           command: ["python", "-m", "scripts.ingest"]
           envFrom:
             - configMapRef: { name: confpilot-config }
-            - secretRef: { name: confpilot-llm, optional: true }
+            - secretRef: { name: confpilot-env, optional: true }
+          resources:
+            requests: { cpu: 200m, memory: 512Mi }
+            limits: { memory: 1Gi }
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: confpilot
   namespace: confpilot
+  labels: { app.kubernetes.io/name: confpilot, app.kubernetes.io/part-of: confpilot }
 spec:
   replicas: 2
-  selector: { matchLabels: { app: confpilot } }
+  selector: { matchLabels: { app.kubernetes.io/name: confpilot } }
   template:
-    metadata: { labels: { app: confpilot } }
+    metadata:
+      labels: { app.kubernetes.io/name: confpilot, app.kubernetes.io/part-of: confpilot }
     spec:
       containers:
         - name: app
-          image: confpilot:latest
-          imagePullPolicy: IfNotPresent
-          ports: [{ containerPort: 8000 }]
+          image: confpilot:local
+          imagePullPolicy: Never
+          ports: [{ name: http, containerPort: 8000 }]
           envFrom:
             - configMapRef: { name: confpilot-config }
-            - secretRef: { name: confpilot-llm, optional: true }
-          readinessProbe:
+            - secretRef: { name: confpilot-env, optional: true }
+          env:  # pod identity, attached to every trace, metric and log
+            - name: POD_NAME
+              valueFrom: { fieldRef: { fieldPath: metadata.name } }
+            - name: POD_NAMESPACE
+              valueFrom: { fieldRef: { fieldPath: metadata.namespace } }
+            - name: NODE_NAME
+              valueFrom: { fieldRef: { fieldPath: spec.nodeName } }
+          readinessProbe:  # not ready when Elasticsearch is unreachable
+            httpGet: { path: /readyz, port: 8000 }
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
             httpGet: { path: /healthz, port: 8000 }
+            initialDelaySeconds: 20
+            periodSeconds: 10
           resources:
             requests: { cpu: 200m, memory: 512Mi }
             limits: { memory: 1Gi }
@@ -108,6 +132,7 @@ kind: Service
 metadata:
   name: confpilot
   namespace: confpilot
+  labels: { app.kubernetes.io/name: confpilot, app.kubernetes.io/part-of: confpilot }
 spec:
-  selector: { app: confpilot }
-  ports: [{ port: 80, targetPort: 8000 }]
+  selector: { app.kubernetes.io/name: confpilot }
+  ports: [{ name: http, port: 80, targetPort: 8000 }]

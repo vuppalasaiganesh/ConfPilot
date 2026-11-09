@@ -43,6 +43,9 @@ def _note_failure(where, exc):
     else:
         reason = "the AI call failed"
     _fallback_used.set(reason)
+    from . import telemetry
+
+    telemetry.record_fallback(reason)
 
 
 def _error_text(exc):
@@ -205,7 +208,30 @@ def _complete(system, user, max_tokens):
 
 
 def _complete_one(model, system, user, max_tokens):
+    from . import telemetry
+
+    started = time.perf_counter()
+    try:
+        text = _complete_one_inner(model, system, user, max_tokens)
+        telemetry.record_llm_call(model, "ok", time.perf_counter() - started)
+        return text
+    except Exception as exc:
+        status = getattr(exc, "status_code", None)
+        outcome = ("retired" if status == 404 else "rejected" if status in (400, 401, 403)
+                   else "busy" if _is_transient(exc) else "error")
+        telemetry.record_llm_call(model, outcome, time.perf_counter() - started)
+        span = telemetry.current_span()
+        if span is not None:
+            span.add_event("llm.call_failed", {"llm.model": model, "outcome": outcome, "error": _error_text(exc)})
+        raise
+
+
+def _complete_one_inner(model, system, user, max_tokens):
     from openai import BadRequestError
+
+    from . import chaos
+
+    chaos.llm_call()
 
     optional = {"response_format": {"type": "json_object"}, "temperature": 0.3, "max_tokens": max_tokens}
     if config.LLM_REASONING_EFFORT:

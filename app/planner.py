@@ -1,5 +1,5 @@
 """Turn ranked talks into a clash-free personal agenda, and export it as an .ics calendar."""
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 
 def _overlaps(a, b):
@@ -39,7 +39,7 @@ def _ics_escape(text):
 
 def to_ics(talks, cal_name="My Conference Agenda"):
     lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//ConfPilot//EN", f"X-WR-CALNAME:{cal_name}"]
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     for t in talks:
         lines += [
             "BEGIN:VEVENT",

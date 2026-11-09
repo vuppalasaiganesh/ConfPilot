@@ -21,6 +21,68 @@ eBPF security, fairly new to Kubernetes"*. ConfPilot gives you back:
 The app works **without an LLM key**: it falls back to rule-based reasons, so a live demo can't break because of a
 rate limit.
 
+## Hackathon tracks
+
+One project, four tracks. Each section is what to show the judges.
+
+### Track 4: Search & Vector Database (Elasticsearch)
+Elasticsearch is the core. Every request runs **hybrid search**: BM25 keyword search plus dense-vector kNN
+(fastembed `bge-small` embeddings), fused with Reciprocal Rank Fusion. Attendee matchmaking is kNN over a second
+index. On the page, the **Keyword #** / **Meaning #** badges show which search found each talk, and the
+**✨ Meaning-only demo** finds talks with no words in common with the query.
+
+### Track 2: Observability (Dash0)
+The app sends **traces, metrics and logs** to Dash0 over OTLP. Each request is a trace: AI understanding →
+`hybrid_search` (with the Elasticsearch calls and `embed_query` inside) → planning → AI explanation. Custom
+metrics: `confpilot.search.duration`, `confpilot.llm.calls` (by model and outcome), `confpilot.llm.duration`,
+`confpilot.ai.fallbacks`. Logs are linked to their traces.
+
+1. Create a Dash0 account (free trial). Copy the **OTLP gRPC endpoint** and an **auth token**.
+2. Add them to `.env`, then run `./start.sh`:
+   ```
+   DASH0_OTLP_ENDPOINT=https://ingress.<region>.aws.dash0.com:4317
+   DASH0_AUTH_TOKEN=auth_...
+   ```
+3. Generate traffic: `python3 scripts/load.py`
+4. Break something, then ask Dash0's AI agent what's wrong:
+   - `scripts/chaos.sh slow`: searches take 3 s. The trace shows the time is in `embed_query`.
+   - `scripts/chaos.sh ai`: the AI provider times out. Fallback metric jumps; error logs explain why.
+   - `scripts/chaos.sh baddata`: 40% of plans fail with HTTP 500. The stack trace points at a talk record
+     with no start time.
+   - `scripts/chaos.sh off`: back to normal.
+
+### Track 3: Kubernetes UI / AI SRE (Radar)
+The app runs on Kubernetes with proper probes (`/readyz` fails when Elasticsearch is unreachable), resource
+limits and pod identity on every trace.
+
+1. Docker Desktop: **Settings → Kubernetes → Enable Kubernetes**, wait for "running".
+2. Deploy: `scripts/k8s.sh up`, then open it: `scripts/k8s.sh open` (http://localhost:8080)
+3. Install and run Radar: `brew install kubectl-radar`, then `kubectl radar`
+4. Break the cluster and let Radar (or a coding agent through Radar's MCP server) find the root cause:
+
+   | Command | What happens |
+   |---|---|
+   | `scripts/k8s.sh break es-down` | Elasticsearch scaled to 0; app pods go NotReady |
+   | `scripts/k8s.sh break bad-config` | A "config change" points the app at a host that doesn't exist |
+   | `scripts/k8s.sh break oom` | Memory limit cut; pods are OOMKilled and crash-loop |
+   | `scripts/k8s.sh break bad-image` | A deploy references an image tag that doesn't exist |
+   | `scripts/k8s.sh break ai-outage` | AI provider times out; the app degrades but stays up |
+   | `scripts/k8s.sh break bad-data` | A corrupt record crashes 40% of plan requests |
+   | `scripts/k8s.sh fix` | Undo everything |
+
+   With Dash0 configured in `.env`, the same incidents show up in Dash0 with the pod name attached.
+
+### Track 1: AI Code Review (Gitar)
+- **CI** (`.github/workflows/ci.yml`): lint (ruff), 30+ unit tests, config validation, and an integration job
+  that starts a real Elasticsearch, loads the data and smoke-tests the API, including a check that the agenda
+  has no clashes.
+- **Review rules** in `.gitar/rules/`: every AI call needs a fallback, the agenda must stay clash-free, only
+  free-license Elasticsearch features, telemetry conventions, and no secrets.
+
+1. Install the Gitar GitHub App on this repository (from gitar.ai).
+2. Open a pull request that breaks a rule, for example an LLM call without a fallback, or a planner change
+   that allows overlaps. Gitar reviews it against `.gitar/rules`, suggests fixes, and diagnoses the failing CI.
+
 ## Architecture
 
 ```

@@ -14,7 +14,7 @@ from .telemetry import step
 
 logging.basicConfig(level=logging.INFO)
 STATIC = Path(__file__).parent / "static"
-VERSION = "2026.11.09-6"  # bump on each release; shown by /healthz so you can tell which code is running
+VERSION = "2026.11.09-7"  # bump on each release; shown by /healthz so you can tell which code is running
 
 app = FastAPI(title="ConfPilot", description="AI conference planner on Elasticsearch hybrid search")
 TRACING = telemetry.setup(app)

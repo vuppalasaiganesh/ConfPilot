@@ -92,9 +92,14 @@ def check():
         return _check_cache["result"]
     try:
         _complete('Reply with JSON {"ok": true}', "ping", max_tokens=300)
-        result = {"ok": True, "configured": True, "model": active_model(), "error": None}
-        if active_model() != config.LLM_MODEL:
-            result["note"] = f"{config.LLM_MODEL} is busy right now, so the backup model {active_model()} is answering."
+        used = active_model()
+        result = {"ok": True, "configured": True, "model": used, "error": None}
+        notes = [f"{old} is retired; using {new}. Update LLM_MODEL / LLM_FALLBACK_MODELS in .env to match."
+                 for old, new in _replacements.items()]
+        if used != _replacements.get(config.LLM_MODEL, config.LLM_MODEL):
+            notes.append(f"{config.LLM_MODEL} is busy right now, so the backup model {used} is answering.")
+        if notes:
+            result["note"] = " ".join(notes)
     except Exception as exc:
         result = {"ok": False, "configured": True, "model": config.LLM_MODEL, "error": _error_text(exc)}
         models = _available_models()
@@ -156,25 +161,47 @@ def active_model():
     return config.LLM_MODEL
 
 
+_replacements = {}  # retired model -> the replacement the provider named, e.g. gemini-2.5-flash-lite -> gemini-3.5-flash-lite
+
+
 def _complete(system, user, max_tokens):
-    """Try the main model, then each backup model when one is busy, rate limited or too slow."""
-    models = list(dict.fromkeys([active_model(), config.LLM_MODEL, *config.LLM_FALLBACK_MODELS]))
-    last = None
-    for model in models:
+    """Try the main model, then each backup model when one is busy, rate limited or too slow.
+
+    If a provider says a model is retired and names a replacement ("use models/X"), switch to it.
+    """
+    from openai import NotFoundError
+
+    def resolve(m):
+        return _replacements.get(m, m)
+
+    models = list(dict.fromkeys(resolve(m) for m in [active_model(), config.LLM_MODEL, *config.LLM_FALLBACK_MODELS]))
+    errors = []
+    i = 0
+    while i < len(models):
+        model = models[i]
+        i += 1
         try:
             text = _complete_one(model, system, user, max_tokens)
-            if model != config.LLM_MODEL:
+            if model != resolve(config.LLM_MODEL):
                 _sticky.update(model=model, until=time.time() + 300)
             elif _sticky["model"]:
                 _sticky.update(model=None, until=0.0)
             return text
+        except NotFoundError as exc:
+            replacement = _suggested_model(_error_text(exc))
+            if replacement and replacement != model and replacement not in models:
+                log.warning("LLM model %s is retired; switching to the suggested %s", model, replacement)
+                _replacements[model] = replacement
+                models.insert(i, replacement)
+            errors.append((model, exc))
         except Exception as exc:
             if not _is_transient(exc):
                 raise
-            log.warning("LLM model %s unavailable (%s)%s", model, _error_text(exc),
-                        "; trying the next backup model" if model != models[-1] else "")
-            last = exc
-    raise last
+            log.warning("LLM model %s unavailable (%s)", model, _error_text(exc))
+            errors.append((model, exc))
+    # Report the main model's error: it explains the problem better than a backup's.
+    main = resolve(config.LLM_MODEL)
+    raise next((e for m, e in errors if m == main), errors[-1][1])
 
 
 def _complete_one(model, system, user, max_tokens):

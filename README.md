@@ -12,10 +12,11 @@ Built for the **Cloud Native Hackathon**, entered in all four tracks:
 
 ## For judges
 
-**Two-minute review, nothing to install:** follow [DEMO.md → For judges](DEMO.md#part-a-for-judges-2-minutes-nothing-to-install).
+**Start here:** 📘 **[TRACKS.md: how we use Elasticsearch, Dash0, Radar and Gitar](TRACKS.md)**. It explains each
+tool's job, why we chose it, where it is in the code, and how to check it, with diagrams. No setup needed.
 
-- 🎥 **Demo video:** _link added after recording_
-- 🤖 **Gitar review:** [pull request #3](https://github.com/vuppalasaiganesh/ConfPilot/pull/3)
+- 🤖 **Gitar review:** [pull request #3](https://github.com/vuppalasaiganesh/ConfPilot/pull/3), blocked with 4 findings, then fixed by Gitar
+- 🧭 **Two-minute path:** [DEMO.md](DEMO.md#part-a-for-judges-2-minutes-nothing-to-install)
 - ✅ **CI:** [GitHub Actions](https://github.com/vuppalasaiganesh/ConfPilot/actions)
 - 📄 **Submission write-up:** [SUBMISSION.md](SUBMISSION.md)
 
@@ -211,10 +212,10 @@ This prints PASS / WARN / FAIL for every part of every track and tells you how t
 
 | Command | What happens |
 |---|---|
-| `scripts/k8s.sh break oom` | Memory limit cut; pods are OOMKilled and crash-loop |
+| `scripts/k8s.sh break oom` | Memory limit cut; new pods are OOMKilled and the rollout stalls |
 | `scripts/k8s.sh break es-down` | Elasticsearch scaled to 0; app pods go NotReady |
 | `scripts/k8s.sh break bad-config` | A "config change" points the app at a host that doesn't exist |
-| `scripts/k8s.sh break bad-image` | A deploy references an image tag that doesn't exist |
+| `scripts/k8s.sh break bad-image` | A deploy references an image tag that doesn't exist; new pods can't start |
 | `scripts/k8s.sh break ai-outage` | AI provider times out; the app degrades but stays up |
 | `scripts/k8s.sh break bad-data` | A corrupt record crashes 40% of plan requests |
 | `scripts/k8s.sh fix` | Undo everything |

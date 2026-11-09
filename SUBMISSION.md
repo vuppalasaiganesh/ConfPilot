@@ -11,7 +11,7 @@ ConfPilot
 Turn a 300-talk conference schedule into your personal, clash-free plan in seconds. Just describe yourself.
 
 ## Links
-- **Demo video:** _link added after recording_
+- **How each tool is used (start here):** https://github.com/vuppalasaiganesh/ConfPilot/blob/main/TRACKS.md
 - **Code:** https://github.com/vuppalasaiganesh/ConfPilot
 - **Judges' 2-minute guide:** https://github.com/vuppalasaiganesh/ConfPilot/blob/main/DEMO.md
 - **Gitar live demo (do not merge):** https://github.com/vuppalasaiganesh/ConfPilot/pull/3

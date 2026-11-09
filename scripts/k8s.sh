@@ -34,10 +34,33 @@ need_cluster() {
 build_image() {
   say "Building the app image (confpilot:local)..."
   if docker compose version >/dev/null 2>&1; then docker compose build ingest; else docker build -t confpilot:local .; fi
-  local ctx; ctx="$(kubectl config current-context)"
-  if [[ "$ctx" == kind-* ]]; then
+  load_image
+}
+
+# Make the local image visible to the cluster. Docker Desktop's newer Kubernetes (kind-based) and kind
+# clusters run each node in its own container with its own image store, so copy the image into every node.
+load_image() {
+  local ctx nodes node arch loaded=0
+  ctx="$(kubectl config current-context)"
+  if [[ "$ctx" == kind-* ]] && command -v kind >/dev/null 2>&1; then
     say "Loading the image into kind cluster ${ctx#kind-}..."
     kind load docker-image confpilot:local --name "${ctx#kind-}"
+    return
+  fi
+  nodes="$(kubectl get nodes -o jsonpath='{.items[*].metadata.name}')"
+  for node in $nodes; do
+    if docker inspect "$node" >/dev/null 2>&1; then
+      arch="$(docker exec "$node" uname -m | sed 's/x86_64/amd64/; s/aarch64/arm64/')"
+      say "Copying the image into Kubernetes node $node ($arch)..."
+      if ! docker save --platform "linux/$arch" confpilot:local 2>/dev/null \
+           | docker exec -i "$node" ctr -n k8s.io images import - >/dev/null; then
+        docker save confpilot:local | docker exec -i "$node" ctr -n k8s.io images import --all-platforms - >/dev/null
+      fi
+      loaded=1
+    fi
+  done
+  if [[ $loaded == 0 ]]; then
+    say "Kubernetes nodes aren't containers here; assuming the cluster shares Docker's images."
   fi
 }
 
@@ -57,18 +80,30 @@ apply_secret() {
 wait_ready() {
   say "Waiting for Elasticsearch..."
   $K rollout status statefulset/elasticsearch --timeout=300s
-  say "Loading talks (ingest job)..."
-  $K wait --for=condition=complete job/confpilot-ingest --timeout=600s || {
+  say "Loading talks (ingest job, about a minute)..."
+  local i
+  for i in $(seq 1 120); do
+    if [[ "$($K get job confpilot-ingest -o jsonpath='{.status.succeeded}' 2>/dev/null)" == "1" ]]; then break; fi
+    if $K get pods -l app.kubernetes.io/name=confpilot-ingest \
+         -o jsonpath='{.items[*].status.containerStatuses[*].state.waiting.reason}' 2>/dev/null | grep -q ErrImageNeverPull; then
+      image_hint; fail "The cluster can't see the confpilot:local image."
+    fi
+    sleep 5
+  done
+  if [[ "$($K get job confpilot-ingest -o jsonpath='{.status.succeeded}' 2>/dev/null)" != "1" ]]; then
     $K logs job/confpilot-ingest --tail=30 || true
-    fail "The ingest job did not finish (logs above)."; }
+    fail "The ingest job did not finish in 10 minutes (logs above)."
+  fi
   say "Waiting for the app..."
   $K rollout status deployment/confpilot --timeout=300s
 }
 
 image_hint() {
   if $K get pods -o jsonpath='{.items[*].status.containerStatuses[*].state.waiting.reason}' 2>/dev/null | grep -q ErrImageNeverPull; then
-    echo "Pods can't see the local image. In Docker Desktop, use Kubernetes with the 'kubeadm' option"
-    echo "(Settings > Kubernetes), or use a kind cluster: kind create cluster --name confpilot"
+    echo "Pods still can't see the local image (ErrImageNeverPull)."
+    echo "Nodes: $(kubectl get nodes -o jsonpath='{.items[*].metadata.name}')   Context: $(kubectl config current-context)"
+    echo "Paste this output to get help, or in Docker Desktop try Settings > General > untick"
+    echo "'Use containerd for pulling and storing images', Apply, then run: $0 up"
   fi
 }
 
@@ -80,8 +115,14 @@ case "${1:-}" in
     $K delete job confpilot-ingest --ignore-not-found >/dev/null 2>&1 || true
     say "Applying k8s/confpilot.yaml..."
     kubectl apply -f k8s/confpilot.yaml
+    # Replace app pods from an earlier attempt (e.g. stuck on ErrImageNeverPull) so they use the fresh image.
+    $K delete pods -l app.kubernetes.io/name=confpilot --ignore-not-found --wait=false >/dev/null 2>&1 || true
     wait_ready || { image_hint; exit 1; }
     say "ConfPilot is running on Kubernetes. Open it with: scripts/k8s.sh open"
+    ;;
+  load)
+    need_cluster
+    load_image
     ;;
   open)
     need_cluster

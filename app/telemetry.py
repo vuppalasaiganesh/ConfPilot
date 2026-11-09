@@ -132,10 +132,10 @@ def record_search(seconds, results):
         c.record(results)
 
 
-def record_summary(talk_id, seconds):
+def record_summary(seconds):
     h = _instrument("create_histogram", "confpilot.summary.duration", unit="s", description="Talk summary latency")
     if h:
-        h.record(seconds, {"talk.id": talk_id})
+        h.record(seconds)
 
 
 def current_span():

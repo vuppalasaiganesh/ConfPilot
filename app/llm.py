@@ -387,7 +387,15 @@ def icebreakers(profile, people):
 
 def summarize_talk(talk):
     """One catchy sentence about a talk, for the agenda cards."""
-    out = _chat_json(
-        "Summarize this conference talk in one catchy sentence. Reply JSON: {\"summary\": \"...\"}",
-        json.dumps(_brief(talk)), max_tokens=120)
-    return out["summary"]
+    fallback = (talk["abstract"].split(". ")[0] or talk["title"]).strip()[:200]
+    if not enabled():
+        return fallback
+    try:
+        out = _chat_json(
+            "Summarize this conference talk in one catchy sentence. Reply JSON: {\"summary\": \"...\"}",
+            json.dumps(_brief(talk)), max_tokens=120)
+        s = out.get("summary") if isinstance(out, dict) else None
+        return s.strip()[:300] if isinstance(s, str) and s.strip() else fallback
+    except Exception as exc:
+        _note_failure("summarize_talk", exc)
+        return fallback

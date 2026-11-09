@@ -6,7 +6,7 @@ from pathlib import Path
 
 from elastic_transport import TransportError
 from elasticsearch import ApiError, NotFoundError
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -213,9 +213,12 @@ def chat_turn(req: ChatRequest):
 @app.get("/api/talks/{talk_id}/summary")
 def talk_summary(talk_id: str):
     started = time.perf_counter()
-    talk = search.get_talks([talk_id])[0]
+    talks = search.get_talks([talk_id])
+    if not talks:
+        raise HTTPException(status_code=404, detail="Talk not found")
+    talk = talks[0]
     summary = llm.summarize_talk(talk)
-    telemetry.record_summary(talk_id, time.perf_counter() - started)
+    telemetry.record_summary(time.perf_counter() - started)
     return {"id": talk_id, "summary": summary}
 
 

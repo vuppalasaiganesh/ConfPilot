@@ -5,7 +5,7 @@ a reason for every talk, and the people worth meeting, then refine it by chattin
 
 [![CI](https://github.com/vuppalasaiganesh/ConfPilot/actions/workflows/ci.yml/badge.svg)](https://github.com/vuppalasaiganesh/ConfPilot/actions/workflows/ci.yml)
 
-Built for the **Cloud Native Hackathon**, entered in all four tracks:
+**Built by Sai Ganesh Vuppala** for the **Cloud Native Hackathon**, entered in all four tracks:
 **Elasticsearch** · **Dash0** · **Radar** · **Gitar**. The submission text is in [SUBMISSION.md](SUBMISSION.md).
 
 ---

@@ -7,6 +7,9 @@ Copy each section into the matching field of the submission form.
 ## Project name
 ConfPilot
 
+## Team
+Sai Ganesh Vuppala
+
 ## Tagline (one line)
 Turn a 300-talk conference schedule into your personal, clash-free plan in seconds. Just describe yourself.
 

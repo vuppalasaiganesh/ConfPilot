@@ -48,7 +48,7 @@ else
   if [[ -n "$W1" ]]; then
     HITS="$(echo "$W1" | json "sum(1 for t in d['agenda'] if t['track']=='Cost + Sustainability')")"
     ONLY="$(echo "$W1" | json "sum(1 for t in d['agenda'] if all(m.startswith('semantic') for m in t.get('matched_by',[])))")"
-    [[ "${HITS:-0}" -ge 2 ]] && pass "Meaning-only demo: $HITS cost/sustainability talks ($ONLY found by meaning only)" \
+    [[ "${HITS:-0}" -ge 2 ]] && pass "Meaning-only demo: $HITS of $(echo "$W1" | json "len(d['agenda'])") talks are cost/sustainability ($ONLY found by meaning only)" \
       || warn "Meaning-only demo found ${HITS:-0} cost/sustainability talks (check embeddings are fastembed)"
   fi
 fi

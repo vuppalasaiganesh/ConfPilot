@@ -263,9 +263,10 @@ and run every step below once.
 2. **Plan (40 s).** Click the *ML engineer* example, then **Plan my conference**. Point out the agenda grouped
    by day with no clashes, the reason under each talk, and the timing line (search takes milliseconds).
 3. **The wow (40 s).** Click **✨ Meaning-only demo: "How can we save money and help the planet?"**, then
-   **Plan my conference**. It should find FinOps, autoscaling and carbon-footprint talks, even though no talk
-   contains the words "save", "money" or "planet". Check this before the demo: it needs the real embedding model. The purple **Found by meaning only** badge proves it; **Keyword #** and **Meaning #** show
-   which search found each talk.
+   **Plan my conference**. None of those words appear in any talk, yet the agenda is FinOps, autoscaling and
+   carbon-footprint talks. Point at the "Searched for" line: the AI turned the question into keywords, and
+   meaning search used the original sentence. The **Keyword #** / **Meaning #** badges show both searches
+   agreeing. (With AI off, some talks also get the purple **Found by meaning only** badge.)
 4. **Chat (40 s).** Type *"swap anything on day 2 for AI talks"*. Talks marked **New** appear. Then ask
    *"who is speaking about service mesh?"* and click **Add**.
 5. **Wrap up (40 s).** Click **Swap for backup** on a talk, scroll to **People worth meeting**, then click

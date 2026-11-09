@@ -1,0 +1,113 @@
+# Deploy:  see README "Run on Kubernetes".
+# Create the LLM secret first (optional; app works without it):
+#   kubectl -n confpilot create secret generic confpilot-llm --from-literal=LLM_API_KEY=xai-...
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: confpilot
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: confpilot-config
+  namespace: confpilot
+data:
+  ES_URL: http://elasticsearch:9200
+  LLM_BASE_URL: https://api.x.ai/v1
+  LLM_MODEL: grok-4
+  EMBEDDINGS: fastembed
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+  namespace: confpilot
+spec:
+  selector: { app: elasticsearch }
+  ports: [{ port: 9200, targetPort: 9200 }]
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elasticsearch
+  namespace: confpilot
+spec:
+  serviceName: elasticsearch
+  replicas: 1
+  selector: { matchLabels: { app: elasticsearch } }
+  template:
+    metadata: { labels: { app: elasticsearch } }
+    spec:
+      containers:
+        - name: elasticsearch
+          image: elasticsearch:8.15.3
+          env:
+            - { name: discovery.type, value: single-node }
+            - { name: xpack.security.enabled, value: "false" }
+            - { name: ES_JAVA_OPTS, value: "-Xms1g -Xmx1g" }
+          ports: [{ containerPort: 9200 }]
+          resources:
+            requests: { cpu: 500m, memory: 2Gi }
+            limits: { memory: 2Gi }
+          readinessProbe:
+            httpGet: { path: /_cluster/health?wait_for_status=yellow&timeout=2s, port: 9200 }
+            periodSeconds: 5
+          volumeMounts: [{ name: data, mountPath: /usr/share/elasticsearch/data }]
+  volumeClaimTemplates:
+    - metadata: { name: data }
+      spec:
+        accessModes: [ReadWriteOnce]
+        resources: { requests: { storage: 2Gi } }
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: confpilot-ingest
+  namespace: confpilot
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: ingest
+          image: confpilot:latest
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-m", "scripts.ingest"]
+          envFrom:
+            - configMapRef: { name: confpilot-config }
+            - secretRef: { name: confpilot-llm, optional: true }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: confpilot
+  namespace: confpilot
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: confpilot } }
+  template:
+    metadata: { labels: { app: confpilot } }
+    spec:
+      containers:
+        - name: app
+          image: confpilot:latest
+          imagePullPolicy: IfNotPresent
+          ports: [{ containerPort: 8000 }]
+          envFrom:
+            - configMapRef: { name: confpilot-config }
+            - secretRef: { name: confpilot-llm, optional: true }
+          readinessProbe:
+            httpGet: { path: /healthz, port: 8000 }
+          resources:
+            requests: { cpu: 200m, memory: 512Mi }
+            limits: { memory: 1Gi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: confpilot
+  namespace: confpilot
+spec:
+  selector: { app: confpilot }
+  ports: [{ port: 80, targetPort: 8000 }]

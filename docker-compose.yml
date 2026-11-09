@@ -1,0 +1,28 @@
+services:
+  elasticsearch:
+    image: elasticsearch:8.15.3
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports: ["9200:9200"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -qE '\"status\":\"(green|yellow)\"'"]
+      interval: 5s
+      retries: 40
+
+  ingest:
+    build: .
+    command: ["python", "-m", "scripts.ingest"]
+    env_file: [.env]
+    environment: [ES_URL=http://elasticsearch:9200]
+    depends_on:
+      elasticsearch: { condition: service_healthy }
+
+  app:
+    build: .
+    env_file: [.env]
+    environment: [ES_URL=http://elasticsearch:9200]
+    ports: ["8000:8000"]
+    depends_on:
+      ingest: { condition: service_completed_successfully }

@@ -1,0 +1,662 @@
+[
+  {
+    "id": "A001",
+    "name": "Zara Lindqvist",
+    "role": "Cloud Architect",
+    "company": "Pied Piper",
+    "working_on": "Cloud Architect at Pied Piper. Currently working on measuring and cutting Kubernetes spend with OpenCost and right-sizing. Also curious about Streaming.",
+    "interests": [
+      "FinOps",
+      "Streaming"
+    ]
+  },
+  {
+    "id": "A002",
+    "name": "Priya Reddy",
+    "role": "Engineering Manager",
+    "company": "Vandelay Shipping",
+    "working_on": "Engineering Manager at Vandelay Shipping. Currently working on persistent storage with CSI drivers, snapshots and disaster recovery. Also curious about GPUs.",
+    "interests": [
+      "Storage",
+      "GPUs"
+    ]
+  },
+  {
+    "id": "A003",
+    "name": "Zara Mensah",
+    "role": "Data Engineer",
+    "company": "Acme Retail",
+    "working_on": "Data Engineer at Acme Retail. Currently working on defining SLOs and error budgets that engineers actually use for alerting. Also curious about Zero Trust.",
+    "interests": [
+      "SLOs",
+      "Zero Trust"
+    ]
+  },
+  {
+    "id": "A004",
+    "name": "Hana Patel",
+    "role": "Backend Developer",
+    "company": "Northwind Bank",
+    "working_on": "Backend Developer at Northwind Bank. Currently working on instrumenting services with OpenTelemetry and shipping traces, metrics and logs through the Collector. Also curious about Edge.",
+    "interests": [
+      "OpenTelemetry",
+      "Edge"
+    ]
+  },
+  {
+    "id": "A005",
+    "name": "Ines Liu",
+    "role": "Engineering Manager",
+    "company": "Stark Logistics",
+    "working_on": "Engineering Manager at Stark Logistics. Currently working on persistent storage with CSI drivers, snapshots and disaster recovery. Also curious about AI Agents.",
+    "interests": [
+      "Storage",
+      "AI Agents"
+    ]
+  },
+  {
+    "id": "A006",
+    "name": "Tariq Lindqvist",
+    "role": "Engineering Manager",
+    "company": "Soylent Foods",
+    "working_on": "Engineering Manager at Soylent Foods. Currently working on measuring and cutting Kubernetes spend with OpenCost and right-sizing. Also curious about Green Software.",
+    "interests": [
+      "FinOps",
+      "Green Software"
+    ]
+  },
+  {
+    "id": "A007",
+    "name": "Rahul Rossi",
+    "role": "Engineering Manager",
+    "company": "Acme Retail",
+    "working_on": "Engineering Manager at Acme Retail. Currently working on migrating from Ingress to the Gateway API for traffic management. Also curious about Secrets.",
+    "interests": [
+      "Gateway API",
+      "Secrets"
+    ]
+  },
+  {
+    "id": "A008",
+    "name": "Kofi Wang",
+    "role": "Cloud Architect",
+    "company": "Globex",
+    "working_on": "Cloud Architect at Globex. Currently working on provisioning cloud infrastructure from Kubernetes with Crossplane compositions. Also curious about GitOps.",
+    "interests": [
+      "Crossplane",
+      "GitOps"
+    ]
+  },
+  {
+    "id": "A009",
+    "name": "Wei Rossi",
+    "role": "ML Engineer",
+    "company": "Soylent Foods",
+    "working_on": "ML Engineer at Soylent Foods. Currently working on defining SLOs and error budgets that engineers actually use for alerting. Also curious about eBPF.",
+    "interests": [
+      "SLOs",
+      "eBPF"
+    ]
+  },
+  {
+    "id": "A010",
+    "name": "Mateo Mensah",
+    "role": "ML Engineer",
+    "company": "Pied Piper",
+    "working_on": "ML Engineer at Pied Piper. Currently working on cutting logging costs by sampling, routing and dropping noisy logs at the edge. Also curious about OpenTelemetry.",
+    "interests": [
+      "Logging",
+      "OpenTelemetry"
+    ]
+  },
+  {
+    "id": "A011",
+    "name": "Lena Okafor",
+    "role": "DevOps Engineer",
+    "company": "Pied Piper",
+    "working_on": "DevOps Engineer at Pied Piper. Currently working on cutting logging costs by sampling, routing and dropping noisy logs at the edge. Also curious about OpenTelemetry.",
+    "interests": [
+      "Logging",
+      "OpenTelemetry"
+    ]
+  },
+  {
+    "id": "A012",
+    "name": "Kofi Kim",
+    "role": "Backend Developer",
+    "company": "Initech",
+    "working_on": "Backend Developer at Initech. Currently working on connecting clusters across regions with multi-cluster services. Also curious about Developer Experience.",
+    "interests": [
+      "Multi-cluster",
+      "Developer Experience"
+    ]
+  },
+  {
+    "id": "A013",
+    "name": "Chen Liu",
+    "role": "Backend Developer",
+    "company": "Globex",
+    "working_on": "Backend Developer at Globex. Currently working on sharing and scheduling GPUs efficiently with DRA, MIG and time-slicing. Also curious about RAG.",
+    "interests": [
+      "GPUs",
+      "RAG"
+    ]
+  },
+  {
+    "id": "A014",
+    "name": "Lucas Reddy",
+    "role": "Student",
+    "company": "Cyberdyne Cloud",
+    "working_on": "Student at Cyberdyne Cloud. Currently working on scaling Prometheus with remote write, sharding and long-term storage. Also curious about Edge.",
+    "interests": [
+      "Prometheus",
+      "Edge"
+    ]
+  },
+  {
+    "id": "A015",
+    "name": "Tariq Rossi",
+    "role": "Cloud Architect",
+    "company": "Globex",
+    "working_on": "Cloud Architect at Globex. Currently working on admission control with Kyverno and OPA Gatekeeper to stop misconfigurations before they ship. Also curious about Gateway API.",
+    "interests": [
+      "Policy",
+      "Gateway API"
+    ]
+  },
+  {
+    "id": "A016",
+    "name": "Yusuf Moreau",
+    "role": "Backend Developer",
+    "company": "Cyberdyne Cloud",
+    "working_on": "Backend Developer at Cyberdyne Cloud. Currently working on defining SLOs and error budgets that engineers actually use for alerting. Also curious about AI Agents.",
+    "interests": [
+      "SLOs",
+      "AI Agents"
+    ]
+  },
+  {
+    "id": "A017",
+    "name": "Lena Tanaka",
+    "role": "SRE",
+    "company": "Wayne Media",
+    "working_on": "SRE at Wayne Media. Currently working on running autonomous AI agents on Kubernetes with tool calling, sandboxes and guardrails. Also curious about Storage.",
+    "interests": [
+      "AI Agents",
+      "Storage"
+    ]
+  },
+  {
+    "id": "A018",
+    "name": "Rahul Tanaka",
+    "role": "Data Engineer",
+    "company": "Initech",
+    "working_on": "Data Engineer at Initech. Currently working on persistent storage with CSI drivers, snapshots and disaster recovery. Also curious about Crossplane.",
+    "interests": [
+      "Storage",
+      "Crossplane"
+    ]
+  },
+  {
+    "id": "A019",
+    "name": "Viktor Ali",
+    "role": "Security Engineer",
+    "company": "Stark Logistics",
+    "working_on": "Security Engineer at Stark Logistics. Currently working on reducing developer cognitive load with paved roads and self-service. Also curious about WebAssembly.",
+    "interests": [
+      "Developer Experience",
+      "WebAssembly"
+    ]
+  },
+  {
+    "id": "A020",
+    "name": "Quinn Reddy",
+    "role": "ML Engineer",
+    "company": "Wayne Media",
+    "working_on": "ML Engineer at Wayne Media. Currently working on persistent storage with CSI drivers, snapshots and disaster recovery. Also curious about Streaming.",
+    "interests": [
+      "Storage",
+      "Streaming"
+    ]
+  },
+  {
+    "id": "A021",
+    "name": "Elena Novak",
+    "role": "Security Engineer",
+    "company": "Vandelay Shipping",
+    "working_on": "Security Engineer at Vandelay Shipping. Currently working on measuring the carbon footprint of workloads with Kepler. Also curious about AI Agents.",
+    "interests": [
+      "Green Software",
+      "AI Agents"
+    ]
+  },
+  {
+    "id": "A022",
+    "name": "Ines Hernandez",
+    "role": "Engineering Manager",
+    "company": "Pied Piper",
+    "working_on": "Engineering Manager at Pied Piper. Currently working on workload identity with SPIFFE/SPIRE and mTLS everywhere across clusters. Also curious about WebAssembly.",
+    "interests": [
+      "Zero Trust",
+      "WebAssembly"
+    ]
+  },
+  {
+    "id": "A023",
+    "name": "Ivan Patel",
+    "role": "Platform Engineer",
+    "company": "Globex",
+    "working_on": "Platform Engineer at Globex. Currently working on zero-code observability with eBPF auto-instrumentation. Also curious about Crossplane.",
+    "interests": [
+      "eBPF",
+      "Crossplane"
+    ]
+  },
+  {
+    "id": "A024",
+    "name": "Ines Tanaka",
+    "role": "DevOps Engineer",
+    "company": "Acme Retail",
+    "working_on": "DevOps Engineer at Acme Retail. Currently working on running lightweight Kubernetes at the edge with K3s and KubeEdge. Also curious about SLOs.",
+    "interests": [
+      "Edge",
+      "SLOs"
+    ]
+  },
+  {
+    "id": "A025",
+    "name": "Ben Rossi",
+    "role": "SRE",
+    "company": "Wayne Media",
+    "working_on": "SRE at Wayne Media. Currently working on persistent storage with CSI drivers, snapshots and disaster recovery. Also curious about eBPF.",
+    "interests": [
+      "Storage",
+      "eBPF"
+    ]
+  },
+  {
+    "id": "A026",
+    "name": "Chen Fischer",
+    "role": "Security Engineer",
+    "company": "Wayne Media",
+    "working_on": "Security Engineer at Wayne Media. Currently working on running lightweight Kubernetes at the edge with K3s and KubeEdge. Also curious about Multi-cluster.",
+    "interests": [
+      "Edge",
+      "Multi-cluster"
+    ]
+  },
+  {
+    "id": "A027",
+    "name": "Arjun Mensah",
+    "role": "Engineering Manager",
+    "company": "Acme Retail",
+    "working_on": "Engineering Manager at Acme Retail. Currently working on production retrieval-augmented generation with vector search and evaluation. Also curious about Supply Chain.",
+    "interests": [
+      "RAG",
+      "Supply Chain"
+    ]
+  },
+  {
+    "id": "A028",
+    "name": "Ines Kim",
+    "role": "SRE",
+    "company": "Umbrella Health",
+    "working_on": "SRE at Umbrella Health. Currently working on defining SLOs and error budgets that engineers actually use for alerting. Also curious about Logging.",
+    "interests": [
+      "SLOs",
+      "Logging"
+    ]
+  },
+  {
+    "id": "A029",
+    "name": "Aisha Wang",
+    "role": "Data Engineer",
+    "company": "Vandelay Shipping",
+    "working_on": "Data Engineer at Vandelay Shipping. Currently working on cutting logging costs by sampling, routing and dropping noisy logs at the edge. Also curious about WebAssembly.",
+    "interests": [
+      "Logging",
+      "WebAssembly"
+    ]
+  },
+  {
+    "id": "A030",
+    "name": "Rahul Moreau",
+    "role": "Security Engineer",
+    "company": "Globex",
+    "working_on": "Security Engineer at Globex. Currently working on signing container images with Sigstore and enforcing provenance with SLSA attestations. Also curious about GitOps.",
+    "interests": [
+      "Supply Chain",
+      "GitOps"
+    ]
+  },
+  {
+    "id": "A031",
+    "name": "Jia Hernandez",
+    "role": "ML Engineer",
+    "company": "Initech",
+    "working_on": "ML Engineer at Initech. Currently working on running stateful Postgres on Kubernetes with operators and backups. Also curious about eBPF.",
+    "interests": [
+      "Databases on Kubernetes",
+      "eBPF"
+    ]
+  },
+  {
+    "id": "A032",
+    "name": "Zara Moreau",
+    "role": "DevOps Engineer",
+    "company": "Soylent Foods",
+    "working_on": "DevOps Engineer at Soylent Foods. Currently working on workload identity with SPIFFE/SPIRE and mTLS everywhere across clusters. Also curious about Internal Developer Platform.",
+    "interests": [
+      "Zero Trust",
+      "Internal Developer Platform"
+    ]
+  },
+  {
+    "id": "A033",
+    "name": "Tariq Costa",
+    "role": "Platform Engineer",
+    "company": "Hooli",
+    "working_on": "Platform Engineer at Hooli. Currently working on event streaming with Kafka on Kubernetes using Strimzi. Also curious about Secrets.",
+    "interests": [
+      "Streaming",
+      "Secrets"
+    ]
+  },
+  {
+    "id": "A034",
+    "name": "Wei Petrova",
+    "role": "Cloud Architect",
+    "company": "Initech",
+    "working_on": "Cloud Architect at Initech. Currently working on signing container images with Sigstore and enforcing provenance with SLSA attestations. Also curious about Edge.",
+    "interests": [
+      "Supply Chain",
+      "Edge"
+    ]
+  },
+  {
+    "id": "A035",
+    "name": "Lena Tanaka",
+    "role": "SRE",
+    "company": "Vandelay Shipping",
+    "working_on": "SRE at Vandelay Shipping. Currently working on provisioning cloud infrastructure from Kubernetes with Crossplane compositions. Also curious about Databases on Kubernetes.",
+    "interests": [
+      "Crossplane",
+      "Databases on Kubernetes"
+    ]
+  },
+  {
+    "id": "A036",
+    "name": "Lena Wang",
+    "role": "Platform Engineer",
+    "company": "Pied Piper",
+    "working_on": "Platform Engineer at Pied Piper. Currently working on measuring the carbon footprint of workloads with Kepler. Also curious about LLM Inference.",
+    "interests": [
+      "Green Software",
+      "LLM Inference"
+    ]
+  },
+  {
+    "id": "A037",
+    "name": "Ben Rossi",
+    "role": "DevOps Engineer",
+    "company": "Hooli",
+    "working_on": "DevOps Engineer at Hooli. Currently working on running lightweight Kubernetes at the edge with K3s and KubeEdge. Also curious about Supply Chain.",
+    "interests": [
+      "Edge",
+      "Supply Chain"
+    ]
+  },
+  {
+    "id": "A038",
+    "name": "Zara Wang",
+    "role": "SRE",
+    "company": "Stark Logistics",
+    "working_on": "SRE at Stark Logistics. Currently working on connecting clusters across regions with multi-cluster services. Also curious about GitOps.",
+    "interests": [
+      "Multi-cluster",
+      "GitOps"
+    ]
+  },
+  {
+    "id": "A039",
+    "name": "Ximena Mensah",
+    "role": "Platform Engineer",
+    "company": "Vandelay Shipping",
+    "working_on": "Platform Engineer at Vandelay Shipping. Currently working on replacing kube-proxy with eBPF-based networking for lower latency. Also curious about Internal Developer Platform.",
+    "interests": [
+      "eBPF",
+      "Internal Developer Platform"
+    ]
+  },
+  {
+    "id": "A040",
+    "name": "Kofi Rahman",
+    "role": "Engineering Manager",
+    "company": "Pied Piper",
+    "working_on": "Engineering Manager at Pied Piper. Currently working on cutting logging costs by sampling, routing and dropping noisy logs at the edge. Also curious about Policy.",
+    "interests": [
+      "Logging",
+      "Policy"
+    ]
+  },
+  {
+    "id": "A041",
+    "name": "Chen Patel",
+    "role": "Backend Developer",
+    "company": "Globex",
+    "working_on": "Backend Developer at Globex. Currently working on event streaming with Kafka on Kubernetes using Strimzi. Also curious about WebAssembly.",
+    "interests": [
+      "Streaming",
+      "WebAssembly"
+    ]
+  },
+  {
+    "id": "A042",
+    "name": "Zara Silva",
+    "role": "Security Engineer",
+    "company": "Northwind Bank",
+    "working_on": "Security Engineer at Northwind Bank. Currently working on admission control with Kyverno and OPA Gatekeeper to stop misconfigurations before they ship. Also curious about Crossplane.",
+    "interests": [
+      "Policy",
+      "Crossplane"
+    ]
+  },
+  {
+    "id": "A043",
+    "name": "Mateo Costa",
+    "role": "ML Engineer",
+    "company": "Pied Piper",
+    "working_on": "ML Engineer at Pied Piper. Currently working on admission control with Kyverno and OPA Gatekeeper to stop misconfigurations before they ship. Also curious about Service Mesh.",
+    "interests": [
+      "Policy",
+      "Service Mesh"
+    ]
+  },
+  {
+    "id": "A044",
+    "name": "Gabriel Liu",
+    "role": "SRE",
+    "company": "Soylent Foods",
+    "working_on": "SRE at Soylent Foods. Currently working on running WebAssembly workloads next to containers with SpinKube. Also curious about GitOps.",
+    "interests": [
+      "WebAssembly",
+      "GitOps"
+    ]
+  },
+  {
+    "id": "A045",
+    "name": "Diego Fischer",
+    "role": "Engineering Manager",
+    "company": "Umbrella Health",
+    "working_on": "Engineering Manager at Umbrella Health. Currently working on replacing kube-proxy with eBPF-based networking for lower latency. Also curious about Zero Trust.",
+    "interests": [
+      "eBPF",
+      "Zero Trust"
+    ]
+  },
+  {
+    "id": "A046",
+    "name": "Kofi Rahman",
+    "role": "Data Engineer",
+    "company": "Wayne Media",
+    "working_on": "Data Engineer at Wayne Media. Currently working on running stateful Postgres on Kubernetes with operators and backups. Also curious about Autoscaling.",
+    "interests": [
+      "Databases on Kubernetes",
+      "Autoscaling"
+    ]
+  },
+  {
+    "id": "A047",
+    "name": "Zara Wang",
+    "role": "Student",
+    "company": "Umbrella Health",
+    "working_on": "Student at Umbrella Health. Currently working on faster, smaller and safer containers with distroless images and rootless runtimes. Also curious about Multi-cluster.",
+    "interests": [
+      "Containers",
+      "Multi-cluster"
+    ]
+  },
+  {
+    "id": "A048",
+    "name": "Arjun Rahman",
+    "role": "DevOps Engineer",
+    "company": "Vandelay Shipping",
+    "working_on": "DevOps Engineer at Vandelay Shipping. Currently working on running stateful Postgres on Kubernetes with operators and backups. Also curious about OpenTelemetry.",
+    "interests": [
+      "Databases on Kubernetes",
+      "OpenTelemetry"
+    ]
+  },
+  {
+    "id": "A049",
+    "name": "Kofi Liu",
+    "role": "Platform Engineer",
+    "company": "Acme Retail",
+    "working_on": "Platform Engineer at Acme Retail. Currently working on provisioning cloud infrastructure from Kubernetes with Crossplane compositions. Also curious about Service Mesh.",
+    "interests": [
+      "Crossplane",
+      "Service Mesh"
+    ]
+  },
+  {
+    "id": "A050",
+    "name": "Nadia Rahman",
+    "role": "Cloud Architect",
+    "company": "Cyberdyne Cloud",
+    "working_on": "Cloud Architect at Cyberdyne Cloud. Currently working on reducing developer cognitive load with paved roads and self-service. Also curious about Storage.",
+    "interests": [
+      "Developer Experience",
+      "Storage"
+    ]
+  },
+  {
+    "id": "A051",
+    "name": "Ximena Fischer",
+    "role": "Data Engineer",
+    "company": "Northwind Bank",
+    "working_on": "Data Engineer at Northwind Bank. Currently working on persistent storage with CSI drivers, snapshots and disaster recovery. Also curious about eBPF.",
+    "interests": [
+      "Storage",
+      "eBPF"
+    ]
+  },
+  {
+    "id": "A052",
+    "name": "Viktor Rossi",
+    "role": "SRE",
+    "company": "Acme Retail",
+    "working_on": "SRE at Acme Retail. Currently working on running stateful Postgres on Kubernetes with operators and backups. Also curious about Multi-tenancy.",
+    "interests": [
+      "Databases on Kubernetes",
+      "Multi-tenancy"
+    ]
+  },
+  {
+    "id": "A053",
+    "name": "Elena Moreau",
+    "role": "Backend Developer",
+    "company": "Northwind Bank",
+    "working_on": "Backend Developer at Northwind Bank. Currently working on connecting clusters across regions with multi-cluster services. Also curious about Edge.",
+    "interests": [
+      "Multi-cluster",
+      "Edge"
+    ]
+  },
+  {
+    "id": "A054",
+    "name": "Hana Fischer",
+    "role": "Backend Developer",
+    "company": "Acme Retail",
+    "working_on": "Backend Developer at Acme Retail. Currently working on persistent storage with CSI drivers, snapshots and disaster recovery. Also curious about Policy.",
+    "interests": [
+      "Storage",
+      "Policy"
+    ]
+  },
+  {
+    "id": "A055",
+    "name": "Tariq Petrova",
+    "role": "Cloud Architect",
+    "company": "Northwind Bank",
+    "working_on": "Cloud Architect at Northwind Bank. Currently working on connecting clusters across regions with multi-cluster services. Also curious about FinOps.",
+    "interests": [
+      "Multi-cluster",
+      "FinOps"
+    ]
+  },
+  {
+    "id": "A056",
+    "name": "Yusuf Wang",
+    "role": "Engineering Manager",
+    "company": "Hooli",
+    "working_on": "Engineering Manager at Hooli. Currently working on persistent storage with CSI drivers, snapshots and disaster recovery. Also curious about Multi-cluster.",
+    "interests": [
+      "Storage",
+      "Multi-cluster"
+    ]
+  },
+  {
+    "id": "A057",
+    "name": "Uma Novak",
+    "role": "DevOps Engineer",
+    "company": "Stark Logistics",
+    "working_on": "DevOps Engineer at Stark Logistics. Currently working on cutting logging costs by sampling, routing and dropping noisy logs at the edge. Also curious about Multi-cluster.",
+    "interests": [
+      "Logging",
+      "Multi-cluster"
+    ]
+  },
+  {
+    "id": "A058",
+    "name": "Farah Kim",
+    "role": "SRE",
+    "company": "Cyberdyne Cloud",
+    "working_on": "SRE at Cyberdyne Cloud. Currently working on building an internal developer platform with Backstage golden paths. Also curious about eBPF.",
+    "interests": [
+      "Internal Developer Platform",
+      "eBPF"
+    ]
+  },
+  {
+    "id": "A059",
+    "name": "Wei Patel",
+    "role": "ML Engineer",
+    "company": "Umbrella Health",
+    "working_on": "ML Engineer at Umbrella Health. Currently working on measuring and cutting Kubernetes spend with OpenCost and right-sizing. Also curious about eBPF.",
+    "interests": [
+      "FinOps",
+      "eBPF"
+    ]
+  },
+  {
+    "id": "A060",
+    "name": "Diego Petrova",
+    "role": "Data Engineer",
+    "company": "Initech",
+    "working_on": "Data Engineer at Initech. Currently working on building reproducible ML pipelines with Kubeflow and model registries. Also curious about Crossplane.",
+    "interests": [
+      "MLOps",
+      "Crossplane"
+    ]
+  }
+]

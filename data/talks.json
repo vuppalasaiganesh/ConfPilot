@@ -1,0 +1,2890 @@
+[
+  {
+    "id": "T114",
+    "title": "Streaming Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers event streaming with Kafka on Kubernetes using Strimzi. The speakers explain how the team at Cyberdyne Cloud approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Uma Haddad (Cyberdyne Cloud)",
+      "Ben Lindqvist (Umbrella Health)"
+    ],
+    "track": "Storage + Data",
+    "level": "Intermediate",
+    "tags": [
+      "Kubernetes",
+      "Storage + Data",
+      "Streaming"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-23T10:00:00",
+    "end": "2027-03-23T10:35:00"
+  },
+  {
+    "id": "T101",
+    "title": "GitOps in Production: Lessons from 150 Clusters",
+    "abstract": "This advanced session covers managing hundreds of clusters declaratively with Argo CD and Flux. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Aisha Rossi (Umbrella Health)",
+      "Sofia Lindqvist (Vandelay Shipping)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Advanced",
+    "tags": [
+      "GitOps",
+      "Platform Engineering"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-23T10:00:00",
+    "end": "2027-03-23T10:35:00"
+  },
+  {
+    "id": "T162",
+    "title": "Debugging Streaming When Everything Is on Fire",
+    "abstract": "This advanced session covers event streaming with Kafka on Kubernetes using Strimzi. The speakers explain how the team at Vandelay Shipping approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Viktor Ali (Vandelay Shipping)"
+    ],
+    "track": "Storage + Data",
+    "level": "Advanced",
+    "tags": [
+      "Kubernetes",
+      "Storage + Data",
+      "Streaming"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-23T10:00:00",
+    "end": "2027-03-23T10:35:00"
+  },
+  {
+    "id": "T072",
+    "title": "Scaling RAG at Wayne Media",
+    "abstract": "This intermediate session covers production retrieval-augmented generation with vector search and evaluation. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Jia Rossi (Wayne Media)"
+    ],
+    "track": "AI + ML",
+    "level": "Intermediate",
+    "tags": [
+      "AI + ML",
+      "RAG"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-23T10:00:00",
+    "end": "2027-03-23T10:35:00"
+  },
+  {
+    "id": "T095",
+    "title": "How Globex Cut Incidents in Half with Crossplane",
+    "abstract": "This intermediate session covers provisioning cloud infrastructure from Kubernetes with Crossplane compositions. The speakers explain how the team at Globex approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Chen Moreau (Globex)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Intermediate",
+    "tags": [
+      "Crossplane",
+      "Kubernetes",
+      "Platform Engineering"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-23T10:00:00",
+    "end": "2027-03-23T10:35:00"
+  },
+  {
+    "id": "T115",
+    "title": "A Beginner's Guide to MLOps",
+    "abstract": "This beginner session covers building reproducible ML pipelines with Kubeflow and model registries. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Hana Costa (Acme Retail)",
+      "Omar Fischer (Soylent Foods)"
+    ],
+    "track": "AI + ML",
+    "level": "Beginner",
+    "tags": [
+      "AI + ML",
+      "MLOps"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-23T10:00:00",
+    "end": "2027-03-23T10:35:00"
+  },
+  {
+    "id": "T121",
+    "title": "MLOps Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers building reproducible ML pipelines with Kubeflow and model registries. The speakers explain how the team at Initech approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Ben Mensah (Initech)",
+      "Elena Ali (Initech)"
+    ],
+    "track": "AI + ML",
+    "level": "Intermediate",
+    "tags": [
+      "AI + ML",
+      "MLOps"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-23T10:00:00",
+    "end": "2027-03-23T10:35:00"
+  },
+  {
+    "id": "T035",
+    "title": "The Future of Edge",
+    "abstract": "This beginner session covers running lightweight Kubernetes at the edge with K3s and KubeEdge. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Lena Costa (Acme Retail)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Beginner",
+    "tags": [
+      "Edge",
+      "Kubernetes",
+      "Runtime + WebAssembly"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-23T10:00:00",
+    "end": "2027-03-23T10:35:00"
+  },
+  {
+    "id": "T017",
+    "title": "A Beginner's Guide to WebAssembly",
+    "abstract": "This beginner session covers running WebAssembly workloads next to containers with SpinKube. The speakers explain how the team at Globex approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Chen Haddad (Globex)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Beginner",
+    "tags": [
+      "Runtime + WebAssembly",
+      "WebAssembly"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-23T11:00:00",
+    "end": "2027-03-23T11:35:00"
+  },
+  {
+    "id": "T099",
+    "title": "Debugging SLOs When Everything Is on Fire",
+    "abstract": "This advanced session covers defining SLOs and error budgets that engineers actually use for alerting. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Wei Novak (Umbrella Health)"
+    ],
+    "track": "Observability",
+    "level": "Advanced",
+    "tags": [
+      "Observability",
+      "SLOs"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-23T11:00:00",
+    "end": "2027-03-23T11:35:00"
+  },
+  {
+    "id": "T025",
+    "title": "OpenTelemetry Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers instrumenting services with OpenTelemetry and shipping traces, metrics and logs through the Collector. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Gabriel Patel (Wayne Media)",
+      "Yusuf Rossi (Umbrella Health)"
+    ],
+    "track": "Observability",
+    "level": "Intermediate",
+    "tags": [
+      "Observability",
+      "OpenTelemetry"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-23T11:00:00",
+    "end": "2027-03-23T11:35:00"
+  },
+  {
+    "id": "T120",
+    "title": "A Beginner's Guide to Streaming",
+    "abstract": "This beginner session covers event streaming with Kafka on Kubernetes using Strimzi. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Mateo Novak (Stark Logistics)",
+      "Diego Patel (Acme Retail)"
+    ],
+    "track": "Storage + Data",
+    "level": "Beginner",
+    "tags": [
+      "Kubernetes",
+      "Storage + Data",
+      "Streaming"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-23T11:00:00",
+    "end": "2027-03-23T11:35:00"
+  },
+  {
+    "id": "T058",
+    "title": "How Umbrella Health Cut Incidents in Half with eBPF",
+    "abstract": "This intermediate session covers runtime threat detection with eBPF probes that watch syscalls without kernel modules. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Jia Ali (Umbrella Health)"
+    ],
+    "track": "Security",
+    "level": "Intermediate",
+    "tags": [
+      "Security",
+      "eBPF"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-23T11:00:00",
+    "end": "2027-03-23T11:35:00"
+  },
+  {
+    "id": "T081",
+    "title": "How Cyberdyne Cloud Cut Incidents in Half with Containers",
+    "abstract": "This intermediate session covers faster, smaller and safer containers with distroless images and rootless runtimes. The speakers explain how the team at Cyberdyne Cloud approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Maya Wang (Cyberdyne Cloud)",
+      "Zara Haddad (Stark Logistics)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Intermediate",
+    "tags": [
+      "Containers",
+      "Runtime + WebAssembly"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-23T11:00:00",
+    "end": "2027-03-23T11:35:00"
+  },
+  {
+    "id": "T100",
+    "title": "LLM Inference in Production: Lessons from 600 Clusters",
+    "abstract": "This advanced session covers serving LLMs on GPUs with vLLM, autoscaling and KV-cache aware routing. The speakers explain how the team at Initech approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Maya Kim (Initech)",
+      "Mateo Ali (Stark Logistics)"
+    ],
+    "track": "AI + ML",
+    "level": "Advanced",
+    "tags": [
+      "AI + ML",
+      "LLM Inference"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-23T11:00:00",
+    "end": "2027-03-23T11:35:00"
+  },
+  {
+    "id": "T001",
+    "title": "A Beginner's Guide to Storage",
+    "abstract": "This beginner session covers persistent storage with CSI drivers, snapshots and disaster recovery. The speakers explain how the team at Cyberdyne Cloud approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Quinn Liu (Cyberdyne Cloud)"
+    ],
+    "track": "Storage + Data",
+    "level": "Beginner",
+    "tags": [
+      "Storage",
+      "Storage + Data"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-23T11:00:00",
+    "end": "2027-03-23T11:35:00"
+  },
+  {
+    "id": "T111",
+    "title": "The Future of eBPF",
+    "abstract": "This beginner session covers replacing kube-proxy with eBPF-based networking for lower latency. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Sofia Rossi (Soylent Foods)"
+    ],
+    "track": "Networking",
+    "level": "Beginner",
+    "tags": [
+      "Networking",
+      "eBPF"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-23T11:45:00",
+    "end": "2027-03-23T12:20:00"
+  },
+  {
+    "id": "T150",
+    "title": "Databases on Kubernetes Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers running stateful Postgres on Kubernetes with operators and backups. The speakers explain how the team at Northwind Bank approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Gabriel Liu (Northwind Bank)"
+    ],
+    "track": "Storage + Data",
+    "level": "Intermediate",
+    "tags": [
+      "Databases on Kubernetes",
+      "Kubernetes",
+      "Storage + Data"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-23T11:45:00",
+    "end": "2027-03-23T12:20:00"
+  },
+  {
+    "id": "T163",
+    "title": "Hands-on: Edge for Platform Teams",
+    "abstract": "This intermediate session covers running lightweight Kubernetes at the edge with K3s and KubeEdge. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Elena Patel (Stark Logistics)",
+      "Omar Liu (Umbrella Health)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Intermediate",
+    "tags": [
+      "Edge",
+      "Kubernetes",
+      "Runtime + WebAssembly"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-23T11:45:00",
+    "end": "2027-03-23T12:20:00"
+  },
+  {
+    "id": "T097",
+    "title": "The Future of Service Mesh",
+    "abstract": "This beginner session covers sidecar-less service mesh with Istio ambient mode and Cilium. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Lucas Patel (Soylent Foods)"
+    ],
+    "track": "Networking",
+    "level": "Beginner",
+    "tags": [
+      "Networking",
+      "Service Mesh"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-23T11:45:00",
+    "end": "2027-03-23T12:20:00"
+  },
+  {
+    "id": "T108",
+    "title": "Service Mesh Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers sidecar-less service mesh with Istio ambient mode and Cilium. The speakers explain how the team at Cyberdyne Cloud approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Zara Hernandez (Cyberdyne Cloud)"
+    ],
+    "track": "Networking",
+    "level": "Advanced",
+    "tags": [
+      "Networking",
+      "Service Mesh"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-23T11:45:00",
+    "end": "2027-03-23T12:20:00"
+  },
+  {
+    "id": "T045",
+    "title": "How Acme Retail Cut Incidents in Half with FinOps",
+    "abstract": "This intermediate session covers measuring and cutting Kubernetes spend with OpenCost and right-sizing. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Hana Rossi (Acme Retail)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Intermediate",
+    "tags": [
+      "Cost + Sustainability",
+      "FinOps",
+      "Kubernetes"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-23T11:45:00",
+    "end": "2027-03-23T12:20:00"
+  },
+  {
+    "id": "T074",
+    "title": "The Future of WebAssembly",
+    "abstract": "This beginner session covers running WebAssembly workloads next to containers with SpinKube. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Nadia Lindqvist (Soylent Foods)",
+      "Lena Moreau (Hooli)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Beginner",
+    "tags": [
+      "Runtime + WebAssembly",
+      "WebAssembly"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-23T11:45:00",
+    "end": "2027-03-23T12:20:00"
+  },
+  {
+    "id": "T026",
+    "title": "From Zero to GitOps in 30 Minutes",
+    "abstract": "This beginner session covers managing hundreds of clusters declaratively with Argo CD and Flux. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Priya Okafor (Umbrella Health)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Beginner",
+    "tags": [
+      "GitOps",
+      "Platform Engineering"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-23T11:45:00",
+    "end": "2027-03-23T12:20:00"
+  },
+  {
+    "id": "T006",
+    "title": "RAG Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers production retrieval-augmented generation with vector search and evaluation. The speakers explain how the team at Globex approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Jia Reddy (Globex)"
+    ],
+    "track": "AI + ML",
+    "level": "Advanced",
+    "tags": [
+      "AI + ML",
+      "RAG"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-23T14:00:00",
+    "end": "2027-03-23T14:35:00"
+  },
+  {
+    "id": "T158",
+    "title": "From Zero to Zero Trust in 30 Minutes",
+    "abstract": "This beginner session covers workload identity with SPIFFE/SPIRE and mTLS everywhere across clusters. The speakers explain how the team at Cyberdyne Cloud approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Hana Mensah (Cyberdyne Cloud)"
+    ],
+    "track": "Security",
+    "level": "Beginner",
+    "tags": [
+      "Security",
+      "Zero Trust"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-23T14:00:00",
+    "end": "2027-03-23T14:35:00"
+  },
+  {
+    "id": "T139",
+    "title": "Prometheus Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers scaling Prometheus with remote write, sharding and long-term storage. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Jia Moreau (Wayne Media)",
+      "Diego Ali (Pied Piper)"
+    ],
+    "track": "Observability",
+    "level": "Intermediate",
+    "tags": [
+      "Observability",
+      "Prometheus"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-23T14:00:00",
+    "end": "2027-03-23T14:35:00"
+  },
+  {
+    "id": "T135",
+    "title": "Multi-tenancy in Production: Lessons from 150 Clusters",
+    "abstract": "This advanced session covers safe multi-tenancy with namespaces, vCluster and hierarchical quotas. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Viktor Novak (Wayne Media)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Advanced",
+    "tags": [
+      "Multi-tenancy",
+      "Platform Engineering"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-23T14:00:00",
+    "end": "2027-03-23T14:35:00"
+  },
+  {
+    "id": "T023",
+    "title": "OpenTelemetry in Production: Lessons from 12 Clusters",
+    "abstract": "This advanced session covers instrumenting services with OpenTelemetry and shipping traces, metrics and logs through the Collector. The speakers explain how the team at Vandelay Shipping approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Ines Rossi (Vandelay Shipping)"
+    ],
+    "track": "Observability",
+    "level": "Advanced",
+    "tags": [
+      "Observability",
+      "OpenTelemetry"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-23T14:00:00",
+    "end": "2027-03-23T14:35:00"
+  },
+  {
+    "id": "T136",
+    "title": "Zero Trust in Production: Lessons from 600 Clusters",
+    "abstract": "This advanced session covers workload identity with SPIFFE/SPIRE and mTLS everywhere across clusters. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Chen Wang (Soylent Foods)"
+    ],
+    "track": "Security",
+    "level": "Advanced",
+    "tags": [
+      "Security",
+      "Zero Trust"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-23T14:00:00",
+    "end": "2027-03-23T14:35:00"
+  },
+  {
+    "id": "T076",
+    "title": "Scaling Storage at Hooli",
+    "abstract": "This intermediate session covers persistent storage with CSI drivers, snapshots and disaster recovery. The speakers explain how the team at Hooli approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Diego Okafor (Hooli)"
+    ],
+    "track": "Storage + Data",
+    "level": "Intermediate",
+    "tags": [
+      "Storage",
+      "Storage + Data"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-23T14:00:00",
+    "end": "2027-03-23T14:35:00"
+  },
+  {
+    "id": "T082",
+    "title": "Debugging MLOps When Everything Is on Fire",
+    "abstract": "This advanced session covers building reproducible ML pipelines with Kubeflow and model registries. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Jia Liu (Umbrella Health)"
+    ],
+    "track": "AI + ML",
+    "level": "Advanced",
+    "tags": [
+      "AI + ML",
+      "MLOps"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-23T14:00:00",
+    "end": "2027-03-23T14:35:00"
+  },
+  {
+    "id": "T125",
+    "title": "Hands-on: eBPF for Platform Teams",
+    "abstract": "This intermediate session covers runtime threat detection with eBPF probes that watch syscalls without kernel modules. The speakers explain how the team at Northwind Bank approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Ivan Lindqvist (Northwind Bank)",
+      "Nadia Reddy (Acme Retail)"
+    ],
+    "track": "Security",
+    "level": "Intermediate",
+    "tags": [
+      "Security",
+      "eBPF"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-23T14:45:00",
+    "end": "2027-03-23T15:20:00"
+  },
+  {
+    "id": "T138",
+    "title": "From Zero to GPUs in 30 Minutes",
+    "abstract": "This beginner session covers sharing and scheduling GPUs efficiently with DRA, MIG and time-slicing. The speakers explain how the team at Northwind Bank approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Viktor Hernandez (Northwind Bank)"
+    ],
+    "track": "AI + ML",
+    "level": "Beginner",
+    "tags": [
+      "AI + ML",
+      "GPUs"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-23T14:45:00",
+    "end": "2027-03-23T15:20:00"
+  },
+  {
+    "id": "T116",
+    "title": "OpenTelemetry Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers instrumenting services with OpenTelemetry and shipping traces, metrics and logs through the Collector. The speakers explain how the team at Cyberdyne Cloud approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Sofia Petrova (Cyberdyne Cloud)"
+    ],
+    "track": "Observability",
+    "level": "Advanced",
+    "tags": [
+      "Observability",
+      "OpenTelemetry"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-23T14:45:00",
+    "end": "2027-03-23T15:20:00"
+  },
+  {
+    "id": "T012",
+    "title": "eBPF Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers zero-code observability with eBPF auto-instrumentation. The speakers explain how the team at Hooli approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Yusuf Patel (Hooli)"
+    ],
+    "track": "Observability",
+    "level": "Advanced",
+    "tags": [
+      "Observability",
+      "eBPF"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-23T14:45:00",
+    "end": "2027-03-23T15:20:00"
+  },
+  {
+    "id": "T002",
+    "title": "Scaling Containers at Wayne Media",
+    "abstract": "This intermediate session covers faster, smaller and safer containers with distroless images and rootless runtimes. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Rahul Petrova (Wayne Media)",
+      "Viktor Rossi (Soylent Foods)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Intermediate",
+    "tags": [
+      "Containers",
+      "Runtime + WebAssembly"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-23T14:45:00",
+    "end": "2027-03-23T15:20:00"
+  },
+  {
+    "id": "T008",
+    "title": "From Zero to Secrets in 30 Minutes",
+    "abstract": "This beginner session covers rotating secrets automatically with External Secrets Operator and Vault. The speakers explain how the team at Initech approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Aisha Lindqvist (Initech)",
+      "Priya Moreau (Acme Retail)"
+    ],
+    "track": "Security",
+    "level": "Beginner",
+    "tags": [
+      "Secrets",
+      "Security"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-23T14:45:00",
+    "end": "2027-03-23T15:20:00"
+  },
+  {
+    "id": "T134",
+    "title": "Supply Chain Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers signing container images with Sigstore and enforcing provenance with SLSA attestations. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Mateo Haddad (Stark Logistics)"
+    ],
+    "track": "Security",
+    "level": "Advanced",
+    "tags": [
+      "Security",
+      "Supply Chain"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-23T14:45:00",
+    "end": "2027-03-23T15:20:00"
+  },
+  {
+    "id": "T146",
+    "title": "AI Agents Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers running autonomous AI agents on Kubernetes with tool calling, sandboxes and guardrails. The speakers explain how the team at Northwind Bank approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Farah Moreau (Northwind Bank)",
+      "Chen Novak (Hooli)"
+    ],
+    "track": "AI + ML",
+    "level": "Intermediate",
+    "tags": [
+      "AI + ML",
+      "AI Agents",
+      "Kubernetes"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-23T15:45:00",
+    "end": "2027-03-23T16:20:00"
+  },
+  {
+    "id": "T014",
+    "title": "Edge Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers running lightweight Kubernetes at the edge with K3s and KubeEdge. The speakers explain how the team at Cyberdyne Cloud approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Omar Novak (Cyberdyne Cloud)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Advanced",
+    "tags": [
+      "Edge",
+      "Kubernetes",
+      "Runtime + WebAssembly"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-23T15:45:00",
+    "end": "2027-03-23T16:20:00"
+  },
+  {
+    "id": "T113",
+    "title": "Crossplane Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers provisioning cloud infrastructure from Kubernetes with Crossplane compositions. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Uma Wang (Stark Logistics)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Intermediate",
+    "tags": [
+      "Crossplane",
+      "Kubernetes",
+      "Platform Engineering"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-23T15:45:00",
+    "end": "2027-03-23T16:20:00"
+  },
+  {
+    "id": "T042",
+    "title": "A Beginner's Guide to RAG",
+    "abstract": "This beginner session covers production retrieval-augmented generation with vector search and evaluation. The speakers explain how the team at Hooli approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Lena Novak (Hooli)",
+      "Lucas Moreau (Cyberdyne Cloud)"
+    ],
+    "track": "AI + ML",
+    "level": "Beginner",
+    "tags": [
+      "AI + ML",
+      "RAG"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-23T15:45:00",
+    "end": "2027-03-23T16:20:00"
+  },
+  {
+    "id": "T037",
+    "title": "The Future of Prometheus",
+    "abstract": "This beginner session covers scaling Prometheus with remote write, sharding and long-term storage. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Uma Patel (Wayne Media)"
+    ],
+    "track": "Observability",
+    "level": "Beginner",
+    "tags": [
+      "Observability",
+      "Prometheus"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-23T15:45:00",
+    "end": "2027-03-23T16:20:00"
+  },
+  {
+    "id": "T084",
+    "title": "Hands-on: Gateway API for Platform Teams",
+    "abstract": "This intermediate session covers migrating from Ingress to the Gateway API for traffic management. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Rahul Costa (Stark Logistics)"
+    ],
+    "track": "Networking",
+    "level": "Intermediate",
+    "tags": [
+      "Gateway API",
+      "Networking"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-23T15:45:00",
+    "end": "2027-03-23T16:20:00"
+  },
+  {
+    "id": "T086",
+    "title": "The Future of Policy",
+    "abstract": "This beginner session covers admission control with Kyverno and OPA Gatekeeper to stop misconfigurations before they ship. The speakers explain how the team at Cyberdyne Cloud approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Wei Rossi (Cyberdyne Cloud)"
+    ],
+    "track": "Security",
+    "level": "Beginner",
+    "tags": [
+      "Policy",
+      "Security"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-23T15:45:00",
+    "end": "2027-03-23T16:20:00"
+  },
+  {
+    "id": "T094",
+    "title": "A Beginner's Guide to Supply Chain",
+    "abstract": "This beginner session covers signing container images with Sigstore and enforcing provenance with SLSA attestations. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Nadia Petrova (Stark Logistics)",
+      "Nadia Ali (Soylent Foods)"
+    ],
+    "track": "Security",
+    "level": "Beginner",
+    "tags": [
+      "Security",
+      "Supply Chain"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-23T15:45:00",
+    "end": "2027-03-23T16:20:00"
+  },
+  {
+    "id": "T064",
+    "title": "Multi-cluster Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers connecting clusters across regions with multi-cluster services. The speakers explain how the team at Globex approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Arjun Petrova (Globex)",
+      "Farah Liu (Vandelay Shipping)"
+    ],
+    "track": "Networking",
+    "level": "Advanced",
+    "tags": [
+      "Multi-cluster",
+      "Networking"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-23T16:30:00",
+    "end": "2027-03-23T17:05:00"
+  },
+  {
+    "id": "T011",
+    "title": "From Zero to Internal Developer Platform in 30 Minutes",
+    "abstract": "This beginner session covers building an internal developer platform with Backstage golden paths. The speakers explain how the team at Globex approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Ben Costa (Globex)",
+      "Maya Hernandez (Hooli)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Beginner",
+    "tags": [
+      "Internal Developer Platform",
+      "Platform Engineering"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-23T16:30:00",
+    "end": "2027-03-23T17:05:00"
+  },
+  {
+    "id": "T052",
+    "title": "Scaling AI Agents at Umbrella Health",
+    "abstract": "This intermediate session covers running autonomous AI agents on Kubernetes with tool calling, sandboxes and guardrails. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Uma Kim (Umbrella Health)",
+      "Aisha Ali (Umbrella Health)"
+    ],
+    "track": "AI + ML",
+    "level": "Intermediate",
+    "tags": [
+      "AI + ML",
+      "AI Agents",
+      "Kubernetes"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-23T16:30:00",
+    "end": "2027-03-23T17:05:00"
+  },
+  {
+    "id": "T050",
+    "title": "From Zero to OpenTelemetry in 30 Minutes",
+    "abstract": "This beginner session covers instrumenting services with OpenTelemetry and shipping traces, metrics and logs through the Collector. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Jia Tanaka (Acme Retail)"
+    ],
+    "track": "Observability",
+    "level": "Beginner",
+    "tags": [
+      "Observability",
+      "OpenTelemetry"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-23T16:30:00",
+    "end": "2027-03-23T17:05:00"
+  },
+  {
+    "id": "T129",
+    "title": "Debugging Zero Trust When Everything Is on Fire",
+    "abstract": "This advanced session covers workload identity with SPIFFE/SPIRE and mTLS everywhere across clusters. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Wei Patel (Acme Retail)",
+      "Chen Mensah (Vandelay Shipping)"
+    ],
+    "track": "Security",
+    "level": "Advanced",
+    "tags": [
+      "Security",
+      "Zero Trust"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-23T16:30:00",
+    "end": "2027-03-23T17:05:00"
+  },
+  {
+    "id": "T131",
+    "title": "eBPF in Production: Lessons from 150 Clusters",
+    "abstract": "This advanced session covers runtime threat detection with eBPF probes that watch syscalls without kernel modules. The speakers explain how the team at Cyberdyne Cloud approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Mateo Moreau (Cyberdyne Cloud)"
+    ],
+    "track": "Security",
+    "level": "Advanced",
+    "tags": [
+      "Security",
+      "eBPF"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-23T16:30:00",
+    "end": "2027-03-23T17:05:00"
+  },
+  {
+    "id": "T155",
+    "title": "Debugging Containers When Everything Is on Fire",
+    "abstract": "This advanced session covers faster, smaller and safer containers with distroless images and rootless runtimes. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Jia Hernandez (Soylent Foods)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Advanced",
+    "tags": [
+      "Containers",
+      "Runtime + WebAssembly"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-23T16:30:00",
+    "end": "2027-03-23T17:05:00"
+  },
+  {
+    "id": "T090",
+    "title": "From Zero to Service Mesh in 30 Minutes",
+    "abstract": "This beginner session covers sidecar-less service mesh with Istio ambient mode and Cilium. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Kofi Kim (Stark Logistics)"
+    ],
+    "track": "Networking",
+    "level": "Beginner",
+    "tags": [
+      "Networking",
+      "Service Mesh"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-23T16:30:00",
+    "end": "2027-03-23T17:05:00"
+  },
+  {
+    "id": "T106",
+    "title": "Service Mesh Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers sidecar-less service mesh with Istio ambient mode and Cilium. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Farah Silva (Stark Logistics)",
+      "Rahul Fischer (Pied Piper)"
+    ],
+    "track": "Networking",
+    "level": "Intermediate",
+    "tags": [
+      "Networking",
+      "Service Mesh"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-24T10:00:00",
+    "end": "2027-03-24T10:35:00"
+  },
+  {
+    "id": "T047",
+    "title": "From Zero to Logging in 30 Minutes",
+    "abstract": "This beginner session covers cutting logging costs by sampling, routing and dropping noisy logs at the edge. The speakers explain how the team at Cyberdyne Cloud approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Lena Patel (Cyberdyne Cloud)",
+      "Ivan Tanaka (Acme Retail)"
+    ],
+    "track": "Observability",
+    "level": "Beginner",
+    "tags": [
+      "Logging",
+      "Observability"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-24T10:00:00",
+    "end": "2027-03-24T10:35:00"
+  },
+  {
+    "id": "T051",
+    "title": "Multi-tenancy Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers safe multi-tenancy with namespaces, vCluster and hierarchical quotas. The speakers explain how the team at Northwind Bank approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Ivan Lindqvist (Northwind Bank)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Intermediate",
+    "tags": [
+      "Multi-tenancy",
+      "Platform Engineering"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-24T10:00:00",
+    "end": "2027-03-24T10:35:00"
+  },
+  {
+    "id": "T016",
+    "title": "Logging Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers cutting logging costs by sampling, routing and dropping noisy logs at the edge. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Lucas Costa (Stark Logistics)",
+      "Elena Tanaka (Wayne Media)"
+    ],
+    "track": "Observability",
+    "level": "Intermediate",
+    "tags": [
+      "Logging",
+      "Observability"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-24T10:00:00",
+    "end": "2027-03-24T10:35:00"
+  },
+  {
+    "id": "T041",
+    "title": "SLOs in Production: Lessons from 150 Clusters",
+    "abstract": "This advanced session covers defining SLOs and error budgets that engineers actually use for alerting. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Aisha Kim (Wayne Media)"
+    ],
+    "track": "Observability",
+    "level": "Advanced",
+    "tags": [
+      "Observability",
+      "SLOs"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-24T10:00:00",
+    "end": "2027-03-24T10:35:00"
+  },
+  {
+    "id": "T005",
+    "title": "Debugging WebAssembly When Everything Is on Fire",
+    "abstract": "This advanced session covers running WebAssembly workloads next to containers with SpinKube. The speakers explain how the team at Hooli approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Omar Silva (Hooli)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Advanced",
+    "tags": [
+      "Runtime + WebAssembly",
+      "WebAssembly"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-24T10:00:00",
+    "end": "2027-03-24T10:35:00"
+  },
+  {
+    "id": "T149",
+    "title": "A Beginner's Guide to Gateway API",
+    "abstract": "This beginner session covers migrating from Ingress to the Gateway API for traffic management. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Ben Tanaka (Soylent Foods)"
+    ],
+    "track": "Networking",
+    "level": "Beginner",
+    "tags": [
+      "Gateway API",
+      "Networking"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-24T10:00:00",
+    "end": "2027-03-24T10:35:00"
+  },
+  {
+    "id": "T036",
+    "title": "eBPF in Production: Lessons from 150 Clusters",
+    "abstract": "This advanced session covers zero-code observability with eBPF auto-instrumentation. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Aisha Haddad (Acme Retail)"
+    ],
+    "track": "Observability",
+    "level": "Advanced",
+    "tags": [
+      "Observability",
+      "eBPF"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-24T10:00:00",
+    "end": "2027-03-24T10:35:00"
+  },
+  {
+    "id": "T127",
+    "title": "Scaling Supply Chain at Hooli",
+    "abstract": "This intermediate session covers signing container images with Sigstore and enforcing provenance with SLSA attestations. The speakers explain how the team at Hooli approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Tariq Lindqvist (Hooli)"
+    ],
+    "track": "Security",
+    "level": "Intermediate",
+    "tags": [
+      "Security",
+      "Supply Chain"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-24T11:00:00",
+    "end": "2027-03-24T11:35:00"
+  },
+  {
+    "id": "T010",
+    "title": "eBPF in Production: Lessons from 12 Clusters",
+    "abstract": "This advanced session covers replacing kube-proxy with eBPF-based networking for lower latency. The speakers explain how the team at Globex approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Lucas Hernandez (Globex)"
+    ],
+    "track": "Networking",
+    "level": "Advanced",
+    "tags": [
+      "Networking",
+      "eBPF"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-24T11:00:00",
+    "end": "2027-03-24T11:35:00"
+  },
+  {
+    "id": "T038",
+    "title": "Hands-on: eBPF for Platform Teams",
+    "abstract": "This intermediate session covers zero-code observability with eBPF auto-instrumentation. The speakers explain how the team at Globex approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Tariq Costa (Globex)"
+    ],
+    "track": "Observability",
+    "level": "Intermediate",
+    "tags": [
+      "Observability",
+      "eBPF"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-24T11:00:00",
+    "end": "2027-03-24T11:35:00"
+  },
+  {
+    "id": "T153",
+    "title": "The Future of Storage",
+    "abstract": "This beginner session covers persistent storage with CSI drivers, snapshots and disaster recovery. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Maya Lindqvist (Acme Retail)"
+    ],
+    "track": "Storage + Data",
+    "level": "Beginner",
+    "tags": [
+      "Storage",
+      "Storage + Data"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-24T11:00:00",
+    "end": "2027-03-24T11:35:00"
+  },
+  {
+    "id": "T057",
+    "title": "Policy in Production: Lessons from 40 Clusters",
+    "abstract": "This advanced session covers admission control with Kyverno and OPA Gatekeeper to stop misconfigurations before they ship. The speakers explain how the team at Vandelay Shipping approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Yusuf Reddy (Vandelay Shipping)"
+    ],
+    "track": "Security",
+    "level": "Advanced",
+    "tags": [
+      "Policy",
+      "Security"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-24T11:00:00",
+    "end": "2027-03-24T11:35:00"
+  },
+  {
+    "id": "T133",
+    "title": "How Pied Piper Cut Incidents in Half with LLM Inference",
+    "abstract": "This intermediate session covers serving LLMs on GPUs with vLLM, autoscaling and KV-cache aware routing. The speakers explain how the team at Pied Piper approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Nadia Patel (Pied Piper)"
+    ],
+    "track": "AI + ML",
+    "level": "Intermediate",
+    "tags": [
+      "AI + ML",
+      "LLM Inference"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-24T11:00:00",
+    "end": "2027-03-24T11:35:00"
+  },
+  {
+    "id": "T105",
+    "title": "From Zero to AI Agents in 30 Minutes",
+    "abstract": "This beginner session covers running autonomous AI agents on Kubernetes with tool calling, sandboxes and guardrails. The speakers explain how the team at Northwind Bank approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Zara Patel (Northwind Bank)",
+      "Lena Petrova (Acme Retail)"
+    ],
+    "track": "AI + ML",
+    "level": "Beginner",
+    "tags": [
+      "AI + ML",
+      "AI Agents",
+      "Kubernetes"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-24T11:00:00",
+    "end": "2027-03-24T11:35:00"
+  },
+  {
+    "id": "T102",
+    "title": "How Hooli Cut Incidents in Half with Storage",
+    "abstract": "This intermediate session covers persistent storage with CSI drivers, snapshots and disaster recovery. The speakers explain how the team at Hooli approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Yusuf Tanaka (Hooli)"
+    ],
+    "track": "Storage + Data",
+    "level": "Intermediate",
+    "tags": [
+      "Storage",
+      "Storage + Data"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-24T11:00:00",
+    "end": "2027-03-24T11:35:00"
+  },
+  {
+    "id": "T147",
+    "title": "From Zero to Databases on Kubernetes in 30 Minutes",
+    "abstract": "This beginner session covers running stateful Postgres on Kubernetes with operators and backups. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Tariq Patel (Wayne Media)"
+    ],
+    "track": "Storage + Data",
+    "level": "Beginner",
+    "tags": [
+      "Databases on Kubernetes",
+      "Kubernetes",
+      "Storage + Data"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-24T11:45:00",
+    "end": "2027-03-24T12:20:00"
+  },
+  {
+    "id": "T071",
+    "title": "Multi-tenancy Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers safe multi-tenancy with namespaces, vCluster and hierarchical quotas. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Lena Haddad (Acme Retail)",
+      "Viktor Hernandez (Globex)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Advanced",
+    "tags": [
+      "Multi-tenancy",
+      "Platform Engineering"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-24T11:45:00",
+    "end": "2027-03-24T12:20:00"
+  },
+  {
+    "id": "T093",
+    "title": "Green Software Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers measuring the carbon footprint of workloads with Kepler. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Ben Mensah (Umbrella Health)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Intermediate",
+    "tags": [
+      "Cost + Sustainability",
+      "Green Software"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-24T11:45:00",
+    "end": "2027-03-24T12:20:00"
+  },
+  {
+    "id": "T060",
+    "title": "Scaling OpenTelemetry at Soylent Foods",
+    "abstract": "This intermediate session covers instrumenting services with OpenTelemetry and shipping traces, metrics and logs through the Collector. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Farah Tanaka (Soylent Foods)",
+      "Chen Rahman (Northwind Bank)"
+    ],
+    "track": "Observability",
+    "level": "Intermediate",
+    "tags": [
+      "Observability",
+      "OpenTelemetry"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-24T11:45:00",
+    "end": "2027-03-24T12:20:00"
+  },
+  {
+    "id": "T143",
+    "title": "The Future of Developer Experience",
+    "abstract": "This beginner session covers reducing developer cognitive load with paved roads and self-service. The speakers explain how the team at Northwind Bank approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Maya Petrova (Northwind Bank)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Beginner",
+    "tags": [
+      "Developer Experience",
+      "Platform Engineering"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-24T11:45:00",
+    "end": "2027-03-24T12:20:00"
+  },
+  {
+    "id": "T030",
+    "title": "Scaling SLOs at Initech",
+    "abstract": "This intermediate session covers defining SLOs and error budgets that engineers actually use for alerting. The speakers explain how the team at Initech approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Wei Novak (Initech)"
+    ],
+    "track": "Observability",
+    "level": "Intermediate",
+    "tags": [
+      "Observability",
+      "SLOs"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-24T11:45:00",
+    "end": "2027-03-24T12:20:00"
+  },
+  {
+    "id": "T039",
+    "title": "Scaling Autoscaling at Wayne Media",
+    "abstract": "This intermediate session covers scaling to zero and bin-packing nodes with Karpenter and KEDA. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Kofi Tanaka (Wayne Media)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Intermediate",
+    "tags": [
+      "Autoscaling",
+      "Cost + Sustainability"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-24T11:45:00",
+    "end": "2027-03-24T12:20:00"
+  },
+  {
+    "id": "T164",
+    "title": "Hands-on: Policy for Platform Teams",
+    "abstract": "This intermediate session covers admission control with Kyverno and OPA Gatekeeper to stop misconfigurations before they ship. The speakers explain how the team at Northwind Bank approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Quinn Wang (Northwind Bank)",
+      "Omar Lindqvist (Northwind Bank)"
+    ],
+    "track": "Security",
+    "level": "Intermediate",
+    "tags": [
+      "Policy",
+      "Security"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-24T14:00:00",
+    "end": "2027-03-24T14:35:00"
+  },
+  {
+    "id": "T119",
+    "title": "A Beginner's Guide to eBPF",
+    "abstract": "This beginner session covers zero-code observability with eBPF auto-instrumentation. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Viktor Fischer (Stark Logistics)"
+    ],
+    "track": "Observability",
+    "level": "Beginner",
+    "tags": [
+      "Observability",
+      "eBPF"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-24T14:00:00",
+    "end": "2027-03-24T14:35:00"
+  },
+  {
+    "id": "T015",
+    "title": "A Beginner's Guide to SLOs",
+    "abstract": "This beginner session covers defining SLOs and error budgets that engineers actually use for alerting. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Uma Tanaka (Umbrella Health)",
+      "Chen Liu (Initech)"
+    ],
+    "track": "Observability",
+    "level": "Beginner",
+    "tags": [
+      "Observability",
+      "SLOs"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-24T14:00:00",
+    "end": "2027-03-24T14:35:00"
+  },
+  {
+    "id": "T080",
+    "title": "Containers in Production: Lessons from 40 Clusters",
+    "abstract": "This advanced session covers faster, smaller and safer containers with distroless images and rootless runtimes. The speakers explain how the team at Hooli approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Mateo Silva (Hooli)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Advanced",
+    "tags": [
+      "Containers",
+      "Runtime + WebAssembly"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-24T14:00:00",
+    "end": "2027-03-24T14:35:00"
+  },
+  {
+    "id": "T009",
+    "title": "Debugging Autoscaling When Everything Is on Fire",
+    "abstract": "This advanced session covers scaling to zero and bin-packing nodes with Karpenter and KEDA. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Wei Rossi (Wayne Media)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Advanced",
+    "tags": [
+      "Autoscaling",
+      "Cost + Sustainability"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-24T14:00:00",
+    "end": "2027-03-24T14:35:00"
+  },
+  {
+    "id": "T020",
+    "title": "Hands-on: FinOps for Platform Teams",
+    "abstract": "This intermediate session covers measuring and cutting Kubernetes spend with OpenCost and right-sizing. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Yusuf Rossi (Stark Logistics)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Intermediate",
+    "tags": [
+      "Cost + Sustainability",
+      "FinOps",
+      "Kubernetes"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-24T14:00:00",
+    "end": "2027-03-24T14:35:00"
+  },
+  {
+    "id": "T027",
+    "title": "Hands-on: Green Software for Platform Teams",
+    "abstract": "This intermediate session covers measuring the carbon footprint of workloads with Kepler. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Uma Wang (Stark Logistics)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Intermediate",
+    "tags": [
+      "Cost + Sustainability",
+      "Green Software"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-24T14:00:00",
+    "end": "2027-03-24T14:35:00"
+  },
+  {
+    "id": "T130",
+    "title": "Zero Trust Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers workload identity with SPIFFE/SPIRE and mTLS everywhere across clusters. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Ivan Moreau (Acme Retail)"
+    ],
+    "track": "Security",
+    "level": "Intermediate",
+    "tags": [
+      "Security",
+      "Zero Trust"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-24T14:00:00",
+    "end": "2027-03-24T14:35:00"
+  },
+  {
+    "id": "T098",
+    "title": "Scaling Streaming at Pied Piper",
+    "abstract": "This intermediate session covers event streaming with Kafka on Kubernetes using Strimzi. The speakers explain how the team at Pied Piper approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Chen Patel (Pied Piper)"
+    ],
+    "track": "Storage + Data",
+    "level": "Intermediate",
+    "tags": [
+      "Kubernetes",
+      "Storage + Data",
+      "Streaming"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-24T14:45:00",
+    "end": "2027-03-24T15:20:00"
+  },
+  {
+    "id": "T151",
+    "title": "How Umbrella Health Cut Incidents in Half with MLOps",
+    "abstract": "This intermediate session covers building reproducible ML pipelines with Kubeflow and model registries. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Kofi Hernandez (Umbrella Health)",
+      "Ximena Haddad (Globex)"
+    ],
+    "track": "AI + ML",
+    "level": "Intermediate",
+    "tags": [
+      "AI + ML",
+      "MLOps"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-24T14:45:00",
+    "end": "2027-03-24T15:20:00"
+  },
+  {
+    "id": "T104",
+    "title": "Scaling Secrets at Soylent Foods",
+    "abstract": "This intermediate session covers rotating secrets automatically with External Secrets Operator and Vault. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Uma Hernandez (Soylent Foods)"
+    ],
+    "track": "Security",
+    "level": "Intermediate",
+    "tags": [
+      "Secrets",
+      "Security"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-24T14:45:00",
+    "end": "2027-03-24T15:20:00"
+  },
+  {
+    "id": "T055",
+    "title": "A Beginner's Guide to eBPF",
+    "abstract": "This beginner session covers runtime threat detection with eBPF probes that watch syscalls without kernel modules. The speakers explain how the team at Vandelay Shipping approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Elena Petrova (Vandelay Shipping)"
+    ],
+    "track": "Security",
+    "level": "Beginner",
+    "tags": [
+      "Security",
+      "eBPF"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-24T14:45:00",
+    "end": "2027-03-24T15:20:00"
+  },
+  {
+    "id": "T066",
+    "title": "Containers Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers faster, smaller and safer containers with distroless images and rootless runtimes. The speakers explain how the team at Cyberdyne Cloud approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Ivan Reddy (Cyberdyne Cloud)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Advanced",
+    "tags": [
+      "Containers",
+      "Runtime + WebAssembly"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-24T14:45:00",
+    "end": "2027-03-24T15:20:00"
+  },
+  {
+    "id": "T004",
+    "title": "How Umbrella Health Cut Incidents in Half with Autoscaling",
+    "abstract": "This intermediate session covers scaling to zero and bin-packing nodes with Karpenter and KEDA. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Nadia Ali (Umbrella Health)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Intermediate",
+    "tags": [
+      "Autoscaling",
+      "Cost + Sustainability"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-24T14:45:00",
+    "end": "2027-03-24T15:20:00"
+  },
+  {
+    "id": "T148",
+    "title": "AI Agents in Production: Lessons from 12 Clusters",
+    "abstract": "This advanced session covers running autonomous AI agents on Kubernetes with tool calling, sandboxes and guardrails. The speakers explain how the team at Pied Piper approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Lena Haddad (Pied Piper)",
+      "Viktor Ali (Hooli)"
+    ],
+    "track": "AI + ML",
+    "level": "Advanced",
+    "tags": [
+      "AI + ML",
+      "AI Agents",
+      "Kubernetes"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-24T14:45:00",
+    "end": "2027-03-24T15:20:00"
+  },
+  {
+    "id": "T048",
+    "title": "The Future of Autoscaling",
+    "abstract": "This beginner session covers scaling to zero and bin-packing nodes with Karpenter and KEDA. The speakers explain how the team at Initech approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Diego Costa (Initech)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Beginner",
+    "tags": [
+      "Autoscaling",
+      "Cost + Sustainability"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-24T14:45:00",
+    "end": "2027-03-24T15:20:00"
+  },
+  {
+    "id": "T077",
+    "title": "Hands-on: Multi-cluster for Platform Teams",
+    "abstract": "This intermediate session covers connecting clusters across regions with multi-cluster services. The speakers explain how the team at Initech approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Jia Costa (Initech)",
+      "Nadia Wang (Initech)"
+    ],
+    "track": "Networking",
+    "level": "Intermediate",
+    "tags": [
+      "Multi-cluster",
+      "Networking"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-24T15:45:00",
+    "end": "2027-03-24T16:20:00"
+  },
+  {
+    "id": "T034",
+    "title": "A Beginner's Guide to Developer Experience",
+    "abstract": "This beginner session covers reducing developer cognitive load with paved roads and self-service. The speakers explain how the team at Initech approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Wei Liu (Initech)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Beginner",
+    "tags": [
+      "Developer Experience",
+      "Platform Engineering"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-24T15:45:00",
+    "end": "2027-03-24T16:20:00"
+  },
+  {
+    "id": "T112",
+    "title": "How Acme Retail Cut Incidents in Half with RAG",
+    "abstract": "This intermediate session covers production retrieval-augmented generation with vector search and evaluation. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Priya Okafor (Acme Retail)"
+    ],
+    "track": "AI + ML",
+    "level": "Intermediate",
+    "tags": [
+      "AI + ML",
+      "RAG"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-24T15:45:00",
+    "end": "2027-03-24T16:20:00"
+  },
+  {
+    "id": "T059",
+    "title": "Debugging GitOps When Everything Is on Fire",
+    "abstract": "This advanced session covers managing hundreds of clusters declaratively with Argo CD and Flux. The speakers explain how the team at Cyberdyne Cloud approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Yusuf Silva (Cyberdyne Cloud)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Advanced",
+    "tags": [
+      "GitOps",
+      "Platform Engineering"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-24T15:45:00",
+    "end": "2027-03-24T16:20:00"
+  },
+  {
+    "id": "T049",
+    "title": "Autoscaling in Production: Lessons from 40 Clusters",
+    "abstract": "This advanced session covers scaling to zero and bin-packing nodes with Karpenter and KEDA. The speakers explain how the team at Globex approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Gabriel Kim (Globex)",
+      "Sofia Reddy (Vandelay Shipping)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Advanced",
+    "tags": [
+      "Autoscaling",
+      "Cost + Sustainability"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-24T15:45:00",
+    "end": "2027-03-24T16:20:00"
+  },
+  {
+    "id": "T079",
+    "title": "How Umbrella Health Cut Incidents in Half with Developer Experience",
+    "abstract": "This intermediate session covers reducing developer cognitive load with paved roads and self-service. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Nadia Kim (Umbrella Health)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Intermediate",
+    "tags": [
+      "Developer Experience",
+      "Platform Engineering"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-24T15:45:00",
+    "end": "2027-03-24T16:20:00"
+  },
+  {
+    "id": "T061",
+    "title": "Developer Experience Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers reducing developer cognitive load with paved roads and self-service. The speakers explain how the team at Hooli approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Jia Lindqvist (Hooli)",
+      "Wei Liu (Cyberdyne Cloud)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Advanced",
+    "tags": [
+      "Developer Experience",
+      "Platform Engineering"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-24T15:45:00",
+    "end": "2027-03-24T16:20:00"
+  },
+  {
+    "id": "T019",
+    "title": "How Vandelay Shipping Cut Incidents in Half with Multi-tenancy",
+    "abstract": "This intermediate session covers safe multi-tenancy with namespaces, vCluster and hierarchical quotas. The speakers explain how the team at Vandelay Shipping approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Maya Ali (Vandelay Shipping)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Intermediate",
+    "tags": [
+      "Multi-tenancy",
+      "Platform Engineering"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-24T15:45:00",
+    "end": "2027-03-24T16:20:00"
+  },
+  {
+    "id": "T092",
+    "title": "Hands-on: GitOps for Platform Teams",
+    "abstract": "This intermediate session covers managing hundreds of clusters declaratively with Argo CD and Flux. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Diego Hernandez (Acme Retail)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Intermediate",
+    "tags": [
+      "GitOps",
+      "Platform Engineering"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-24T16:30:00",
+    "end": "2027-03-24T17:05:00"
+  },
+  {
+    "id": "T053",
+    "title": "Hands-on: eBPF for Platform Teams",
+    "abstract": "This intermediate session covers replacing kube-proxy with eBPF-based networking for lower latency. The speakers explain how the team at Hooli approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Kofi Rahman (Hooli)"
+    ],
+    "track": "Networking",
+    "level": "Intermediate",
+    "tags": [
+      "Networking",
+      "eBPF"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-24T16:30:00",
+    "end": "2027-03-24T17:05:00"
+  },
+  {
+    "id": "T117",
+    "title": "Scaling GPUs at Acme Retail",
+    "abstract": "This intermediate session covers sharing and scheduling GPUs efficiently with DRA, MIG and time-slicing. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Tariq Haddad (Acme Retail)"
+    ],
+    "track": "AI + ML",
+    "level": "Intermediate",
+    "tags": [
+      "AI + ML",
+      "GPUs"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-24T16:30:00",
+    "end": "2027-03-24T17:05:00"
+  },
+  {
+    "id": "T075",
+    "title": "Gateway API Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers migrating from Ingress to the Gateway API for traffic management. The speakers explain how the team at Hooli approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Gabriel Novak (Hooli)"
+    ],
+    "track": "Networking",
+    "level": "Intermediate",
+    "tags": [
+      "Gateway API",
+      "Networking"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-24T16:30:00",
+    "end": "2027-03-24T17:05:00"
+  },
+  {
+    "id": "T122",
+    "title": "From Zero to Supply Chain in 30 Minutes",
+    "abstract": "This beginner session covers signing container images with Sigstore and enforcing provenance with SLSA attestations. The speakers explain how the team at Pied Piper approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Sofia Silva (Pied Piper)"
+    ],
+    "track": "Security",
+    "level": "Beginner",
+    "tags": [
+      "Security",
+      "Supply Chain"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-24T16:30:00",
+    "end": "2027-03-24T17:05:00"
+  },
+  {
+    "id": "T068",
+    "title": "How Umbrella Health Cut Incidents in Half with Policy",
+    "abstract": "This intermediate session covers admission control with Kyverno and OPA Gatekeeper to stop misconfigurations before they ship. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Chen Tanaka (Umbrella Health)"
+    ],
+    "track": "Security",
+    "level": "Intermediate",
+    "tags": [
+      "Policy",
+      "Security"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-24T16:30:00",
+    "end": "2027-03-24T17:05:00"
+  },
+  {
+    "id": "T089",
+    "title": "Debugging Supply Chain When Everything Is on Fire",
+    "abstract": "This advanced session covers signing container images with Sigstore and enforcing provenance with SLSA attestations. The speakers explain how the team at Globex approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Priya Novak (Globex)",
+      "Wei Rossi (Soylent Foods)"
+    ],
+    "track": "Security",
+    "level": "Advanced",
+    "tags": [
+      "Security",
+      "Supply Chain"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-24T16:30:00",
+    "end": "2027-03-24T17:05:00"
+  },
+  {
+    "id": "T003",
+    "title": "Debugging AI Agents When Everything Is on Fire",
+    "abstract": "This advanced session covers running autonomous AI agents on Kubernetes with tool calling, sandboxes and guardrails. The speakers explain how the team at Globex approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Mateo Costa (Globex)"
+    ],
+    "track": "AI + ML",
+    "level": "Advanced",
+    "tags": [
+      "AI + ML",
+      "AI Agents",
+      "Kubernetes"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-24T16:30:00",
+    "end": "2027-03-24T17:05:00"
+  },
+  {
+    "id": "T145",
+    "title": "Debugging Internal Developer Platform When Everything Is on Fire",
+    "abstract": "This advanced session covers building an internal developer platform with Backstage golden paths. The speakers explain how the team at Hooli approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Farah Fischer (Hooli)",
+      "Kofi Ali (Vandelay Shipping)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Advanced",
+    "tags": [
+      "Internal Developer Platform",
+      "Platform Engineering"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-25T10:00:00",
+    "end": "2027-03-25T10:35:00"
+  },
+  {
+    "id": "T013",
+    "title": "How Pied Piper Cut Incidents in Half with Internal Developer Platform",
+    "abstract": "This intermediate session covers building an internal developer platform with Backstage golden paths. The speakers explain how the team at Pied Piper approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Arjun Costa (Pied Piper)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Intermediate",
+    "tags": [
+      "Internal Developer Platform",
+      "Platform Engineering"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-25T10:00:00",
+    "end": "2027-03-25T10:35:00"
+  },
+  {
+    "id": "T088",
+    "title": "Edge in Production: Lessons from 600 Clusters",
+    "abstract": "This advanced session covers running lightweight Kubernetes at the edge with K3s and KubeEdge. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Aisha Petrova (Acme Retail)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Advanced",
+    "tags": [
+      "Edge",
+      "Kubernetes",
+      "Runtime + WebAssembly"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-25T10:00:00",
+    "end": "2027-03-25T10:35:00"
+  },
+  {
+    "id": "T124",
+    "title": "Debugging eBPF When Everything Is on Fire",
+    "abstract": "This advanced session covers replacing kube-proxy with eBPF-based networking for lower latency. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Diego Okafor (Umbrella Health)",
+      "Lena Tanaka (Vandelay Shipping)"
+    ],
+    "track": "Networking",
+    "level": "Advanced",
+    "tags": [
+      "Networking",
+      "eBPF"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-25T10:00:00",
+    "end": "2027-03-25T10:35:00"
+  },
+  {
+    "id": "T123",
+    "title": "From Zero to WebAssembly in 30 Minutes",
+    "abstract": "This beginner session covers running WebAssembly workloads next to containers with SpinKube. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Zara Moreau (Stark Logistics)",
+      "Maya Petrova (Globex)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Beginner",
+    "tags": [
+      "Runtime + WebAssembly",
+      "WebAssembly"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-25T10:00:00",
+    "end": "2027-03-25T10:35:00"
+  },
+  {
+    "id": "T165",
+    "title": "Hands-on: GPUs for Platform Teams",
+    "abstract": "This intermediate session covers sharing and scheduling GPUs efficiently with DRA, MIG and time-slicing. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Uma Wang (Umbrella Health)"
+    ],
+    "track": "AI + ML",
+    "level": "Intermediate",
+    "tags": [
+      "AI + ML",
+      "GPUs"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-25T10:00:00",
+    "end": "2027-03-25T10:35:00"
+  },
+  {
+    "id": "T110",
+    "title": "A Beginner's Guide to GPUs",
+    "abstract": "This beginner session covers sharing and scheduling GPUs efficiently with DRA, MIG and time-slicing. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Zara Rossi (Stark Logistics)",
+      "Rahul Hernandez (Hooli)"
+    ],
+    "track": "AI + ML",
+    "level": "Beginner",
+    "tags": [
+      "AI + ML",
+      "GPUs"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-25T10:00:00",
+    "end": "2027-03-25T10:35:00"
+  },
+  {
+    "id": "T033",
+    "title": "A Beginner's Guide to Prometheus",
+    "abstract": "This beginner session covers scaling Prometheus with remote write, sharding and long-term storage. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Chen Ali (Wayne Media)"
+    ],
+    "track": "Observability",
+    "level": "Beginner",
+    "tags": [
+      "Observability",
+      "Prometheus"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-25T10:00:00",
+    "end": "2027-03-25T10:35:00"
+  },
+  {
+    "id": "T018",
+    "title": "Scaling Logging at Hooli",
+    "abstract": "This intermediate session covers cutting logging costs by sampling, routing and dropping noisy logs at the edge. The speakers explain how the team at Hooli approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Ben Silva (Hooli)"
+    ],
+    "track": "Observability",
+    "level": "Intermediate",
+    "tags": [
+      "Logging",
+      "Observability"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-25T11:00:00",
+    "end": "2027-03-25T11:35:00"
+  },
+  {
+    "id": "T032",
+    "title": "Scaling Databases on Kubernetes at Vandelay Shipping",
+    "abstract": "This intermediate session covers running stateful Postgres on Kubernetes with operators and backups. The speakers explain how the team at Vandelay Shipping approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Ines Liu (Vandelay Shipping)"
+    ],
+    "track": "Storage + Data",
+    "level": "Intermediate",
+    "tags": [
+      "Databases on Kubernetes",
+      "Kubernetes",
+      "Storage + Data"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-25T11:00:00",
+    "end": "2027-03-25T11:35:00"
+  },
+  {
+    "id": "T043",
+    "title": "From Zero to FinOps in 30 Minutes",
+    "abstract": "This beginner session covers measuring and cutting Kubernetes spend with OpenCost and right-sizing. The speakers explain how the team at Pied Piper approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Quinn Silva (Pied Piper)",
+      "Ximena Haddad (Hooli)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Beginner",
+    "tags": [
+      "Cost + Sustainability",
+      "FinOps",
+      "Kubernetes"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-25T11:00:00",
+    "end": "2027-03-25T11:35:00"
+  },
+  {
+    "id": "T031",
+    "title": "GPUs Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers sharing and scheduling GPUs efficiently with DRA, MIG and time-slicing. The speakers explain how the team at Vandelay Shipping approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Yusuf Rahman (Vandelay Shipping)"
+    ],
+    "track": "AI + ML",
+    "level": "Intermediate",
+    "tags": [
+      "AI + ML",
+      "GPUs"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-25T11:00:00",
+    "end": "2027-03-25T11:35:00"
+  },
+  {
+    "id": "T040",
+    "title": "A Beginner's Guide to Edge",
+    "abstract": "This beginner session covers running lightweight Kubernetes at the edge with K3s and KubeEdge. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Hana Patel (Umbrella Health)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Beginner",
+    "tags": [
+      "Edge",
+      "Kubernetes",
+      "Runtime + WebAssembly"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-25T11:00:00",
+    "end": "2027-03-25T11:35:00"
+  },
+  {
+    "id": "T021",
+    "title": "Hands-on: Zero Trust for Platform Teams",
+    "abstract": "This intermediate session covers workload identity with SPIFFE/SPIRE and mTLS everywhere across clusters. The speakers explain how the team at Pied Piper approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Priya Tanaka (Pied Piper)",
+      "Priya Okafor (Wayne Media)"
+    ],
+    "track": "Security",
+    "level": "Intermediate",
+    "tags": [
+      "Security",
+      "Zero Trust"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-25T11:00:00",
+    "end": "2027-03-25T11:35:00"
+  },
+  {
+    "id": "T028",
+    "title": "Storage in Production: Lessons from 12 Clusters",
+    "abstract": "This advanced session covers persistent storage with CSI drivers, snapshots and disaster recovery. The speakers explain how the team at Northwind Bank approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Hana Silva (Northwind Bank)"
+    ],
+    "track": "Storage + Data",
+    "level": "Advanced",
+    "tags": [
+      "Storage",
+      "Storage + Data"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-25T11:00:00",
+    "end": "2027-03-25T11:35:00"
+  },
+  {
+    "id": "T022",
+    "title": "The Future of Internal Developer Platform",
+    "abstract": "This beginner session covers building an internal developer platform with Backstage golden paths. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Ximena Rahman (Soylent Foods)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Beginner",
+    "tags": [
+      "Internal Developer Platform",
+      "Platform Engineering"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-25T11:00:00",
+    "end": "2027-03-25T11:35:00"
+  },
+  {
+    "id": "T078",
+    "title": "The Future of Secrets",
+    "abstract": "This beginner session covers rotating secrets automatically with External Secrets Operator and Vault. The speakers explain how the team at Hooli approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Uma Petrova (Hooli)"
+    ],
+    "track": "Security",
+    "level": "Beginner",
+    "tags": [
+      "Secrets",
+      "Security"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-25T11:45:00",
+    "end": "2027-03-25T12:20:00"
+  },
+  {
+    "id": "T154",
+    "title": "A Beginner's Guide to FinOps",
+    "abstract": "This beginner session covers measuring and cutting Kubernetes spend with OpenCost and right-sizing. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Sofia Haddad (Acme Retail)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Beginner",
+    "tags": [
+      "Cost + Sustainability",
+      "FinOps",
+      "Kubernetes"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-25T11:45:00",
+    "end": "2027-03-25T12:20:00"
+  },
+  {
+    "id": "T029",
+    "title": "Hands-on: SLOs for Platform Teams",
+    "abstract": "This intermediate session covers defining SLOs and error budgets that engineers actually use for alerting. The speakers explain how the team at Globex approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Elena Kim (Globex)"
+    ],
+    "track": "Observability",
+    "level": "Intermediate",
+    "tags": [
+      "Observability",
+      "SLOs"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-25T11:45:00",
+    "end": "2027-03-25T12:20:00"
+  },
+  {
+    "id": "T069",
+    "title": "A Beginner's Guide to Green Software",
+    "abstract": "This beginner session covers measuring the carbon footprint of workloads with Kepler. The speakers explain how the team at Vandelay Shipping approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Yusuf Novak (Vandelay Shipping)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Beginner",
+    "tags": [
+      "Cost + Sustainability",
+      "Green Software"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-25T11:45:00",
+    "end": "2027-03-25T12:20:00"
+  },
+  {
+    "id": "T096",
+    "title": "A Beginner's Guide to LLM Inference",
+    "abstract": "This beginner session covers serving LLMs on GPUs with vLLM, autoscaling and KV-cache aware routing. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Priya Ali (Soylent Foods)",
+      "Omar Novak (Hooli)"
+    ],
+    "track": "AI + ML",
+    "level": "Beginner",
+    "tags": [
+      "AI + ML",
+      "LLM Inference"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-25T11:45:00",
+    "end": "2027-03-25T12:20:00"
+  },
+  {
+    "id": "T087",
+    "title": "How Soylent Foods Cut Incidents in Half with Logging",
+    "abstract": "This intermediate session covers cutting logging costs by sampling, routing and dropping noisy logs at the edge. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Priya Lindqvist (Soylent Foods)",
+      "Sofia Mensah (Acme Retail)"
+    ],
+    "track": "Observability",
+    "level": "Intermediate",
+    "tags": [
+      "Logging",
+      "Observability"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-25T11:45:00",
+    "end": "2027-03-25T12:20:00"
+  },
+  {
+    "id": "T024",
+    "title": "Scaling eBPF at Northwind Bank",
+    "abstract": "This intermediate session covers runtime threat detection with eBPF probes that watch syscalls without kernel modules. The speakers explain how the team at Northwind Bank approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Uma Haddad (Northwind Bank)",
+      "Omar Rahman (Northwind Bank)"
+    ],
+    "track": "Security",
+    "level": "Intermediate",
+    "tags": [
+      "Security",
+      "eBPF"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-25T11:45:00",
+    "end": "2027-03-25T12:20:00"
+  },
+  {
+    "id": "T142",
+    "title": "A Beginner's Guide to eBPF",
+    "abstract": "This beginner session covers replacing kube-proxy with eBPF-based networking for lower latency. The speakers explain how the team at Pied Piper approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Tariq Novak (Pied Piper)",
+      "Ivan Liu (Stark Logistics)"
+    ],
+    "track": "Networking",
+    "level": "Beginner",
+    "tags": [
+      "Networking",
+      "eBPF"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-25T11:45:00",
+    "end": "2027-03-25T12:20:00"
+  },
+  {
+    "id": "T128",
+    "title": "WebAssembly Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers running WebAssembly workloads next to containers with SpinKube. The speakers explain how the team at Pied Piper approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Omar Okafor (Pied Piper)",
+      "Priya Rossi (Wayne Media)"
+    ],
+    "track": "Runtime + WebAssembly",
+    "level": "Advanced",
+    "tags": [
+      "Runtime + WebAssembly",
+      "WebAssembly"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-25T14:00:00",
+    "end": "2027-03-25T14:35:00"
+  },
+  {
+    "id": "T156",
+    "title": "Prometheus Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers scaling Prometheus with remote write, sharding and long-term storage. The speakers explain how the team at Globex approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Arjun Fischer (Globex)",
+      "Maya Hernandez (Initech)"
+    ],
+    "track": "Observability",
+    "level": "Advanced",
+    "tags": [
+      "Observability",
+      "Prometheus"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-25T14:00:00",
+    "end": "2027-03-25T14:35:00"
+  },
+  {
+    "id": "T083",
+    "title": "From Zero to Crossplane in 30 Minutes",
+    "abstract": "This beginner session covers provisioning cloud infrastructure from Kubernetes with Crossplane compositions. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Maya Petrova (Soylent Foods)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Beginner",
+    "tags": [
+      "Crossplane",
+      "Kubernetes",
+      "Platform Engineering"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-25T14:00:00",
+    "end": "2027-03-25T14:35:00"
+  },
+  {
+    "id": "T144",
+    "title": "Scaling Service Mesh at Acme Retail",
+    "abstract": "This intermediate session covers sidecar-less service mesh with Istio ambient mode and Cilium. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Ximena Okafor (Acme Retail)",
+      "Quinn Silva (Wayne Media)"
+    ],
+    "track": "Networking",
+    "level": "Intermediate",
+    "tags": [
+      "Networking",
+      "Service Mesh"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-25T14:00:00",
+    "end": "2027-03-25T14:35:00"
+  },
+  {
+    "id": "T062",
+    "title": "Debugging Multi-cluster When Everything Is on Fire",
+    "abstract": "This advanced session covers connecting clusters across regions with multi-cluster services. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Ines Novak (Acme Retail)"
+    ],
+    "track": "Networking",
+    "level": "Advanced",
+    "tags": [
+      "Multi-cluster",
+      "Networking"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-25T14:00:00",
+    "end": "2027-03-25T14:35:00"
+  },
+  {
+    "id": "T056",
+    "title": "A Beginner's Guide to Crossplane",
+    "abstract": "This beginner session covers provisioning cloud infrastructure from Kubernetes with Crossplane compositions. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Diego Costa (Acme Retail)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Beginner",
+    "tags": [
+      "Crossplane",
+      "Kubernetes",
+      "Platform Engineering"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-25T14:00:00",
+    "end": "2027-03-25T14:35:00"
+  },
+  {
+    "id": "T073",
+    "title": "Debugging Green Software When Everything Is on Fire",
+    "abstract": "This advanced session covers measuring the carbon footprint of workloads with Kepler. The speakers explain how the team at Northwind Bank approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Chen Mensah (Northwind Bank)",
+      "Diego Rossi (Pied Piper)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Advanced",
+    "tags": [
+      "Cost + Sustainability",
+      "Green Software"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-25T14:00:00",
+    "end": "2027-03-25T14:35:00"
+  },
+  {
+    "id": "T054",
+    "title": "How Hooli Cut Incidents in Half with Gateway API",
+    "abstract": "This intermediate session covers migrating from Ingress to the Gateway API for traffic management. The speakers explain how the team at Hooli approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Arjun Wang (Hooli)"
+    ],
+    "track": "Networking",
+    "level": "Intermediate",
+    "tags": [
+      "Gateway API",
+      "Networking"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-25T14:00:00",
+    "end": "2027-03-25T14:35:00"
+  },
+  {
+    "id": "T159",
+    "title": "Scaling FinOps at Pied Piper",
+    "abstract": "This intermediate session covers measuring and cutting Kubernetes spend with OpenCost and right-sizing. The speakers explain how the team at Pied Piper approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Quinn Reddy (Pied Piper)",
+      "Yusuf Fischer (Stark Logistics)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Intermediate",
+    "tags": [
+      "Cost + Sustainability",
+      "FinOps",
+      "Kubernetes"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-25T14:45:00",
+    "end": "2027-03-25T15:20:00"
+  },
+  {
+    "id": "T007",
+    "title": "How Stark Logistics Cut Incidents in Half with eBPF",
+    "abstract": "This intermediate session covers zero-code observability with eBPF auto-instrumentation. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Arjun Tanaka (Stark Logistics)"
+    ],
+    "track": "Observability",
+    "level": "Intermediate",
+    "tags": [
+      "Observability",
+      "eBPF"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-25T14:45:00",
+    "end": "2027-03-25T15:20:00"
+  },
+  {
+    "id": "T132",
+    "title": "From Zero to LLM Inference in 30 Minutes",
+    "abstract": "This beginner session covers serving LLMs on GPUs with vLLM, autoscaling and KV-cache aware routing. The speakers explain how the team at Pied Piper approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Diego Hernandez (Pied Piper)"
+    ],
+    "track": "AI + ML",
+    "level": "Beginner",
+    "tags": [
+      "AI + ML",
+      "LLM Inference"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-25T14:45:00",
+    "end": "2027-03-25T15:20:00"
+  },
+  {
+    "id": "T107",
+    "title": "Debugging Gateway API When Everything Is on Fire",
+    "abstract": "This advanced session covers migrating from Ingress to the Gateway API for traffic management. The speakers explain how the team at Umbrella Health approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Ivan Kim (Umbrella Health)"
+    ],
+    "track": "Networking",
+    "level": "Advanced",
+    "tags": [
+      "Gateway API",
+      "Networking"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-25T14:45:00",
+    "end": "2027-03-25T15:20:00"
+  },
+  {
+    "id": "T126",
+    "title": "Debugging Databases on Kubernetes When Everything Is on Fire",
+    "abstract": "This advanced session covers running stateful Postgres on Kubernetes with operators and backups. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Omar Fischer (Acme Retail)"
+    ],
+    "track": "Storage + Data",
+    "level": "Advanced",
+    "tags": [
+      "Databases on Kubernetes",
+      "Kubernetes",
+      "Storage + Data"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-25T14:45:00",
+    "end": "2027-03-25T15:20:00"
+  },
+  {
+    "id": "T044",
+    "title": "RAG Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers production retrieval-augmented generation with vector search and evaluation. The speakers explain how the team at Initech approached it, what broke, and what worked. We share dashboards, configs and the mistakes we made along the way.",
+    "speakers": [
+      "Uma Kim (Initech)"
+    ],
+    "track": "AI + ML",
+    "level": "Intermediate",
+    "tags": [
+      "AI + ML",
+      "RAG"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-25T14:45:00",
+    "end": "2027-03-25T15:20:00"
+  },
+  {
+    "id": "T063",
+    "title": "MLOps Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers building reproducible ML pipelines with Kubeflow and model registries. The speakers explain how the team at Vandelay Shipping approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Nadia Hernandez (Vandelay Shipping)"
+    ],
+    "track": "AI + ML",
+    "level": "Advanced",
+    "tags": [
+      "AI + ML",
+      "MLOps"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-25T14:45:00",
+    "end": "2027-03-25T15:20:00"
+  },
+  {
+    "id": "T109",
+    "title": "Scaling Prometheus at Globex",
+    "abstract": "This intermediate session covers scaling Prometheus with remote write, sharding and long-term storage. The speakers explain how the team at Globex approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Maya Rossi (Globex)"
+    ],
+    "track": "Observability",
+    "level": "Intermediate",
+    "tags": [
+      "Observability",
+      "Prometheus"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-25T14:45:00",
+    "end": "2027-03-25T15:20:00"
+  },
+  {
+    "id": "T137",
+    "title": "Scaling LLM Inference at Wayne Media",
+    "abstract": "This intermediate session covers serving LLMs on GPUs with vLLM, autoscaling and KV-cache aware routing. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Ximena Fischer (Wayne Media)"
+    ],
+    "track": "AI + ML",
+    "level": "Intermediate",
+    "tags": [
+      "AI + ML",
+      "LLM Inference"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-25T15:45:00",
+    "end": "2027-03-25T16:20:00"
+  },
+  {
+    "id": "T085",
+    "title": "Hands-on: Streaming for Platform Teams",
+    "abstract": "This intermediate session covers event streaming with Kafka on Kubernetes using Strimzi. The speakers explain how the team at Initech approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Sofia Rossi (Initech)",
+      "Yusuf Haddad (Northwind Bank)"
+    ],
+    "track": "Storage + Data",
+    "level": "Intermediate",
+    "tags": [
+      "Kubernetes",
+      "Storage + Data",
+      "Streaming"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-25T15:45:00",
+    "end": "2027-03-25T16:20:00"
+  },
+  {
+    "id": "T118",
+    "title": "From Zero to Multi-tenancy in 30 Minutes",
+    "abstract": "This beginner session covers safe multi-tenancy with namespaces, vCluster and hierarchical quotas. The speakers explain how the team at Northwind Bank approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Gabriel Patel (Northwind Bank)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Beginner",
+    "tags": [
+      "Multi-tenancy",
+      "Platform Engineering"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-25T15:45:00",
+    "end": "2027-03-25T16:20:00"
+  },
+  {
+    "id": "T067",
+    "title": "Multi-cluster Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers connecting clusters across regions with multi-cluster services. The speakers explain how the team at Acme Retail approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Lucas Haddad (Acme Retail)"
+    ],
+    "track": "Networking",
+    "level": "Intermediate",
+    "tags": [
+      "Multi-cluster",
+      "Networking"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-25T15:45:00",
+    "end": "2027-03-25T16:20:00"
+  },
+  {
+    "id": "T091",
+    "title": "GitOps Anti-Patterns and How to Avoid Them",
+    "abstract": "This intermediate session covers managing hundreds of clusters declaratively with Argo CD and Flux. The speakers explain how the team at Vandelay Shipping approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Hana Liu (Vandelay Shipping)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Intermediate",
+    "tags": [
+      "GitOps",
+      "Platform Engineering"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-25T15:45:00",
+    "end": "2027-03-25T16:20:00"
+  },
+  {
+    "id": "T046",
+    "title": "Internal Developer Platform Deep Dive: What We Got Wrong",
+    "abstract": "This advanced session covers building an internal developer platform with Backstage golden paths. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Priya Costa (Soylent Foods)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Advanced",
+    "tags": [
+      "Internal Developer Platform",
+      "Platform Engineering"
+    ],
+    "room": "Room 202",
+    "start": "2027-03-25T15:45:00",
+    "end": "2027-03-25T16:20:00"
+  },
+  {
+    "id": "T070",
+    "title": "The Future of Crossplane",
+    "abstract": "This beginner session covers provisioning cloud infrastructure from Kubernetes with Crossplane compositions. The speakers explain how the team at Hooli approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Ines Novak (Hooli)",
+      "Sofia Haddad (Soylent Foods)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Beginner",
+    "tags": [
+      "Crossplane",
+      "Kubernetes",
+      "Platform Engineering"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-25T15:45:00",
+    "end": "2027-03-25T16:20:00"
+  },
+  {
+    "id": "T160",
+    "title": "Hands-on: Secrets for Platform Teams",
+    "abstract": "This intermediate session covers rotating secrets automatically with External Secrets Operator and Vault. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. Expect a live demo and a reference repo you can clone afterwards.",
+    "speakers": [
+      "Hana Hernandez (Soylent Foods)",
+      "Gabriel Rahman (Vandelay Shipping)"
+    ],
+    "track": "Security",
+    "level": "Intermediate",
+    "tags": [
+      "Secrets",
+      "Security"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-25T15:45:00",
+    "end": "2027-03-25T16:20:00"
+  },
+  {
+    "id": "T103",
+    "title": "A Beginner's Guide to Policy",
+    "abstract": "This beginner session covers admission control with Kyverno and OPA Gatekeeper to stop misconfigurations before they ship. The speakers explain how the team at Initech approached it, what broke, and what worked. Includes a case study from a large-scale production rollout.",
+    "speakers": [
+      "Tariq Novak (Initech)"
+    ],
+    "track": "Security",
+    "level": "Beginner",
+    "tags": [
+      "Policy",
+      "Security"
+    ],
+    "room": "Hall A",
+    "start": "2027-03-25T16:30:00",
+    "end": "2027-03-25T17:05:00"
+  },
+  {
+    "id": "T141",
+    "title": "Scaling Green Software at Stark Logistics",
+    "abstract": "This intermediate session covers measuring the carbon footprint of workloads with Kepler. The speakers explain how the team at Stark Logistics approached it, what broke, and what worked. We cover benchmarks, failure modes and the trade-offs we would make again.",
+    "speakers": [
+      "Yusuf Novak (Stark Logistics)"
+    ],
+    "track": "Cost + Sustainability",
+    "level": "Intermediate",
+    "tags": [
+      "Cost + Sustainability",
+      "Green Software"
+    ],
+    "room": "Hall B",
+    "start": "2027-03-25T16:30:00",
+    "end": "2027-03-25T17:05:00"
+  },
+  {
+    "id": "T157",
+    "title": "A Beginner's Guide to Databases on Kubernetes",
+    "abstract": "This beginner session covers running stateful Postgres on Kubernetes with operators and backups. The speakers explain how the team at Vandelay Shipping approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Quinn Wang (Vandelay Shipping)"
+    ],
+    "track": "Storage + Data",
+    "level": "Beginner",
+    "tags": [
+      "Databases on Kubernetes",
+      "Kubernetes",
+      "Storage + Data"
+    ],
+    "room": "Room 101",
+    "start": "2027-03-25T16:30:00",
+    "end": "2027-03-25T17:05:00"
+  },
+  {
+    "id": "T065",
+    "title": "Hands-on: Developer Experience for Platform Teams",
+    "abstract": "This intermediate session covers reducing developer cognitive load with paved roads and self-service. The speakers explain how the team at Vandelay Shipping approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Omar Hernandez (Vandelay Shipping)"
+    ],
+    "track": "Platform Engineering",
+    "level": "Intermediate",
+    "tags": [
+      "Developer Experience",
+      "Platform Engineering"
+    ],
+    "room": "Room 102",
+    "start": "2027-03-25T16:30:00",
+    "end": "2027-03-25T17:05:00"
+  },
+  {
+    "id": "T161",
+    "title": "Debugging Secrets When Everything Is on Fire",
+    "abstract": "This advanced session covers rotating secrets automatically with External Secrets Operator and Vault. The speakers explain how the team at Soylent Foods approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Farah Kim (Soylent Foods)"
+    ],
+    "track": "Security",
+    "level": "Advanced",
+    "tags": [
+      "Secrets",
+      "Security"
+    ],
+    "room": "Room 201",
+    "start": "2027-03-25T16:30:00",
+    "end": "2027-03-25T17:05:00"
+  },
+  {
+    "id": "T140",
+    "title": "A Beginner's Guide to Multi-cluster",
+    "abstract": "This beginner session covers connecting clusters across regions with multi-cluster services. The speakers explain how the team at Globex approached it, what broke, and what worked. You will leave with a checklist you can apply on Monday.",
+    "speakers": [
+      "Hana Hernandez (Globex)"
+    ],
+    "track": "Networking",
+    "level": "Beginner",
+    "tags": [
+      "Multi-cluster",
+      "Networking"
+    ],
+    "room": "Room 301",
+    "start": "2027-03-25T16:30:00",
+    "end": "2027-03-25T17:05:00"
+  },
+  {
+    "id": "T152",
+    "title": "Logging in Production: Lessons from 40 Clusters",
+    "abstract": "This advanced session covers cutting logging costs by sampling, routing and dropping noisy logs at the edge. The speakers explain how the team at Wayne Media approached it, what broke, and what worked. No prior experience required; we start from first principles.",
+    "speakers": [
+      "Quinn Costa (Wayne Media)"
+    ],
+    "track": "Observability",
+    "level": "Advanced",
+    "tags": [
+      "Logging",
+      "Observability"
+    ],
+    "room": "Room 302",
+    "start": "2027-03-25T16:30:00",
+    "end": "2027-03-25T17:05:00"
+  }
+]

@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ConfPilot</title>
+<style>
+  :root {
+    --bg: #f6f7fb; --panel: #ffffff; --text: #1b1f2a; --muted: #5d6475; --line: #e3e6ee;
+    --accent: #3f5bd8; --accent-soft: #e8ecfd; --good: #1d8a5a; --warn: #b8650b; --bad: #c0392b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0f1218; --panel: #171b24; --text: #e7e9ef; --muted: #9aa2b5; --line: #2a3040;
+            --accent: #8099ff; --accent-soft: #232b4a; --good: #4cc38a; --warn: #f0a24b; --bad: #ff7b6b; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+  header { padding: 20px 24px 8px; max-width: 1200px; margin: 0 auto; }
+  header h1 { margin: 0; font-size: 24px; }
+  header p { margin: 4px 0 0; color: var(--muted); }
+  main { max-width: 1200px; margin: 0 auto; padding: 12px 24px 40px; display: grid; grid-template-columns: 360px 1fr; gap: 20px; }
+  @media (max-width: 860px) { main { grid-template-columns: 1fr; padding: 12px 16px 40px; } header { padding: 16px 16px 4px; } }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .sticky { position: sticky; top: 12px; align-self: start; }
+  label { font-weight: 600; font-size: 13px; display: block; margin: 12px 0 6px; }
+  textarea { width: 100%; min-height: 120px; resize: vertical; padding: 10px; border-radius: 8px; border: 1px solid var(--line);
+             background: var(--bg); color: var(--text); font: inherit; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { border: 1px solid var(--line); background: var(--bg); color: var(--text); border-radius: 999px; padding: 4px 10px;
+          font-size: 13px; cursor: pointer; }
+  .chip.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  button.primary { width: 100%; margin-top: 16px; padding: 11px; border: 0; border-radius: 8px; background: var(--accent);
+                   color: #fff; font-weight: 600; font-size: 15px; cursor: pointer; }
+  button.primary:disabled { opacity: .6; cursor: wait; }
+  .examples button { display: block; width: 100%; text-align: left; margin-top: 6px; background: none; border: 1px dashed var(--line);
+                     color: var(--muted); border-radius: 8px; padding: 6px 8px; cursor: pointer; font: inherit; font-size: 13px; }
+  .status { font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; background: var(--muted); }
+  .dot.ok { background: var(--good); } .dot.no { background: var(--warn); }
+  h2 { font-size: 17px; margin: 0 0 8px; }
+  h3 { font-size: 14px; margin: 18px 0 8px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .summary { font-size: 15px; }
+  .tips { margin: 8px 0 0; padding-left: 18px; color: var(--muted); }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+  .toolbar button { border: 1px solid var(--accent); background: none; color: var(--accent); border-radius: 8px; padding: 6px 12px;
+                    cursor: pointer; font: inherit; font-size: 14px; }
+  .talk { display: grid; grid-template-columns: 92px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+  .talk:first-of-type { border-top: 0; }
+  .time { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .room { color: var(--muted); font-size: 13px; }
+  .title { font-weight: 600; }
+  .meta { color: var(--muted); font-size: 13px; }
+  .badge { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); margin-right: 4px; }
+  .lv-Beginner { color: var(--good); border-color: var(--good); }
+  .lv-Intermediate { color: var(--warn); border-color: var(--warn); }
+  .lv-Advanced { color: var(--bad); border-color: var(--bad); }
+  .reason { margin-top: 4px; }
+  .reason::before { content: "Why: "; font-weight: 600; color: var(--accent); }
+  .actions { margin-top: 6px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .actions button { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; font: inherit; font-size: 13px; }
+  details { margin-top: 6px; font-size: 13px; color: var(--muted); }
+  .people { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .person { border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
+  .person .opener { font-size: 13px; margin-top: 6px; }
+  .empty { color: var(--muted); text-align: center; padding: 50px 10px; }
+  .debug { font-size: 12px; color: var(--muted); }
+  .chat { margin-top: 14px; border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: var(--bg); }
+  .chat h2 { font-size: 15px; }
+  .log { max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+  .msg { max-width: 88%; padding: 8px 11px; border-radius: 12px; font-size: 14px; }
+  .msg.user { align-self: flex-end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
+  .msg.bot { align-self: flex-start; background: var(--panel); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+  .sugg { margin-top: 6px; border-top: 1px solid var(--line); padding-top: 6px; font-size: 13px; }
+  .sugg button { margin-left: 6px; border: 1px solid var(--accent); color: var(--accent); background: none; border-radius: 6px;
+                 font-size: 12px; padding: 1px 8px; cursor: pointer; }
+  .chatform { display: flex; gap: 8px; }
+  .chatform input { flex: 1; min-width: 0; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line);
+                    background: var(--panel); color: var(--text); font: inherit; }
+  .chatform button { border: 0; border-radius: 8px; background: var(--accent); color: #fff; padding: 0 14px; font-weight: 600; cursor: pointer; }
+  .chatform button:disabled { opacity: .6; cursor: wait; }
+  .new { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; background: var(--accent); color: #fff; margin-right: 6px; }
+  code { background: var(--bg); padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>ConfPilot</h1>
+  <p>Describe yourself. Get a clash-free conference agenda, reasons for every talk, and people worth meeting.</p>
+</header>
+<main>
+  <section class="panel sticky">
+    <label for="profile">About you and what you want to learn</label>
+    <textarea id="profile" placeholder="e.g. Backend dev moving into platform engineering. Interested in eBPF security and cutting cloud costs. Fairly new to Kubernetes."></textarea>
+    <div class="examples" id="examples"></div>
+    <label>Days</label>
+    <div class="chips" id="days"></div>
+    <label>Level (optional; otherwise inferred)</label>
+    <div class="chips" id="levels"></div>
+    <button class="primary" id="go">Plan my conference</button>
+    <div class="status" id="status">Connecting…</div>
+  </section>
+
+  <section>
+    <div class="panel" id="out"><div class="empty">Your agenda will appear here.</div></div>
+  </section>
+</main>
+
+<script>
+const EXAMPLES = [
+  "SRE at a bank. I want to get serious about OpenTelemetry and SLOs, and I'm curious about eBPF.",
+  "ML engineer deploying LLMs. Need GPU scheduling, inference autoscaling and AI agents on Kubernetes.",
+  "Student, new to cloud native. Beginner talks on Kubernetes networking, security and GitOps please.",
+  "Platform team lead: internal developer platforms, multi-tenancy and keeping our cloud bill down.",
+];
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+let state = { days: new Set(), levels: new Set(), agenda: [], profile: "", history: [], fresh: new Set() };
+const CHAT_EXAMPLES = ["Swap anything on day 2 for AI talks", "Add a beginner GPU talk", "Who is speaking about service mesh?", "Drop the policy talks"];
+
+function chips(el, values, set, fmt = (v) => v) {
+  el.innerHTML = "";
+  values.forEach((v) => {
+    const b = document.createElement("button");
+    b.className = "chip"; b.textContent = fmt(v); b.type = "button";
+    b.onclick = () => { set.has(v) ? set.delete(v) : set.add(v); b.classList.toggle("on"); };
+    el.appendChild(b);
+  });
+}
+const dayLabel = (d) => new Date(d + "T12:00:00").toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+const hhmm = (iso) => iso.slice(11, 16);
+
+EXAMPLES.forEach((ex) => {
+  const b = document.createElement("button"); b.type = "button"; b.textContent = "Try: " + ex;
+  b.onclick = () => { $("#profile").value = ex; };
+  $("#examples").appendChild(b);
+});
+
+async function init() {
+  try {
+    const r = await fetch("/api/facets");
+    if (!r.ok) throw new Error((await r.json()).detail);
+    const f = await r.json();
+    chips($("#days"), f.days, state.days, dayLabel);
+    chips($("#levels"), ["Beginner", "Intermediate", "Advanced"], state.levels);
+    $("#status").innerHTML =
+      `<span class="dot ok"></span>Elasticsearch ready (embeddings: ${esc(f.embedder)}) &nbsp; ` +
+      (f.llm ? `<span class="dot ok"></span>LLM on` : `<span class="dot no"></span>LLM off (rule-based reasons)`);
+  } catch (e) {
+    $("#status").innerHTML = `<span class="dot no"></span>${esc(e.message)}. Is Elasticsearch running and ingested?`;
+  }
+}
+
+function talkHtml(t, i) {
+  const b = t.backup;
+  return `<div class="talk">
+    <div><div class="time">${hhmm(t.start)}–${hhmm(t.end)}</div><div class="room">${esc(t.room)}</div></div>
+    <div>
+      <div class="title">${state.fresh.has(t.id) ? '<span class="new">New</span>' : ""}${esc(t.title)}</div>
+      <div class="meta"><span class="badge lv-${esc(t.level)}">${esc(t.level)}</span>${esc(t.track)} · ${esc(t.speakers.join(", "))}</div>
+      ${t.reason ? `<div class="reason">${esc(t.reason)}</div>` : ""}
+      <details><summary>Abstract &amp; ranking</summary>${esc(t.abstract)}<br>
+        <span class="debug">RRF score ${t.score} · matched by ${esc((t.matched_by || []).join(", "))}</span></details>
+      <div class="actions">
+        ${b ? `<button data-swap="${i}">Swap for backup: ${esc(b.title)} (${esc(b.room)})</button>` : ""}
+        <button data-remove="${i}">Remove</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderAgenda() {
+  const box = $("#agenda");
+  if (!state.agenda.length) { box.innerHTML = `<div class="empty">No talks left in your agenda.</div>`; return; }
+  const byDay = {};
+  state.agenda.forEach((t, i) => (byDay[t.start.slice(0, 10)] ||= []).push(talkHtml(t, i)));
+  box.innerHTML = Object.entries(byDay).map(([d, items]) => `<h3>${dayLabel(d)}</h3>${items.join("")}`).join("");
+  box.querySelectorAll("[data-remove]").forEach((el) => el.onclick = () => { state.agenda.splice(+el.dataset.remove, 1); renderAgenda(); });
+  box.querySelectorAll("[data-swap]").forEach((el) => el.onclick = () => {
+    const i = +el.dataset.swap, cur = state.agenda[i];
+    state.agenda[i] = { ...cur.backup, reason: "Backup pick for this time slot.", backup: { ...cur, backup: null } };
+    renderAgenda();
+  });
+}
+
+function render(data) {
+  state.agenda = data.agenda; state.history = []; state.fresh = new Set();
+  const u = data.understood;
+  $("#out").innerHTML = `
+    <h2>Your agenda</h2>
+    <div class="summary">${esc(data.summary)}</div>
+    ${data.tips.length ? `<ul class="tips">${data.tips.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+    <div class="debug" style="margin-top:8px">Searched for <code>${esc(u.search_query)}</code>${u.levels.length ? ` · levels: ${esc(u.levels.join(", "))}` : ""}</div>
+    <div class="toolbar"><button id="ics">Add to calendar (.ics)</button></div>
+    <div class="chat">
+      <h2>Ask a follow-up or change your agenda</h2>
+      <div class="log" id="log"><div class="msg bot">Want changes? Ask things like "swap day 2 for AI talks" or "who's talking about GPUs?"</div></div>
+      <div class="chips" id="chatex" style="margin-bottom:8px"></div>
+      <form class="chatform" id="chatform"><input id="chatin" placeholder="Type a question or change…" autocomplete="off" maxlength="1000"><button id="chatsend">Send</button></form>
+    </div>
+    <div id="agenda"></div>
+    <h3>People worth meeting</h3>
+    <div class="people">${data.people.map((p) => `<div class="person">
+        <div class="title">${esc(p.name)}</div><div class="meta">${esc(p.role)} · ${esc(p.company)}</div>
+        <div class="opener">💬 ${esc(p.opener)}</div></div>`).join("")}</div>`;
+  renderAgenda();
+  $("#ics").onclick = downloadIcs;
+  CHAT_EXAMPLES.forEach((ex) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = ex;
+    b.onclick = () => sendChat(ex); $("#chatex").appendChild(b);
+  });
+  $("#chatform").onsubmit = (e) => { e.preventDefault(); const v = $("#chatin").value.trim(); if (v) sendChat(v); };
+}
+
+function addMsg(role, text, suggestions = []) {
+  const div = document.createElement("div");
+  div.className = "msg " + (role === "user" ? "user" : "bot");
+  div.innerHTML = esc(text) + suggestions.map((t, i) =>
+    `<div class="sugg"><b>${esc(t.title)}</b> · ${dayLabel(t.start.slice(0, 10))} ${hhmm(t.start)}, ${esc(t.room)} · ${esc(t.level)}<button data-i="${i}">Add</button></div>`).join("");
+  div.querySelectorAll("button[data-i]").forEach((b) => b.onclick = () => { addTalk(suggestions[+b.dataset.i]); b.disabled = true; b.textContent = "Added"; });
+  $("#log").appendChild(div); $("#log").scrollTop = $("#log").scrollHeight;
+}
+
+function addTalk(t) {
+  const clashes = state.agenda.filter((a) => a.start < t.end && t.start < a.end);
+  state.agenda = state.agenda.filter((a) => !clashes.includes(a));
+  state.agenda.push({ ...t, reason: "Added from chat.", backup: clashes[0] ? { ...clashes[0], backup: null } : null });
+  state.agenda.sort((a, b) => a.start.localeCompare(b.start));
+  state.fresh = new Set([t.id]);
+  renderAgenda();
+}
+
+async function sendChat(text) {
+  $("#chatin").value = ""; addMsg("user", text);
+  const btn = $("#chatsend"); btn.disabled = true;
+  try {
+    const r = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text, profile: state.profile, agenda_ids: state.agenda.map((t) => t.id), history: state.history.slice(-10) }) });
+    if (!r.ok) throw new Error(`Request failed (${r.status})`);
+    const d = await r.json();
+    state.history.push({ role: "user", content: text }, { role: "assistant", content: d.reply });
+    if (d.changed) {
+      const keep = Object.fromEntries(state.agenda.map((t) => [t.id, t]));
+      d.added.forEach((t) => (keep[t.id] = t));
+      state.agenda = d.agenda_ids.map((id) => keep[id]).filter(Boolean);
+      state.fresh = new Set(d.added.map((t) => t.id));
+      renderAgenda();
+    }
+    addMsg("bot", d.reply, d.suggestions || []);
+  } catch (e) { addMsg("bot", "Sorry, something went wrong: " + e.message); }
+  finally { btn.disabled = false; $("#chatin").focus(); }
+}
+
+async function downloadIcs() {
+  const r = await fetch("/api/agenda.ics", { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ talk_ids: state.agenda.map((t) => t.id) }) });
+  if (!r.ok) return alert("Could not build calendar file");
+  const url = URL.createObjectURL(await r.blob());
+  Object.assign(document.createElement("a"), { href: url, download: "confpilot-agenda.ics" }).click();
+  URL.revokeObjectURL(url);
+}
+
+$("#go").onclick = async () => {
+  const profile = $("#profile").value.trim();
+  if (profile.length < 3) return $("#profile").focus();
+  state.profile = profile;
+  const btn = $("#go"); btn.disabled = true; btn.textContent = "Planning…";
+  $("#out").innerHTML = `<div class="empty">Searching talks and building your agenda…</div>`;
+  try {
+    const r = await fetch("/api/plan", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ profile, days: [...state.days], levels: [...state.levels] }) });
+    if (!r.ok) throw new Error(`Request failed (${r.status})`);
+    render(await r.json());
+  } catch (e) {
+    $("#out").innerHTML = `<div class="empty">${esc(e.message)}</div>`;
+  } finally { btn.disabled = false; btn.textContent = "Plan my conference"; }
+};
+
+init();
+</script>
+</body>
+</html>

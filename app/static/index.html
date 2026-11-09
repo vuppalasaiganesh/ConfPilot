@@ -79,6 +79,21 @@
   .chatform button { border: 0; border-radius: 8px; background: var(--accent); color: #fff; padding: 0 14px; font-weight: 600; cursor: pointer; }
   .chatform button:disabled { opacity: .6; cursor: wait; }
   .new { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 999px; background: var(--accent); color: #fff; margin-right: 6px; }
+  .mk, .ms { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 6px; margin: 4px 4px 0 0; }
+  .mk { background: #fff4e0; color: #8a4d00; } .ms { background: #e6f0ff; color: #1f4fbf; }
+  .mo { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 6px; margin: 4px 4px 0 0; background: #efe6ff; color: #5b2bbf; font-weight: 600; }
+  @media (prefers-color-scheme: dark) { .mk { background: #3a2a10; color: #f5c27a; } .ms { background: #142846; color: #8fb6ff; } .mo { background: #2b1d4a; color: #c7a8ff; } }
+  .notice { margin: 10px 0; padding: 8px 12px; border-radius: 8px; background: #fff4e0; color: #8a4d00; font-size: 13px; }
+  @media (prefers-color-scheme: dark) { .notice { background: #3a2a10; color: #f5c27a; } }
+  .loading { text-align: center; padding: 50px 10px; color: var(--muted); }
+  .spinner { width: 28px; height: 28px; border: 3px solid var(--line); border-top-color: var(--accent); border-radius: 50%;
+             margin: 0 auto 14px; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .steps { list-style: none; padding: 0; margin: 0 auto; display: inline-block; text-align: left; font-size: 14px; }
+  .steps li { opacity: .4; margin: 4px 0; } .steps li.on { opacity: 1; color: var(--text); } .steps li.done { opacity: .8; }
+  .steps li.done::before { content: "✓ "; color: var(--good); } .steps li.on::before { content: "› "; color: var(--accent); }
+  .examples button.wow { border-style: solid; border-color: var(--accent); color: var(--accent); }
+  .filters { margin-top: 12px; }
   code { background: var(--bg); padding: 1px 5px; border-radius: 4px; }
 </style>
 </head>
@@ -114,7 +129,20 @@ const EXAMPLES = [
 ];
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-let state = { days: new Set(), levels: new Set(), agenda: [], profile: "", history: [], fresh: new Set() };
+let state = { days: new Set(), levels: new Set(), agenda: [], profile: "", history: [], fresh: new Set(), track: null };
+
+async function api(path, body) {
+  const r = await fetch(path, body === undefined ? {} : { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  if (!r.ok) {
+    let detail = "";
+    try { detail = (await r.json()).detail; } catch (_) {}
+    if (typeof detail !== "string") detail = "";
+    throw new Error(detail || (r.status >= 500 ? "The server had a problem. Run ./start.sh logs to see why." : `Request failed (${r.status})`));
+  }
+  return r.json();
+}
+const ms = (v) => v >= 1000 ? (v / 1000).toFixed(1) + " s" : v + " ms";
+const WOW = "How can we save money and help the planet?";
 const CHAT_EXAMPLES = ["Swap anything on day 2 for AI talks", "Add a beginner GPU talk", "Who is speaking about service mesh?", "Drop the policy talks"];
 
 function chips(el, values, set, fmt = (v) => v) {
@@ -134,20 +162,36 @@ EXAMPLES.forEach((ex) => {
   b.onclick = () => { $("#profile").value = ex; };
   $("#examples").appendChild(b);
 });
+{
+  const b = document.createElement("button"); b.type = "button"; b.className = "wow";
+  b.textContent = "✨ Meaning-only demo: \"" + WOW + "\" (no words in common with any talk)";
+  b.onclick = () => { $("#profile").value = WOW; };
+  $("#examples").appendChild(b);
+}
 
 async function init() {
+  let es;
   try {
-    const r = await fetch("/api/facets");
-    if (!r.ok) throw new Error((await r.json()).detail);
-    const f = await r.json();
+    const f = await api("/api/facets");
     chips($("#days"), f.days, state.days, dayLabel);
     chips($("#levels"), ["Beginner", "Intermediate", "Advanced"], state.levels);
-    $("#status").innerHTML =
-      `<span class="dot ok"></span>Elasticsearch ready (embeddings: ${esc(f.embedder)}) &nbsp; ` +
-      (f.llm ? `<span class="dot ok"></span>LLM on` : `<span class="dot no"></span>LLM off (rule-based reasons)`);
+    const warn = f.embedder === "hash" ? ` <b>(low quality: the embedding model didn't load. Check ./start.sh logs)</b>` : "";
+    es = `<span class="dot ok"></span>Elasticsearch ready, embeddings: ${esc(f.embedder)}${warn}`;
+    if (f.tracing) es += ` · <a href="http://localhost:16686" target="_blank" rel="noopener">traces</a>`;
   } catch (e) {
-    $("#status").innerHTML = `<span class="dot no"></span>${esc(e.message)}. Is Elasticsearch running and ingested?`;
+    $("#status").innerHTML = `<span class="dot no"></span>${esc(e.message)}`;
+    setTimeout(init, 5000);  // keep retrying while the data loads
+    return;
   }
+  $("#status").innerHTML = es + `<br><span class="dot"></span>Checking AI…`;
+  try {
+    const h = await api("/healthz?deep=true");
+    const l = h.llm;
+    const ai = !l.configured ? `<span class="dot no"></span>AI off: rule-based answers. Add LLM_API_KEY to .env to turn it on.`
+      : l.ok ? `<span class="dot ok"></span>AI on (${esc(l.model)})`
+      : `<span class="dot no"></span>AI key problem: ${esc(l.error)}. Using rule-based answers.`;
+    $("#status").innerHTML = es + "<br>" + ai;
+  } catch (_) { $("#status").innerHTML = es; }
 }
 
 function talkHtml(t, i) {
@@ -158,8 +202,8 @@ function talkHtml(t, i) {
       <div class="title">${state.fresh.has(t.id) ? '<span class="new">New</span>' : ""}${esc(t.title)}</div>
       <div class="meta"><span class="badge lv-${esc(t.level)}">${esc(t.level)}</span>${esc(t.track)} · ${esc(t.speakers.join(", "))}</div>
       ${t.reason ? `<div class="reason">${esc(t.reason)}</div>` : ""}
-      <details><summary>Abstract &amp; ranking</summary>${esc(t.abstract)}<br>
-        <span class="debug">RRF score ${t.score} · matched by ${esc((t.matched_by || []).join(", "))}</span></details>
+      <div>${matchChips(t)}</div>
+      <details><summary>Abstract</summary>${esc(t.abstract)}<br><span class="debug">Fused (RRF) score ${t.score}</span></details>
       <div class="actions">
         ${b ? `<button data-swap="${i}">Swap for backup: ${esc(b.title)} (${esc(b.room)})</button>` : ""}
         <button data-remove="${i}">Remove</button>
@@ -168,11 +212,31 @@ function talkHtml(t, i) {
   </div>`;
 }
 
+function matchChips(t) {
+  const m = t.matched_by || [];
+  const kw = m.find((x) => x.startsWith("keyword")), se = m.find((x) => x.startsWith("semantic"));
+  let out = "";
+  if (kw) out += `<span class="mk" title="Rank in keyword (BM25) search">Keyword #${kw.split("#")[1]}</span>`;
+  if (se) out += `<span class="ms" title="Rank in meaning (vector) search">Meaning #${se.split("#")[1]}</span>`;
+  if (se && !kw) out += `<span class="mo" title="No keyword match: found purely by meaning">Found by meaning only</span>`;
+  return out;
+}
+
+function renderFilters() {
+  const el = $("#filters"); if (!el) return;
+  const tracks = [...new Set(state.agenda.map((t) => t.track))].sort();
+  if (state.track && !tracks.includes(state.track)) state.track = null;
+  el.innerHTML = tracks.length > 1 ? [null, ...tracks].map((tr) =>
+    `<button type="button" class="chip ${state.track === tr ? "on" : ""}" data-track="${esc(tr ?? "")}">${esc(tr ?? "All tracks")}</button>`).join("") : "";
+  el.querySelectorAll("[data-track]").forEach((b) => b.onclick = () => { state.track = b.dataset.track || null; renderAgenda(); });
+}
+
 function renderAgenda() {
   const box = $("#agenda");
+  renderFilters();
   if (!state.agenda.length) { box.innerHTML = `<div class="empty">No talks left in your agenda.</div>`; return; }
   const byDay = {};
-  state.agenda.forEach((t, i) => (byDay[t.start.slice(0, 10)] ||= []).push(talkHtml(t, i)));
+  state.agenda.forEach((t, i) => { if (!state.track || t.track === state.track) (byDay[t.start.slice(0, 10)] ||= []).push(talkHtml(t, i)); });
   box.innerHTML = Object.entries(byDay).map(([d, items]) => `<h3>${dayLabel(d)}</h3>${items.join("")}`).join("");
   box.querySelectorAll("[data-remove]").forEach((el) => el.onclick = () => { state.agenda.splice(+el.dataset.remove, 1); renderAgenda(); });
   box.querySelectorAll("[data-swap]").forEach((el) => el.onclick = () => {
@@ -183,13 +247,18 @@ function renderAgenda() {
 }
 
 function render(data) {
-  state.agenda = data.agenda; state.history = []; state.fresh = new Set();
-  const u = data.understood;
+  state.agenda = data.agenda; state.history = []; state.fresh = new Set(); state.track = null;
+  const u = data.understood, tm = data.timings || {};
+  const aiMs = (tm.understand || 0) + (tm.explain || 0);
+  const timing = `Hybrid search over the talks: ${ms(tm.hybrid_search)} · clash-free planning: ${ms(tm.plan)}` +
+    (data.ai.used ? ` · AI: ${ms(aiMs)}` : "") + ` · total: ${ms(tm.total)}`;
   $("#out").innerHTML = `
     <h2>Your agenda</h2>
     <div class="summary">${esc(data.summary)}</div>
     ${data.tips.length ? `<ul class="tips">${data.tips.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+    ${data.ai.notice ? `<div class="notice">${esc(data.ai.notice)}</div>` : ""}
     <div class="debug" style="margin-top:8px">Searched for <code>${esc(u.search_query)}</code>${u.levels.length ? ` · levels: ${esc(u.levels.join(", "))}` : ""}</div>
+    <div class="debug">${timing}</div>
     <div class="toolbar"><button id="ics">Add to calendar (.ics)</button></div>
     <div class="chat">
       <h2>Ask a follow-up or change your agenda</h2>
@@ -197,6 +266,7 @@ function render(data) {
       <div class="chips" id="chatex" style="margin-bottom:8px"></div>
       <form class="chatform" id="chatform"><input id="chatin" placeholder="Type a question or change…" autocomplete="off" maxlength="1000"><button id="chatsend">Send</button></form>
     </div>
+    <div class="chips filters" id="filters"></div>
     <div id="agenda"></div>
     <h3>People worth meeting</h3>
     <div class="people">${data.people.map((p) => `<div class="person">
@@ -232,11 +302,11 @@ function addTalk(t) {
 async function sendChat(text) {
   $("#chatin").value = ""; addMsg("user", text);
   const btn = $("#chatsend"); btn.disabled = true;
+  const wait = document.createElement("div"); wait.className = "msg bot"; wait.textContent = "Thinking…";
+  $("#log").appendChild(wait); $("#log").scrollTop = $("#log").scrollHeight;
   try {
-    const r = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text, profile: state.profile, agenda_ids: state.agenda.map((t) => t.id), history: state.history.slice(-10) }) });
-    if (!r.ok) throw new Error(`Request failed (${r.status})`);
-    const d = await r.json();
+    const d = await api("/api/chat", { message: text, profile: state.profile, agenda_ids: state.agenda.map((t) => t.id), history: state.history.slice(-10) });
+    wait.remove();
     state.history.push({ role: "user", content: text }, { role: "assistant", content: d.reply });
     if (d.changed) {
       const keep = Object.fromEntries(state.agenda.map((t) => [t.id, t]));
@@ -245,9 +315,9 @@ async function sendChat(text) {
       state.fresh = new Set(d.added.map((t) => t.id));
       renderAgenda();
     }
-    addMsg("bot", d.reply, d.suggestions || []);
-  } catch (e) { addMsg("bot", "Sorry, something went wrong: " + e.message); }
-  finally { btn.disabled = false; $("#chatin").focus(); }
+    addMsg("bot", d.reply + (d.ai && d.ai.notice ? "\n\n(" + d.ai.notice + ")" : ""), d.suggestions || []);
+  } catch (e) { addMsg("bot", "Sorry, that didn't work: " + e.message); }
+  finally { wait.remove(); btn.disabled = false; $("#chatin").focus(); }
 }
 
 async function downloadIcs() {
@@ -264,15 +334,18 @@ $("#go").onclick = async () => {
   if (profile.length < 3) return $("#profile").focus();
   state.profile = profile;
   const btn = $("#go"); btn.disabled = true; btn.textContent = "Planning…";
-  $("#out").innerHTML = `<div class="empty">Searching talks and building your agenda…</div>`;
+  const steps = ["Understanding what you're looking for", "Hybrid search: keywords + meaning", "Building a clash-free agenda",
+                 "Explaining each pick", "Finding people worth meeting"];
+  $("#out").innerHTML = `<div class="loading"><div class="spinner"></div><ul class="steps">${steps.map((s) => `<li>${s}</li>`).join("")}</ul></div>`;
+  let k = 0;
+  const tick = () => document.querySelectorAll(".steps li").forEach((li, j) => { li.className = j < k ? "done" : j === k ? "on" : ""; });
+  tick();
+  const timer = setInterval(() => { if (k < steps.length - 1) { k++; tick(); } }, 900);
   try {
-    const r = await fetch("/api/plan", { method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ profile, days: [...state.days], levels: [...state.levels] }) });
-    if (!r.ok) throw new Error(`Request failed (${r.status})`);
-    render(await r.json());
+    render(await api("/api/plan", { profile, days: [...state.days], levels: [...state.levels] }));
   } catch (e) {
     $("#out").innerHTML = `<div class="empty">${esc(e.message)}</div>`;
-  } finally { btn.disabled = false; btn.textContent = "Plan my conference"; }
+  } finally { clearInterval(timer); btn.disabled = false; btn.textContent = "Plan my conference"; }
 };
 
 init();

@@ -4,6 +4,7 @@
 #         ./start.sh stop     stop everything
 #         ./start.sh logs     follow the app logs
 #         ./start.sh reset    stop and delete all data, then start fresh
+#         ./start.sh tracing  start with OpenTelemetry tracing + Jaeger UI at http://localhost:16686
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -36,11 +37,14 @@ elif command -v docker-compose >/dev/null 2>&1; then DC="docker-compose"
 else fail "Docker Compose is missing. Open Docker Desktop once (Applications > Docker), wait until it is running, then try again."; fi
 
 case "${1:-start}" in
-  stop)  $DC down; exit 0 ;;
+  stop)  $DC --profile tracing down; exit 0 ;;
   logs)  $DC logs -f app; exit 0 ;;
-  reset) $DC down -v ;;
+  reset) $DC --profile tracing down -v ;;
+  tracing)
+    export COMPOSE_PROFILES=tracing OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+    say "Tracing on: traces will be at http://localhost:16686 (service 'confpilot')" ;;
   start) ;;
-  *) fail "Unknown option '$1'. Use: start | stop | logs | reset" ;;
+  *) fail "Unknown option '$1'. Use: start | stop | logs | reset | tracing" ;;
 esac
 
 # 4. .env with optional LLM key (asked once, stored only on this computer).

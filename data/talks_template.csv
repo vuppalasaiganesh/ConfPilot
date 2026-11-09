@@ -1,0 +1,3 @@
+title,abstract,speakers,track,level,tags,room,start,end
+"Keynote: The State of Cloud Native","Where the ecosystem is heading this year, from AI workloads to platform engineering.","Jane Doe (Example Corp)",Keynote,Beginner,"Kubernetes;AI",Hall A,2027-03-23 09:00,2027-03-23 09:30
+"Zero-Code Tracing with eBPF","How we added distributed tracing to 400 services without touching code, using eBPF auto-instrumentation.","Sam Lee (Acme); Priya Rao (Acme)",Observability,Intermediate,"eBPF;OpenTelemetry",Room 101,2027-03-23 10:00,2027-03-23 10:35

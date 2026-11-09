@@ -19,6 +19,7 @@ from datetime import datetime
 
 from . import llm, search
 from .planner import _overlaps
+from .telemetry import step
 
 log = logging.getLogger(__name__)
 MODES = ("answer", "add", "replace", "remove")
@@ -108,7 +109,7 @@ def understand(message, history, agenda, days):
         try:
             return _intent_llm(message, history, agenda, days)
         except Exception as exc:
-            log.warning("LLM chat intent failed: %s", exc)
+            llm._note_failure("chat intent", exc)
     return _intent_rules(message, agenda, days)
 
 
@@ -205,19 +206,52 @@ def reply(message, profile, intent, agenda, added, removed_talks, suggestions):
             text = out.get("reply") or _reply_rules(intent, added, removed_talks, suggestions)
             return text, {**fallback_reasons, **reasons}
         except Exception as exc:
-            log.warning("LLM chat reply failed: %s", exc)
+            llm._note_failure("chat reply", exc)
     return _reply_rules(intent, added, removed_talks, suggestions), fallback_reasons
 
 
+HELP = ("I can change your agenda or answer questions about talks. Try: \"swap anything on day 2 for AI talks\", "
+        "\"add a beginner GPU talk\", \"drop the policy talks\" or \"who is speaking about service mesh?\"")
+_SMALL_TALK = re.compile(r"^(hi+|hello|hey|yo|thanks?|thank you|thx|ok(ay)?|cool|great|nice|awesome|perfect|"
+                         r"good|got it|help|what can you do)\b[\s!.?]*$", re.I)
+
+
+def small_talk(message):
+    """Canned reply for greetings, thanks, help and messages with no content. None otherwise."""
+    m = message.strip()
+    if not re.search(r"[a-z0-9]", m, re.I):
+        return HELP
+    if _SMALL_TALK.match(m):
+        if re.match(r"^(thanks?|thank you|thx)", m, re.I):
+            return "You're welcome! Ask me anything else about the talks, or tell me what to change."
+        return HELP
+    return None
+
+
 def handle(message, profile, agenda_ids, history):
-    agenda = sorted(search.get_talks(agenda_ids), key=lambda t: t["start"]) if agenda_ids else []
-    days = search.facets()["days"]
-    intent = understand(message, history, agenda, days)
+    timings = {}
+    base = {"intent": None, "agenda_ids": list(agenda_ids), "added": [], "removed_ids": [],
+            "suggestions": [], "changed": False, "timings": timings}
+    canned = small_talk(message)
+    if canned:
+        return {**base, "reply": canned}
+
+    with step("load_agenda", timings):
+        agenda = sorted(search.get_talks(agenda_ids), key=lambda t: t["start"]) if agenda_ids else []
+        days = search.facets()["days"]
+    with step("understand", timings, llm=llm.enabled()):
+        intent = understand(message, history, agenda, days)
+    # Vague edits like "add more" or "replace day 2" with no topic: use the attendee's profile as the topic.
+    if intent["mode"] in ("add", "replace") and not intent["search_query"] and profile:
+        intent["search_query"] = llm._keywords(profile)
     before = {t["id"]: t for t in agenda}
-    new_agenda, added, removed, suggestions = apply(intent, agenda)
+    with step("search_and_edit", timings):
+        new_agenda, added, removed, suggestions = apply(intent, agenda)
     removed_talks = [before[i] for i in removed if i in before]
-    text, reasons = reply(message, profile, intent, new_agenda, added, removed_talks, suggestions)
+    with step("reply", timings, llm=llm.enabled()):
+        text, reasons = reply(message, profile, intent, new_agenda, added, removed_talks, suggestions)
     return {
+        **base,
         "reply": text,
         "intent": intent,
         "agenda_ids": [t["id"] for t in new_agenda],

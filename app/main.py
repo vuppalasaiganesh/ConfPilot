@@ -1,29 +1,52 @@
 import logging
-import os
+import time
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse, Response
+from elastic_transport import TransportError
+from elasticsearch import ApiError, NotFoundError
+from fastapi import FastAPI, Request
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from . import chat, config, llm, planner, search
+from . import chat, config, llm, planner, search, telemetry
+from .telemetry import step
 
 logging.basicConfig(level=logging.INFO)
 STATIC = Path(__file__).parent / "static"
 
 app = FastAPI(title="ConfPilot", description="AI conference planner on Elasticsearch hybrid search")
+TRACING = telemetry.setup(app)
 
-if os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT"):
-    try:
-        from opentelemetry.instrumentation.elasticsearch import ElasticsearchInstrumentor
-        from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
-        ElasticsearchInstrumentor().instrument()
-        FastAPIInstrumentor.instrument_app(app)
-    except ImportError:
-        logging.warning("OpenTelemetry packages not installed; tracing disabled")
+# ---------- clear errors instead of a bare 500 ----------
 
+@app.exception_handler(NotFoundError)
+def es_missing_index(request: Request, exc: NotFoundError):
+    return JSONResponse(status_code=503, content={
+        "detail": "The talk data isn't loaded yet. Wait a minute, or run ./start.sh again."})
+
+
+@app.exception_handler(TransportError)
+@app.exception_handler(ApiError)
+def es_down(request: Request, exc: Exception):
+    logging.warning("Elasticsearch error: %s", exc)
+    return JSONResponse(status_code=503, content={
+        "detail": "Search is unavailable: Elasticsearch is not reachable. Check Docker, then run ./start.sh."})
+
+
+def _ai_status():
+    """What the UI should say about the AI for this request."""
+    if not llm.enabled():
+        return {"used": False, "notice": None}
+    reason = llm.fallback_reason()
+    if reason:
+        return {"used": False, "notice": f"AI answers are off for this request because {reason}. "
+                                          "Showing rule-based results instead."}
+    return {"used": True, "notice": None}
+
+
+# ---------- models ----------
 
 class PlanRequest(BaseModel):
     profile: str = Field(..., min_length=3, max_length=2000)
@@ -56,57 +79,80 @@ class IcsRequest(BaseModel):
     talk_ids: list[str] = Field(..., min_length=1, max_length=50)
 
 
+# ---------- routes ----------
+
 @app.get("/")
 def index():
     return FileResponse(STATIC / "index.html")
 
 
 @app.get("/healthz")
-def healthz():
+def healthz(deep: bool = False):
+    """deep=true also makes a tiny real LLM call to verify the key (cached 5 minutes)."""
+    start = time.perf_counter()
     try:
-        ok = search.es_client().ping()
+        es_ok = search.es_client().ping()
     except Exception:
-        ok = False
-    return {"elasticsearch": ok, "llm": llm.enabled(), "llm_model": config.LLM_MODEL if llm.enabled() else None}
+        es_ok = False
+    out = {"elasticsearch": es_ok, "es_ms": round((time.perf_counter() - start) * 1000),
+           "llm": {"configured": llm.enabled(), "model": config.LLM_MODEL if llm.enabled() else None},
+           "tracing": TRACING}
+    if deep:
+        out["llm"] = llm.check()
+    return out
 
 
 @app.get("/api/facets")
 def get_facets():
-    try:
-        return {**search.facets(), "llm": llm.enabled()}
-    except Exception as exc:
-        raise HTTPException(503, f"Elasticsearch not ready or not ingested: {exc}")
+    return {**search.facets(), "llm": llm.enabled(), "tracing": TRACING}
 
 
 @app.post("/api/search")
 def do_search(req: SearchRequest):
-    return {"results": search.hybrid_search_talks(req.query, size=req.size, levels=req.levels,
-                                                  days=req.days, tracks=req.tracks)}
+    timings = {}
+    with step("hybrid_search", timings):
+        results = search.hybrid_search_talks(req.query, size=req.size, levels=req.levels,
+                                             days=req.days, tracks=req.tracks)
+    return {"results": results, "timings": timings}
 
 
 @app.post("/api/plan")
 def plan(req: PlanRequest):
-    intent = llm.understand(req.profile)
+    llm.start_request()
+    timings, start = {}, time.perf_counter()
+    with step("understand", timings, llm=llm.enabled()):
+        intent = llm.understand(req.profile)
     levels = req.levels or intent["levels"]
-    ranked = search.hybrid_search_talks(intent["search_query"], size=60, levels=levels, days=req.days)
-    agenda = planner.build_agenda(ranked, max_talks=req.max_talks)
-    explanation = llm.explain_agenda(req.profile, agenda)
-    people = search.similar_people(req.profile, size=4)
-    openers = llm.icebreakers(req.profile, people)
+    with step("hybrid_search", timings):
+        ranked = search.hybrid_search_talks(intent["search_query"], size=60, levels=levels, days=req.days)
+    with step("plan", timings):
+        agenda = planner.build_agenda(ranked, max_talks=req.max_talks)
+    with step("explain", timings, llm=llm.enabled()):
+        explanation = llm.explain_agenda(req.profile, agenda)
+    with step("people", timings):
+        people = search.similar_people(req.profile, size=4)
+        openers = llm.icebreakers(req.profile, people)
+    timings["total"] = round((time.perf_counter() - start) * 1000)
     return {
         "understood": {"search_query": intent["search_query"], "levels": levels, "days": req.days},
         "summary": explanation["summary"],
         "tips": explanation["tips"],
         "agenda": [{**t, "reason": explanation["reasons"].get(t["id"], "")} for t in agenda],
         "people": [{**p, "opener": openers.get(p["id"], "")} for p in people],
-        "llm": llm.enabled(),
+        "candidates": len(ranked),
+        "ai": _ai_status(),
+        "timings": timings,
     }
 
 
 @app.post("/api/chat")
 def chat_turn(req: ChatRequest):
+    llm.start_request()
+    start = time.perf_counter()
     history = [{"role": h.role, "content": h.content} for h in req.history]
-    return chat.handle(req.message, req.profile, req.agenda_ids, history)
+    out = chat.handle(req.message, req.profile, req.agenda_ids, history)
+    out["timings"]["total"] = round((time.perf_counter() - start) * 1000)
+    return {**out, "ai": _ai_status()}
 
 
 @app.post("/api/agenda.ics")

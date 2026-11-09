@@ -78,6 +78,7 @@ The first run downloads about 1–2 GB and takes 5–10 minutes. Later runs take
 | `./start.sh stop` | Stop everything |
 | `./start.sh logs` | Follow the app logs |
 | `./start.sh reset` | Delete all data and start fresh |
+| `./start.sh tracing` | Start with OpenTelemetry tracing. Jaeger UI at http://localhost:16686 |
 
 **Troubleshooting**
 - *"permission denied: ./start.sh"*: run `chmod +x start.sh` once.
@@ -159,16 +160,48 @@ The LLM secret is optional.
 - `GET /api/facets` lists days, tracks, levels and the active embedder
 - `GET /healthz` reports Elasticsearch and LLM status
 
+## Use a real conference schedule
+
+Put the schedule in a spreadsheet with these columns and save it as CSV. `data/talks_template.csv` is an example.
+
+`title, abstract, speakers, track, level, tags, room, start, end`
+
+Separate several speakers or tags with `;`, and write times like `2027-03-23 10:00`. Only title, abstract,
+start and end are required.
+
+```bash
+python3 scripts/import_csv.py my_schedule.csv
+```
+
+```bash
+./start.sh
+```
+
+## Tracing and reliability
+
+- `./start.sh tracing` sends OpenTelemetry traces to Jaeger. Open http://localhost:16686, pick service
+  `confpilot`, and each request shows its steps: AI understanding → hybrid search (with the Elasticsearch calls
+  inside) → planning → AI explanation → people matching.
+- Every response includes step timings, and the page shows them under the summary.
+- `GET /healthz?deep=true` checks Elasticsearch and makes a tiny real call to the AI to verify your key. The
+  page shows the result: *AI on*, *AI off*, or *AI key problem: …*.
+- If the AI fails mid-demo (bad key, rate limit, timeout), the request still works with rule-based answers,
+  and the page says why in a yellow notice. AI calls time out after 20 seconds with one retry.
+- If Elasticsearch is down or still loading, the page says so in plain words instead of failing silently.
+
 ## 3-minute demo script
 
-1. Click an example profile, then **Plan my conference**. Point out the agenda grouped by day, with no clashes.
-2. Open **Abstract & ranking** on a talk. `matched_by: keyword#3, semantic#1` shows that hybrid search found
-   things keyword search alone would have missed.
-3. Click **Swap for backup**. In the chat, type *"swap anything on day 2 for AI talks"* and watch the agenda
-   change, with **New** badges on the added talks. Then ask *"who is speaking about service mesh?"* and click
-   **Add** on one of the answers. Finish with **Add to calendar**.
-4. Scroll to **People worth meeting** to show the vector matchmaking and the AI openers.
-5. Type an unusual query (for example *"I want to make my clusters greener and cheaper"*) to show semantic search
-   finding Kepler, Karpenter and OpenCost talks even though none of those words appear in the query. This needs the
-   real embedding model (fastembed or OpenAI) or an LLM key. The `hash` fallback embedder only matches words.
-   Try it before demo day.
+Before the demo: run `./start.sh`, check that the status line says **embeddings: fastembed** and **AI on**,
+and run every step below once.
+
+1. **The problem (20 s).** "KubeCon has hundreds of talks at the same time. Picking is painful."
+2. **Plan (40 s).** Click the *ML engineer* example, then **Plan my conference**. Point out the agenda grouped
+   by day with no clashes, the reason under each talk, and the timing line (search takes milliseconds).
+3. **The wow (40 s).** Click **✨ Meaning-only demo: "How can we save money and help the planet?"**, then
+   **Plan my conference**. It should find FinOps, autoscaling and carbon-footprint talks, even though no talk
+   contains the words "save", "money" or "planet". Check this before the demo: it needs the real embedding model. The purple **Found by meaning only** badge proves it; **Keyword #** and **Meaning #** show
+   which search found each talk.
+4. **Chat (40 s).** Type *"swap anything on day 2 for AI talks"*. Talks marked **New** appear. Then ask
+   *"who is speaking about service mesh?"* and click **Add**.
+5. **Wrap up (40 s).** Click **Swap for backup** on a talk, scroll to **People worth meeting**, then click
+   **Add to calendar**. If you started with `./start.sh tracing`, show one trace in Jaeger.

@@ -30,8 +30,18 @@ services:
     env_file:
       - path: .env
         required: false
-    environment: [ES_URL=http://elasticsearch:9200]
+    environment:
+      - ES_URL=http://elasticsearch:9200
+      # Set by "./start.sh tracing"; empty means tracing is off.
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      - OTEL_SERVICE_NAME=confpilot
     ports: ["8000:8000"]
     depends_on:
       ingest: { condition: service_completed_successfully }
     restart: unless-stopped
+
+  # Optional: "./start.sh tracing" starts this too. Open http://localhost:16686 to see traces.
+  jaeger:
+    image: jaegertracing/all-in-one:1.62.0
+    profiles: [tracing]
+    ports: ["16686:16686"]

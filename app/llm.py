@@ -6,15 +6,58 @@ or when the LLM call fails during a live demo.
 import json
 import logging
 import re
+import time
+from contextvars import ContextVar
 
 from . import config
 
 log = logging.getLogger(__name__)
 _client = None
+# Set when any LLM call in the current request failed and a fallback was used.
+_fallback_used = ContextVar("llm_fallback_used", default=None)
+_check_cache = {"at": 0.0, "result": None}
 
 
 def enabled():
     return bool(config.LLM_API_KEY)
+
+
+def start_request():
+    _fallback_used.set(None)
+
+
+def fallback_reason():
+    """Why the AI was skipped in this request (None if it worked or is not configured)."""
+    return _fallback_used.get()
+
+
+def _note_failure(where, exc):
+    log.warning("LLM %s failed: %s", where, exc)
+    msg = str(exc)
+    if "401" in msg or "403" in msg or "invalid" in msg.lower() and "key" in msg.lower():
+        reason = "the API key was rejected"
+    elif "429" in msg or "rate" in msg.lower():
+        reason = "the AI provider is rate limiting"
+    elif "timed out" in msg.lower() or "timeout" in msg.lower():
+        reason = "the AI provider timed out"
+    else:
+        reason = "the AI call failed"
+    _fallback_used.set(reason)
+
+
+def check():
+    """Tiny real call to verify the key and model. Cached for 5 minutes."""
+    if not enabled():
+        return {"ok": False, "configured": False, "error": None}
+    if time.time() - _check_cache["at"] < 300 and _check_cache["result"]:
+        return _check_cache["result"]
+    try:
+        _chat_json('Reply with JSON {"ok": true}', "ping", max_tokens=20)
+        result = {"ok": True, "configured": True, "model": config.LLM_MODEL, "error": None}
+    except Exception as exc:
+        result = {"ok": False, "configured": True, "model": config.LLM_MODEL, "error": str(exc)[:200]}
+    _check_cache.update(at=time.time(), result=result)
+    return result
 
 
 def _chat_json(system, user, max_tokens=1500):
@@ -22,7 +65,7 @@ def _chat_json(system, user, max_tokens=1500):
     if _client is None:
         from openai import OpenAI
 
-        _client = OpenAI(api_key=config.LLM_API_KEY, base_url=config.LLM_BASE_URL, timeout=45)
+        _client = OpenAI(api_key=config.LLM_API_KEY, base_url=config.LLM_BASE_URL, timeout=20, max_retries=1)
     resp = _client.chat.completions.create(
         model=config.LLM_MODEL,
         messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
@@ -56,7 +99,7 @@ def understand(profile):
         levels = [lv for lv in out.get("levels", []) if lv in ("Beginner", "Intermediate", "Advanced")]
         return {"search_query": out.get("search_query") or profile, "levels": levels}
     except Exception as exc:
-        log.warning("LLM understand failed: %s", exc)
+        _note_failure("understand", exc)
         return fallback
 
 
@@ -103,7 +146,7 @@ def explain_agenda(profile, agenda):
             return {"summary": out.get("summary", ""), "reasons": {**fb, **reasons},
                     "tips": list(out.get("tips") or [])[:3]}
         except Exception as exc:
-            log.warning("LLM explain failed: %s", exc)
+            _note_failure("explain", exc)
     return {
         "summary": f"{len(agenda)} talks with no time clashes, ranked by hybrid keyword + semantic match "
                    f"to your interests. Add an LLM API key for personalised explanations.",
@@ -140,5 +183,5 @@ def icebreakers(profile, people):
             max_tokens=600)
         return {**fallback, **{k: v for k, v in out.items() if k in fallback}}
     except Exception as exc:
-        log.warning("LLM icebreakers failed: %s", exc)
+        _note_failure("icebreakers", exc)
         return fallback

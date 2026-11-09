@@ -10,11 +10,12 @@
 | Step | Look at | What it shows |
 |---|---|---|
 | 1 | [README → What ConfPilot does](README.md#what-confpilot-does) | The problem and the product |
-| 2 | **[TRACKS.md](TRACKS.md)** | How each tool is used, why, where in the code, with diagrams |
-| 3 | [Pull request #3](https://github.com/vuppalasaiganesh/ConfPilot/pull/3) | **Gitar** blocking a pull request that breaks our rules, diagnosing the failing CI, and fixing it |
-| 4 | [CI runs](https://github.com/vuppalasaiganesh/ConfPilot/actions) | Lint, 34 unit tests, and an integration test against a real Elasticsearch on every push |
-| 5 | [`scripts/validate.sh`](scripts/validate.sh) | The one command that checks all four tracks end to end |
-| 6 | [SUBMISSION.md](SUBMISSION.md) | How it's built and how each track is used |
+| 2 | **[Slides (PDF)](docs/ConfPilot_Project_Overview.pdf)** | The project in 9 slides |
+| 3 | **[TRACKS.md](TRACKS.md)** | How each tool is used, why, where in the code, with diagrams |
+| 4 | [Pull request #3](https://github.com/vuppalasaiganesh/ConfPilot/pull/3) | **Gitar** blocking a pull request that breaks our rules, diagnosing the failing CI, and fixing it |
+| 5 | [CI runs](https://github.com/vuppalasaiganesh/ConfPilot/actions) | Lint, 34 unit tests, and an integration test against a real Elasticsearch on every push |
+| 6 | [`scripts/validate.sh`](scripts/validate.sh) | The one command that checks all four tracks end to end |
+| 7 | [SUBMISSION.md](SUBMISSION.md) | How it's built and how each track is used |
 
 **Want to run it?** Install Docker Desktop, then:
 ```bash

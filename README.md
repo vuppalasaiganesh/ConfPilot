@@ -15,6 +15,7 @@ a reason for every talk, and the people worth meeting, then refine it by chattin
 **Start here:** 📘 **[TRACKS.md: how we use Elasticsearch, Dash0, Radar and Gitar](TRACKS.md)**. It explains each
 tool's job, why we chose it, where it is in the code, and how to check it, with diagrams. No setup needed.
 
+- 📊 **Slides:** [view in browser (PDF)](docs/ConfPilot_Project_Overview.pdf) · [download PowerPoint](docs/ConfPilot_Project_Overview.pptx)
 - 🤖 **Gitar review:** [pull request #3](https://github.com/vuppalasaiganesh/ConfPilot/pull/3), blocked with 4 findings, then fixed by Gitar
 - 🧭 **Two-minute path:** [DEMO.md](DEMO.md#part-a-for-judges-2-minutes-nothing-to-install)
 - ✅ **CI:** [GitHub Actions](https://github.com/vuppalasaiganesh/ConfPilot/actions)

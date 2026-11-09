@@ -10,6 +10,17 @@ Built for the **Cloud Native Hackathon**, entered in all four tracks:
 
 ---
 
+## For judges
+
+**Two-minute review, nothing to install:** follow [DEMO.md → For judges](DEMO.md#part-a-for-judges-2-minutes-nothing-to-install).
+
+- 🎥 **Demo video:** _link added after recording_
+- 🤖 **Gitar review:** [pull request #3](https://github.com/vuppalasaiganesh/ConfPilot/pull/3)
+- ✅ **CI:** [GitHub Actions](https://github.com/vuppalasaiganesh/ConfPilot/actions)
+- 📄 **Submission write-up:** [SUBMISSION.md](SUBMISSION.md)
+
+---
+
 ## Contents
 
 1. [The problem](#the-problem)

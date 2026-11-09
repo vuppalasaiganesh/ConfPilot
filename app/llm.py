@@ -381,3 +381,13 @@ def icebreakers(profile, people):
     except Exception as exc:
         _note_failure("icebreakers", exc)
         return fallback
+
+
+# ---------- 4. One-line talk summaries ----------
+
+def summarize_talk(talk):
+    """One catchy sentence about a talk, for the agenda cards."""
+    out = _chat_json(
+        "Summarize this conference talk in one catchy sentence. Reply JSON: {\"summary\": \"...\"}",
+        json.dumps(_brief(talk)), max_tokens=120)
+    return out["summary"]

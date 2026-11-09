@@ -105,6 +105,10 @@ def check():
                               f"{', '.join(models[:6])}")
         if models:
             result["available_models"] = models
+        if "hint" not in result and "timed out" in result["error"].lower():
+            result["hint"] = ("The model answered too slowly. Try a faster model"
+                              + (f" such as {next((m for m in models if 'lite' in m), models[0])}" if models else "")
+                              + ", or raise LLM_TIMEOUT in .env (seconds).")
         if "hint" not in result and getattr(exc, "status_code", None) in (400, 401, 403):
             result["hint"] = ("Check LLM_API_KEY in .env (xAI keys start with 'xai-') and that LLM_BASE_URL "
                               "matches the provider the key is from.")
@@ -117,13 +121,13 @@ def _get_client():
     if _client is None:
         from openai import OpenAI
 
-        _client = OpenAI(api_key=config.LLM_API_KEY, base_url=config.LLM_BASE_URL, timeout=30, max_retries=1)
+        _client = OpenAI(api_key=config.LLM_API_KEY, base_url=config.LLM_BASE_URL, timeout=config.LLM_TIMEOUT, max_retries=1)
     return _client
 
 
 # Optional request settings, dropped one by one if the provider/model rejects them (HTTP 400),
 # e.g. models that don't support JSON mode or a custom temperature. What works is remembered.
-_OPTIONAL = ["response_format", "temperature", "max_tokens"]
+_OPTIONAL = ["reasoning_effort", "response_format", "temperature", "max_tokens"]
 _dropped = set()
 
 
@@ -131,6 +135,8 @@ def _complete(system, user, max_tokens):
     from openai import BadRequestError
 
     optional = {"response_format": {"type": "json_object"}, "temperature": 0.3, "max_tokens": max_tokens}
+    if config.LLM_REASONING_EFFORT:
+        optional["reasoning_effort"] = config.LLM_REASONING_EFFORT
     while True:
         kwargs = {k: v for k, v in optional.items() if k not in _dropped}
         try:

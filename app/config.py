@@ -11,6 +11,9 @@ ES_INDEX_PEOPLE = os.getenv("ES_INDEX_PEOPLE", "attendees")
 LLM_API_KEY = os.getenv("LLM_API_KEY", "")
 LLM_BASE_URL = os.getenv("LLM_BASE_URL", "https://api.x.ai/v1")
 LLM_MODEL = os.getenv("LLM_MODEL", "grok-4")
+LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "45"))
+# "low" keeps "thinking" models (e.g. newer Gemini flash) fast. Empty = provider default.
+LLM_REASONING_EFFORT = os.getenv("LLM_REASONING_EFFORT", "low")
 
 EMBEDDINGS = os.getenv("EMBEDDINGS", "fastembed").lower()
 FASTEMBED_MODEL = os.getenv("FASTEMBED_MODEL", "BAAI/bge-small-en-v1.5")

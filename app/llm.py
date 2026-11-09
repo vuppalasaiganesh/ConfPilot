@@ -32,9 +32,9 @@ def fallback_reason():
 
 
 def _note_failure(where, exc):
-    log.warning("LLM %s failed: %s", where, exc)
-    msg = str(exc)
-    if "401" in msg or "403" in msg or "invalid" in msg.lower() and "key" in msg.lower():
+    msg = _error_text(exc)
+    log.warning("LLM %s failed: %s", where, msg)
+    if "401" in msg or "403" in msg or ("key" in msg.lower() and ("invalid" in msg.lower() or "incorrect" in msg.lower())):
         reason = "the API key was rejected"
     elif "429" in msg or "rate" in msg.lower():
         reason = "the AI provider is rate limiting"
@@ -45,6 +45,27 @@ def _note_failure(where, exc):
     _fallback_used.set(reason)
 
 
+def _error_text(exc):
+    """Readable error: status code plus the provider's own message, not just 'Error code: 400'."""
+    status = getattr(exc, "status_code", None)
+    body = getattr(exc, "body", None)
+    msg = ""
+    if isinstance(body, dict):
+        err = body.get("error", body)
+        msg = err.get("message") or err.get("error") or json.dumps(err) if isinstance(err, dict) else str(err)
+    elif body:
+        msg = str(body)
+    msg = (msg or str(exc)).strip()
+    return f"{status}: {msg}"[:300] if status else msg[:300]
+
+
+def _available_models():
+    try:
+        return sorted(m.id for m in _get_client().models.list().data)[:15]
+    except Exception:
+        return []
+
+
 def check():
     """Tiny real call to verify the key and model. Cached for 5 minutes."""
     if not enabled():
@@ -52,30 +73,71 @@ def check():
     if time.time() - _check_cache["at"] < 300 and _check_cache["result"]:
         return _check_cache["result"]
     try:
-        _chat_json('Reply with JSON {"ok": true}', "ping", max_tokens=20)
+        _complete('Reply with JSON {"ok": true}', "ping", max_tokens=300)
         result = {"ok": True, "configured": True, "model": config.LLM_MODEL, "error": None}
     except Exception as exc:
-        result = {"ok": False, "configured": True, "model": config.LLM_MODEL, "error": str(exc)[:200]}
+        result = {"ok": False, "configured": True, "model": config.LLM_MODEL, "error": _error_text(exc)}
+        models = _available_models()
+        if models:
+            result["available_models"] = models
+            if config.LLM_MODEL not in models:
+                result["hint"] = (f"Your account doesn't list the model '{config.LLM_MODEL}'. "
+                                  f"Set LLM_MODEL in .env to one of: {', '.join(models)}")
+        elif getattr(exc, "status_code", None) in (400, 401, 403):
+            result["hint"] = ("Check LLM_API_KEY in .env (xAI keys start with 'xai-') and that LLM_BASE_URL "
+                              "matches the provider the key is from.")
     _check_cache.update(at=time.time(), result=result)
     return result
 
 
-def _chat_json(system, user, max_tokens=1500):
+def _get_client():
     global _client
     if _client is None:
         from openai import OpenAI
 
-        _client = OpenAI(api_key=config.LLM_API_KEY, base_url=config.LLM_BASE_URL, timeout=20, max_retries=1)
-    resp = _client.chat.completions.create(
-        model=config.LLM_MODEL,
-        messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
-        temperature=0.3,
-        max_tokens=max_tokens,
-        response_format={"type": "json_object"},
-    )
-    text = resp.choices[0].message.content or "{}"
-    match = re.search(r"\{.*\}", text, re.S)  # tolerate code fences or preamble
-    return json.loads(match.group(0) if match else text)
+        _client = OpenAI(api_key=config.LLM_API_KEY, base_url=config.LLM_BASE_URL, timeout=30, max_retries=1)
+    return _client
+
+
+# Optional request settings, dropped one by one if the provider/model rejects them (HTTP 400),
+# e.g. models that don't support JSON mode or a custom temperature. What works is remembered.
+_OPTIONAL = ["response_format", "temperature", "max_tokens"]
+_dropped = set()
+
+
+def _complete(system, user, max_tokens):
+    from openai import BadRequestError
+
+    optional = {"response_format": {"type": "json_object"}, "temperature": 0.3, "max_tokens": max_tokens}
+    while True:
+        kwargs = {k: v for k, v in optional.items() if k not in _dropped}
+        try:
+            resp = _get_client().chat.completions.create(
+                model=config.LLM_MODEL,
+                messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
+                **kwargs)
+            return resp.choices[0].message.content or ""
+        except BadRequestError as exc:
+            remaining = [k for k in _OPTIONAL if k not in _dropped]
+            text = _error_text(exc).lower()
+            if "model" in text and ("not found" in text or "does not exist" in text or "invalid" in text):
+                raise  # wrong model name: retrying without settings won't help
+            if "api key" in text or "apikey" in text or "unauthor" in text:
+                raise
+            if not remaining:
+                raise
+            # Drop the setting the error names, otherwise the next one in order.
+            named = next((k for k in remaining if k in text or k.replace("_", "") in text), remaining[0])
+            log.warning("LLM rejected %r (%s); retrying without it", named, _error_text(exc))
+            _dropped.add(named)
+
+
+def _chat_json(system, user, max_tokens=1500):
+    text = _complete(system, user, max_tokens)
+    match = re.search(r"\{.*\}", text, re.S)  # tolerate code fences, reasoning text or preamble
+    if not match:
+        raise ValueError(f"AI reply was not JSON: {text[:120]!r}")
+    return json.loads(match.group(0))
 
 
 def _brief(t):

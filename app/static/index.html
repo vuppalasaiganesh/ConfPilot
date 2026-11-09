@@ -242,7 +242,7 @@ async function init() {
     const l = h.llm;
     const ai = !l.configured ? `<span class="dot no"></span>AI off: rule-based answers. Add LLM_API_KEY to .env to turn it on.`
       : l.ok ? `<span class="dot ok"></span>AI on (${esc(l.model)})`
-      : `<span class="dot no"></span>AI key problem: ${esc(l.error)}. Using rule-based answers.`;
+      : `<span class="dot no"></span>AI problem: ${esc(l.error)}${l.hint ? `<br><b>Fix:</b> ${esc(l.hint)}` : ""}<br>Using rule-based answers until then.`;
     $("#status").innerHTML = es + "<br>" + ai;
   } catch (_) { $("#status").innerHTML = es; }
 }

@@ -210,15 +210,6 @@ def chat_turn(req: ChatRequest):
     return {**out, "ai": _ai_status()}
 
 
-@app.get("/api/talks/{talk_id}/summary")
-def talk_summary(talk_id: str):
-    started = time.perf_counter()
-    talk = search.get_talks([talk_id])[0]
-    summary = llm.summarize_talk(talk)
-    telemetry.record_summary(talk_id, time.perf_counter() - started)
-    return {"id": talk_id, "summary": summary}
-
-
 @app.get("/api/chaos")
 def get_chaos():
     return {"runtime_toggle": chaos.ENABLED, **chaos.state}

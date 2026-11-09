@@ -12,7 +12,8 @@ Turn a 300-talk conference schedule into your personal, clash-free plan in secon
 
 ## Links
 - **Code:** https://github.com/vuppalasaiganesh/ConfPilot
-- **Gitar review demo (do not merge):** https://github.com/vuppalasaiganesh/ConfPilot/pull/2
+- **Gitar live demo (do not merge):** https://github.com/vuppalasaiganesh/ConfPilot/pull/3
+- **Completed Gitar review:** https://github.com/vuppalasaiganesh/ConfPilot/pull/2
 - **CI runs:** https://github.com/vuppalasaiganesh/ConfPilot/actions
 
 ## Tracks entered
@@ -100,8 +101,9 @@ Elasticsearch is the core of every request, not an add-on:
   Elasticsearch, loads the data, and fails if the agenda ever contains a clash.
 - **Five project-specific Gitar rules:** every AI call needs a fallback, the agenda must stay clash-free, only
   free-license Elasticsearch features, telemetry conventions (low-cardinality metric labels), and no secrets.
-- **Demo pull request #2** looks like a normal feature but breaks three rules and fails CI. Gitar catches each
-  issue and explains the failing build.
+- **Demo pull request** looks like a normal feature but breaks three rules and fails CI. Gitar blocked it with
+  four findings (one we didn't plant: a missing 404), quoted our own rule files, pinpointed the CI failure, and
+  offered one-click fixes.
 
 ---
 

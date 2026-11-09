@@ -59,7 +59,7 @@ It keeps working if the AI is down: answers fall back to simple rules and the pa
 | **4. Search & Vector DB (Elasticsearch)** | Hybrid search (keywords + meaning) is the core of every request; people matching is vector search | The ✨ meaning demo and the Keyword/Meaning badges |
 | **2. Observability (Dash0)** | Traces, metrics and logs sent to Dash0; switches that break the app on purpose | Break the app, then ask Dash0's AI agent what went wrong |
 | **3. Kubernetes UI / AI SRE (Radar)** | One command deploys to Kubernetes; six scripted incidents | Break the cluster, then let Radar find the root cause |
-| **1. AI Code Review (Gitar)** | CI with a real Elasticsearch, plus five project-specific review rules | [Pull request #2](https://github.com/vuppalasaiganesh/ConfPilot/pull/2), where Gitar catches three rule violations and a failing build |
+| **1. AI Code Review (Gitar)** | CI with a real Elasticsearch, plus five project-specific review rules | [Pull request #3](https://github.com/vuppalasaiganesh/ConfPilot/pull/3), where Gitar catches three rule violations and a failing build |
 
 ---
 
@@ -227,10 +227,16 @@ With Dash0 configured, the same incidents also appear in Dash0, tagged with the 
   | `telemetry-conventions` | New steps are traced; metric labels stay low-cardinality; no secrets in logs |
   | `no-secrets` | No API keys or tokens committed |
 
-**Demo:** [Pull request #2](https://github.com/vuppalasaiganesh/ConfPilot/pull/2) looks like a normal feature
+**Demo:** [Pull request #3](https://github.com/vuppalasaiganesh/ConfPilot/pull/3) looks like a normal feature
 (AI talk summaries plus a planner speed-up) but breaks three rules: an AI call with no fallback, a metric
 labelled with talk IDs, and a planner change that lets clashes through, which also makes CI fail. Show Gitar's
 review comments next to the rules, and its diagnosis of the failing build.
+
+A completed Gitar review (Blocked, 4 findings, 3 of 5 rules failed, CI diagnosis) is also visible on
+[pull request #2](https://github.com/vuppalasaiganesh/ConfPilot/pull/2).
+
+**Protect `main`:** Settings → Branches → add a rule for `main` with *Require status checks to pass before
+merging* (`lint-and-test`, `integration`). GitHub then blocks merging any pull request with failing checks.
 
 > ⚠️ **Never merge the demo pull request.** It contains deliberate bugs. If it gets merged by accident, revert
 > it on `main` (GitHub's **Revert** button on the merged pull request) and open a new one from the same changes.
@@ -243,7 +249,7 @@ review comments next to the rules, and its diagnosis of the failing build.
 - [ ] `./start.sh` and `scripts/k8s.sh up` are running
 - [ ] `scripts/validate.sh` shows **0 failed**
 - [ ] `python3 scripts/load.py` is sending traffic, so Dash0 has live data
-- [ ] Browser tabs open: the app, Dash0, Radar (`kubectl radar`), pull request #2
+- [ ] Browser tabs open: the app, Dash0, Radar (`kubectl radar`), pull request #3
 - [ ] Every fault is off: `scripts/chaos.sh off` and `scripts/k8s.sh fix`
 
 **5 minutes, all four tracks**
